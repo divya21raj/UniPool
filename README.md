@@ -4,21 +4,24 @@ This project is being made for the course CSD207 under the guidance of Professor
 
 ## Contributors 
  
-* **Abhishek Srivastava**  
+* **Abhishek Srivastava**  (https://github.com/abhesrivastava)
  
-* **Divya Raj**  
+* **Divya Raj**  (https://github.com/divya21raj)
  
-* **Atishay Jain**  
+* **Atishay Jain**  (https://github.com/atishayjain708)
  
-* **Simran Srivastava**  
+* **Simran Srivastava**  (https://github.com/ss616)
  
-* **Rohan Dutta**  
+* **Rohan Dutta**  (https://github.com/Solstafir)
 
 ## Contributing 
 To contribute, follow these guidelines,
 1. Fork the repository.
 2. Make your commits with concise and proper description.
 3. Make pull request.
- 
+
+## Deadline
+Tentative Date for Presentation: Friday, November 24th, 2017
+
 ## Acknowledgments 
 * Anuradha Ravi - Assistant Professor
