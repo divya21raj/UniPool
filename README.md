@@ -1,9 +1,9 @@
-# Java_Final_Project
+# Java-Final-Project
 The final project for the Object Oriented Programming in Java course.
 
-Team:
-1. Abhishek Srivastava
-2. Atishay Jain
-3. Simran Srivastava
-4. Rohan Datta
-5. Divya Raj
+## Team:
+- Abhishek Srivastava
+- Atishay Jain
+- Simran Srivastava
+- Rohan Datta
+- Divya Raj
