@@ -4,15 +4,15 @@ This project is being made for the course CSD207 under the guidance of Professor
 
 ## Contributors 
  
-* **Abhishek Srivastava**  (https://github.com/abhesrivastava)
+* **Abhishek Srivastava** - [abhesrivastava](https://github.com/abhesrivastava)
  
-* **Divya Raj**  (https://github.com/divya21raj)
+* **Divya Raj** - [divya21raj](https://github.com/divya21raj)
  
-* **Atishay Jain**  (https://github.com/atishayjain708)
+* **Atishay Jain** - [atishayjain](https://github.com/atishayjain708)
  
-* **Simran Srivastava**  (https://github.com/ss616)
+* **Simran Srivastava** - [ss616](https://github.com/ss616)
  
-* **Rohan Dutta**  (https://github.com/Solstafir)
+* **Rohan Dutta** - [Solstafir](https://github.com/Solstafir)
 
 ## Contributing 
 To contribute, follow these guidelines,
