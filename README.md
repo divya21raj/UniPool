@@ -1,4 +1,4 @@
-# Java Main Project 
+# Cabpool Android Application
  
 This project is being made for the course CSD207 under the guidance of Professor Anuradha Ravi in the semester of Monsoon 2017. 
 
