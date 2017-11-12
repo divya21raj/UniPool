@@ -1,4 +1,4 @@
-package GarbageCollectors.com.snucabpool;
+package garbagecollectors.com.snucabpool;
 
 import android.app.Activity;
 import android.content.Intent;
