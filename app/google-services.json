@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "560852588496",
+    "firebase_url": "https://snu-cabpool-db611.firebaseio.com",
+    "project_id": "snu-cabpool-db611",
+    "storage_bucket": "snu-cabpool-db611.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560852588496:android:7f0a586268b8fc20",
+        "android_client_info": {
+          "package_name": "garbagecollectors.com.snucabpool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560852588496-0s3msr6b2m8chbs8aks12kuv8j2233f5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "garbagecollectors.com.snucabpool",
+            "certificate_hash": "4f9e380dd6c2ed3f6b79a9f8f5daefa2f991a65a"
+          }
+        },
+        {
+          "client_id": "560852588496-baos0qb9om1qmvade33hbh1l2ic70l00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbviwwtxjwpZyiqvRzzulh6YycC11F1vQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "560852588496-baos0qb9om1qmvade33hbh1l2ic70l00.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
