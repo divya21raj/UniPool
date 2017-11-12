@@ -1,6 +1,7 @@
 package garbagecollectors.com.snucabpool;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,6 +33,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private FirebaseAuth mAuth;
 
+    private ProgressDialog progressDialog;
+
     SignInButton signInButton;
 
     @Override
@@ -50,6 +53,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         mAuth = FirebaseAuth.getInstance();
+
+        progressDialog = new ProgressDialog(this);
 
         signInButton = (SignInButton) findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
@@ -105,6 +110,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void signIn()
     {
+        progressDialog.setMessage("Please Wait!");
+        progressDialog.show();
+
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }

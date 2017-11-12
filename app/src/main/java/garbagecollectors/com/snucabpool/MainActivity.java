@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -64,4 +65,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void onClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.sign_out_button:
+                mAuth.signOut();
+                finish();
+                startActivity(new Intent(this, LoginActivity.class));
+        }
+    }
 }

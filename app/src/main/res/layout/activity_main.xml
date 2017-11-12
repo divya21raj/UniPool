@@ -33,6 +33,14 @@
         </android.support.v7.widget.CardView>
     </FrameLayout>
 
+    <Button
+        android:id="@+id/sign_out_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="160dp"
+        android:text="Sign Out"
+        android:onClick="onClick"/>
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
