@@ -1,4 +1,4 @@
-package atishay.com.snucabpool;
+package GarbageCollectors.com.snucabpool;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
