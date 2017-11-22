@@ -1,4 +1,4 @@
-package garbagecollectors.com.snucabpool;
+package garbagecollectors.com.snucabpool.Actvities;
 
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
@@ -23,9 +23,10 @@ import java.util.Calendar;
 <<<<<<< HEAD
 =======
 import java.util.HashMap;
->>>>>>> master
+>>>>>>> master import garbagecollectors.com.snucabpool.DatePickerFragment;
+import garbagecollectors.com.snucabpool.R;
 
-public class NewEntry extends AppCompatActivity  {
+public class NewEntryActivity extends AppCompatActivity  {
 
     int count=0;
     private long user_id;                                                 //Data type could be changed to long
@@ -65,7 +66,7 @@ public class NewEntry extends AppCompatActivity  {
         Calendar calendar = Calendar.getInstance();
 
         timePickerDialog = new TimePickerDialog(
-                NewEntry.this,
+                NewEntryActivity.this,
                 onTimeSetListener,
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),

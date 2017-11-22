@@ -1,4 +1,4 @@
-package garbagecollectors.com.snucabpool;
+package garbagecollectors.com.snucabpool.Actvities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +14,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+import garbagecollectors.com.snucabpool.Entry;
+import garbagecollectors.com.snucabpool.R;
+
+public class HomeActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     static ArrayList<Entry> entry_list = entry_list = new ArrayList<>();                            //To store all the entries
