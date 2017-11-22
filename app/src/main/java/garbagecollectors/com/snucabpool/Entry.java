@@ -2,13 +2,15 @@ package garbagecollectors.com.snucabpool;
 
 public class Entry
 {
-    private String entryID;
+    private String entryID;                                                                         //Data type could be changed to long
 
     private String userId;
 
     private String sourceLocation, destinationLocation;
 
     private String time;
+
+    private HashMap<Long, Float> map = new HashMap<>();                                             //HashMap contains entry_id(Long value) and lambda(Float value)
 
     public Entry(String entryID, String userId, String sourceLocation, String destinationLocation, String time)
     {
