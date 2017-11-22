@@ -42,24 +42,26 @@ public class NewEntry extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
-        text = (TextView)findViewById(R.id.searched_address);//Check
+        text = (TextView) findViewById(R.id.searched_address);//Check
 
-        buttonChangeDate = (Button)findViewById(R.id.SetTime);
-        buttonChangeDate.setOnClickListener(new OnClickListener(){
+        buttonChangeDate = (Button) findViewById(R.id.SetTime);
+        buttonChangeDate.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 openTimePickerDialog(false);
-            }});
+            }
+        });
 
-        buttonstartSetDialog = (Button)findViewById(R.id.btnChangeDate);
-        buttonstartSetDialog.setOnClickListener(new OnClickListener(){
+        buttonstartSetDialog = (Button) findViewById(R.id.btnChangeDate);
+        buttonstartSetDialog.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getFragmentManager(),"Date Picker");
-            }});
+                newFragment.show(getFragmentManager(), "Date Picker");
+            }
+        });
     }
 
     private void openTimePickerDialog(boolean is24r){
@@ -159,6 +161,7 @@ public class NewEntry extends AppCompatActivity  {
         }
     }
 
+    //Method for SAVE Button
     public void finalSave(View view){
 
     }
