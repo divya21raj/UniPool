@@ -20,7 +20,7 @@ import garbagecollectors.com.snucabpool.R;
 public class HomeActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
-    static ArrayList<Entry> entry_list = entry_list = new ArrayList<>();                            //To store all the entries
+    static ArrayList<Entry> entry_list = new ArrayList<>();                            //To store all the entries
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
