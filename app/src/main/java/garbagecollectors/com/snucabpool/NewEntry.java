@@ -20,15 +20,18 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class NewEntry extends AppCompatActivity  {
 
     int count=0;
+    private long user_id;                                                 //Data type could be changed to long
     String source, destination,time;
     String AM_PM ;
     Button buttonstartSetDialog,buttonChangeDate;
     TextView text;
     static String date;
+    private HashMap<Long, Float> map = new HashMap<>();                   //HashMap contains entry_id(Long value) and lambda(Float value)
 
     TimePickerDialog timePickerDialog;
     @Override

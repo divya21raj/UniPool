@@ -12,9 +12,12 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
+    static ArrayList<Entry> entry_list = entry_list = new ArrayList<>();                            //To store all the entries
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
