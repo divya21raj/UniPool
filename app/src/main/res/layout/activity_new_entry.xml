@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="garbagecollectors.com.snucabpool.Actvities.NewEntryActivity">
+
+    <Button
+        android:id="@+id/findSource"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search Source"
+        android:onClick="findSource"/>
+
+    <Button
+        android:id="@+id/findDestination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search Destination"
+        android:onClick="findDestination"
+        android:layout_marginTop="28dp"
+        android:layout_below="@+id/findSource"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/SetTime"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/findDestination"
+        android:layout_marginTop="33dp"
+        android:text="Set Target Time" />
+
+    <TextView
+        android:id="@+id/searched_address"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/finalSave"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btnChangeDate"
+        android:textSize="25dp" />
+
+    <Button
+        android:id="@+id/btnChangeDate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SetTime"
+        android:text="Change Date" />
+
+    <Button
+        android:id="@+id/finalSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="finalSave"
+        android:text="Save"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="463dp" />
+
+</RelativeLayout>
