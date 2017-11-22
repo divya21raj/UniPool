@@ -20,10 +20,9 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 import java.util.Calendar;
-<<<<<<< HEAD
-=======
+
 import java.util.HashMap;
->>>>>>> master import garbagecollectors.com.snucabpool.DatePickerFragment;
+import garbagecollectors.com.snucabpool.DatePickerFragment;
 import garbagecollectors.com.snucabpool.R;
 
 public class NewEntryActivity extends AppCompatActivity  {
