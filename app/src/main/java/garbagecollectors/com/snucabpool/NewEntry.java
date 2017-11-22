@@ -1,5 +1,16 @@
 package garbagecollectors.com.snucabpool;
 
+<<<<<<< HEAD
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+=======
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
@@ -12,14 +23,30 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
+>>>>>>> divya21raj/master
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+<<<<<<< HEAD
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+
+import java.net.URI;
+import java.net.URL;
+import java.util.Calendar;
+import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TimePicker;
+import android.app.DialogFragment;
+=======
 
 import java.util.Calendar;
+>>>>>>> divya21raj/master
 
 public class NewEntry extends AppCompatActivity  {
 
@@ -35,24 +62,45 @@ public class NewEntry extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
+<<<<<<< HEAD
+        text = (TextView) findViewById(R.id.searched_address);//Check
+
+        buttonChangeDate = (Button) findViewById(R.id.SetTime);
+        buttonChangeDate.setOnClickListener(new OnClickListener() {
+=======
         text = (TextView)findViewById(R.id.searched_address);//Check
 
         buttonChangeDate = (Button)findViewById(R.id.SetTime);
         buttonChangeDate.setOnClickListener(new OnClickListener(){
+>>>>>>> divya21raj/master
 
             @Override
             public void onClick(View v) {
                 openTimePickerDialog(false);
+<<<<<<< HEAD
+            }
+        });
+
+        buttonstartSetDialog = (Button) findViewById(R.id.btnChangeDate);
+        buttonstartSetDialog.setOnClickListener(new OnClickListener() {
+=======
             }});
 
         buttonstartSetDialog = (Button)findViewById(R.id.btnChangeDate);
         buttonstartSetDialog.setOnClickListener(new OnClickListener(){
+>>>>>>> divya21raj/master
 
             @Override
             public void onClick(View v) {
                 DialogFragment newFragment = new DatePickerFragment();
+<<<<<<< HEAD
+                newFragment.show(getFragmentManager(), "Date Picker");
+            }
+        });
+=======
                 newFragment.show(getFragmentManager(),"Date Picker");
             }});
+>>>>>>> divya21raj/master
     }
 
     private void openTimePickerDialog(boolean is24r){
@@ -100,7 +148,13 @@ public class NewEntry extends AppCompatActivity  {
                             .build(this);
             startActivityForResult(intent, 1);
 
+<<<<<<< HEAD
+        } catch (GooglePlayServicesRepairableException e) {
+            // TODO: Handle the error.
+        } catch (GooglePlayServicesNotAvailableException e) {
+=======
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+>>>>>>> divya21raj/master
             // TODO: Handle the error.
         }
 
@@ -143,11 +197,21 @@ public class NewEntry extends AppCompatActivity  {
                     new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                             .build(this);
             startActivityForResult(intent, 1);
+<<<<<<< HEAD
+        } catch (GooglePlayServicesRepairableException e) {
+            // TODO: Handle the error.
+        } catch (GooglePlayServicesNotAvailableException e) {
+=======
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+>>>>>>> divya21raj/master
             // TODO: Handle the error.
         }
     }
 
+<<<<<<< HEAD
+    //Method for SAVE Button
+=======
+>>>>>>> divya21raj/master
     public void finalSave(View view){
 
     }
