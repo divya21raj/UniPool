@@ -1,4 +1,4 @@
-package atishay.com.snucabpool;
+package garbagecollectors.com.snucabpool;
 
 import org.junit.Test;
 
