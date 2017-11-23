@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -19,10 +19,7 @@ public class HomeActivity extends BaseActivity {
     private TextView mTextMessage;
 
     static ArrayList<Entry> entry_list = new ArrayList<>();                            //To store all the entries
-
-    private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
-
+  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +33,8 @@ public class HomeActivity extends BaseActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
+        entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
+
         if(currentUser != null)
         {
             mTextMessage.setText(currentUser.getEmail());
@@ -45,8 +44,6 @@ public class HomeActivity extends BaseActivity {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
-
-
     }
 
     @Override

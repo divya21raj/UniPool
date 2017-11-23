@@ -9,11 +9,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+
 import garbagecollectors.com.snucabpool.R;
 
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
     protected BottomNavigationView navigationView;
+
+    protected FirebaseAuth mAuth;
+    protected static FirebaseUser currentUser;
+
+    protected static DatabaseReference entryDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
