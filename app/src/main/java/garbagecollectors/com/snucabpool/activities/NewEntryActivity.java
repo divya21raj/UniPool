@@ -24,8 +24,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import garbagecollectors.com.snucabpool.DatePickerFragment;
-import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.Entry;
+import garbagecollectors.com.snucabpool.R;
 
 public class NewEntryActivity extends BaseActivity  {
 
