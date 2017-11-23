@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -24,15 +25,17 @@ import java.util.HashMap;
 
 import garbagecollectors.com.snucabpool.DatePickerFragment;
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.Entry;
 
 public class NewEntryActivity extends BaseActivity  {
 
     int count=0;
-    private long user_id;                                                 //Data type could be changed to long
+
     String source, destination,time;
     String AM_PM ;
     Button buttonstartSetDialog,buttonChangeDate, buttonFinalSave;
     TextView text;
+
     public static String date;
     private HashMap<Long, Float> map = new HashMap<>();                   //HashMap contains entry_id(Long value) and lambda(Float value)
 
@@ -54,6 +57,10 @@ public class NewEntryActivity extends BaseActivity  {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
+
+        source = "";
+        destination = "";
+        time = "";
 
         navigationView = (BottomNavigationView) findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
@@ -136,7 +143,6 @@ public class NewEntryActivity extends BaseActivity  {
 
     public void findSource(View view)
     {
-
         count=0;
         try
         {
@@ -206,6 +212,25 @@ public class NewEntryActivity extends BaseActivity  {
 
     public void finalSave(View view)
     {
+        if(!(time.isEmpty()||source.isEmpty()||destination.isEmpty()))
+        {
+            String entryId = entryDatabaseReference.push().getKey();
 
+            //initialise lambda map for this entry here!!!!
+
+            Entry entry = new Entry(entryId, currentUser.getUid(), source, destination, time, null);
+
+            entryDatabaseReference.child(entryId).setValue(entry);
+
+            Toast.makeText(this, "Entry created!", Toast.LENGTH_SHORT).show();
+
+            finish();
+            startActivity(new Intent(this, HomeActivity.class));
+        }
+
+        else
+        {
+            Toast.makeText(this, "Fill all the details, you monkey!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

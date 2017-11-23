@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 
 import garbagecollectors.com.snucabpool.R;
 
@@ -20,6 +21,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     protected FirebaseAuth mAuth;
     protected static FirebaseUser currentUser;
+
+    protected static DatabaseReference entryDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

@@ -2,29 +2,34 @@ package garbagecollectors.com.snucabpool;
 
 import java.util.HashMap;
 
-/**
- * Created by Rohan on 22-11-2017.
- */
-
 public class Entry
 {
-    private long user_id;                                                 //Data type could be changed to long
-    String source, destination,time;
-    private HashMap<Long, Float> map = new HashMap<>();                   //HashMap contains entry_id(Long value) and lambda(Float value)
+    private String entry_id;
+    private String user_id;                               //Data type could be changed to long
 
-    public Entry(long user_id, String source, String destination, String time, HashMap<Long, Float> map)
+    String source, destination,time;
+
+    private HashMap<String, Float> lambdaMap = new HashMap<>(); //HashMap contains entry_id(String value) as key and lambda(Float value) as value
+
+    public Entry(String entry_id, String user_id, String source, String destination, String time, HashMap<String, Float> map)
     {
+        this.entry_id = entry_id;
         this.user_id = user_id;
         this.source = source;
         this.destination = destination;
         this.time = time;
-        this.map = map;
+        this.lambdaMap = map;
     }
 
     public Entry()
-    {}
+    { }
 
-    public long getUser_id()
+    public String getEntry_id()
+    {
+        return entry_id;
+    }
+
+    public String getUser_id()
     {
         return user_id;
     }
@@ -44,8 +49,8 @@ public class Entry
         return time;
     }
 
-    public HashMap<Long, Float> getMap()
+    public HashMap<String, Float> getMap()
     {
-        return map;
+        return lambdaMap;
     }
 }
