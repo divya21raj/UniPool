@@ -1,4 +1,4 @@
-package garbagecollectors.com.snucabpool.Actvities;
+package garbagecollectors.com.snucabpool.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -153,6 +153,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
     {
         if(currentUser != null)
         {
+            progressDialog.dismiss();
             finish();
             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         }
