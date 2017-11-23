@@ -24,7 +24,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import garbagecollectors.com.snucabpool.DatePickerFragment;
+
 import garbagecollectors.com.snucabpool.Entry;
+
 import garbagecollectors.com.snucabpool.R;
 
 public class NewEntryActivity extends BaseActivity  {
@@ -42,6 +44,7 @@ public class NewEntryActivity extends BaseActivity  {
 
     TimePickerDialog timePickerDialog;
     @Override
+
     int getContentViewId()
     {
         return R.layout.activity_new_entry;
@@ -69,6 +72,7 @@ public class NewEntryActivity extends BaseActivity  {
         text = (TextView)findViewById(R.id.searched_address);//Check
 
         buttonChangeDate = (Button)findViewById(R.id.SetTime);
+
         buttonChangeDate.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -123,7 +127,6 @@ public class NewEntryActivity extends BaseActivity  {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute)
         {
-
             Calendar calNow = Calendar.getInstance();
             Calendar calSet = (Calendar) calNow.clone();
 
@@ -154,6 +157,7 @@ public class NewEntryActivity extends BaseActivity  {
 
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e)
         {
+
             // TODO: Handle the error.
         }
 
@@ -183,13 +187,15 @@ public class NewEntryActivity extends BaseActivity  {
                 }
 
 
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR)
+            } 
+            else if (resultCode == PlaceAutocomplete.RESULT_ERROR)
             {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 // TODO: Handle the error.
                 Log.e("Tag", status.getStatusMessage());
 
-            } else if (resultCode == RESULT_CANCELED)
+            } 
+            else if (resultCode == RESULT_CANCELED)
             {
                 // The user canceled the operation.
             }
@@ -204,7 +210,7 @@ public class NewEntryActivity extends BaseActivity  {
             Intent intent =
                     new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                             .build(this);
-            startActivityForResult(intent, 1);
+            startActivityForResult(intent, 1);       
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e)
         {
             // TODO: Handle the error.

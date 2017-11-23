@@ -19,7 +19,7 @@ public class HomeActivity extends BaseActivity {
     private TextView mTextMessage;
 
     static ArrayList<Entry> entry_list = new ArrayList<>();                            //To store all the entries
-
+  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
