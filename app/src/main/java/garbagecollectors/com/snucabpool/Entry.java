@@ -7,17 +7,18 @@ public class Entry
     private String entry_id;
     private String user_id;                               //Data type could be changed to long
 
-    String source, destination,time;
+    String source, destination,time, date;
 
     private HashMap<String, Float> lambdaMap = new HashMap<>(); //HashMap contains entry_id(String value) as key and lambda(Float value) as value
 
-    public Entry(String entry_id, String user_id, String source, String destination, String time, HashMap<String, Float> map)
+    public Entry(String entry_id, String user_id, String source, String destination, String time, String date, HashMap<String, Float> map)
     {
         this.entry_id = entry_id;
         this.user_id = user_id;
         this.source = source;
         this.destination = destination;
         this.time = time;
+        this.date = date;
         this.lambdaMap = map;
     }
 
@@ -49,7 +50,12 @@ public class Entry
         return time;
     }
 
-    public HashMap<String, Float> getMap()
+    public String getDate()
+    {
+        return date;
+    }
+
+    public HashMap<String, Float> getLambdaMap()
     {
         return lambdaMap;
     }
