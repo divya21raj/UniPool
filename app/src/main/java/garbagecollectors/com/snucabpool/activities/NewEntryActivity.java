@@ -206,6 +206,6 @@ public class NewEntryActivity extends BaseActivity  {
 
     public void finalSave(View view)
     {
-        
+
     }
 }

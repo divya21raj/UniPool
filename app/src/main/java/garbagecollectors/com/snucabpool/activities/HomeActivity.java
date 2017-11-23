@@ -20,9 +20,6 @@ public class HomeActivity extends BaseActivity {
 
     static ArrayList<Entry> entry_list = new ArrayList<>();                            //To store all the entries
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +42,6 @@ public class HomeActivity extends BaseActivity {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
-
-
     }
 
     @Override
