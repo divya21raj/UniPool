@@ -37,6 +37,7 @@ public class NewEntryActivity extends BaseActivity  {
     TextView text;
 
     public static String date;
+
     private HashMap<Long, Float> map = new HashMap<>();                   //HashMap contains entry_id(Long value) and lambda(Float value)
 
     TimePickerDialog timePickerDialog;
@@ -218,7 +219,7 @@ public class NewEntryActivity extends BaseActivity  {
 
             //initialise lambda map for this entry here!!!!
 
-            Entry entry = new Entry(entryId, currentUser.getUid(), source, destination, time, null);
+            Entry entry = new Entry(entryId, currentUser.getUid(), source, destination, time, date, null);
 
             entryDatabaseReference.child(entryId).setValue(entry);
 
