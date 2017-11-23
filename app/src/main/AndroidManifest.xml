@@ -12,15 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Actvities.HomeActivity"
+            android:name=".activities.HomeActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Actvities.LoginActivity">
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,13 +30,12 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB8Ik3P9bFz_prcjauv0oGMM_4gQmK2U_I" />
 
-        <activity android:name=".Actvities.NewEntryActivity">
+        <activity android:name=".activities.NewEntryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

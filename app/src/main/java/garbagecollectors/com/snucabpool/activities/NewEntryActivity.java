@@ -1,11 +1,11 @@
-package garbagecollectors.com.snucabpool.Actvities;
+package garbagecollectors.com.snucabpool.activities;
 
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,12 +20,12 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 import java.util.Calendar;
-
 import java.util.HashMap;
+
 import garbagecollectors.com.snucabpool.DatePickerFragment;
 import garbagecollectors.com.snucabpool.R;
 
-public class NewEntryActivity extends AppCompatActivity  {
+public class NewEntryActivity extends BaseActivity  {
 
     int count=0;
     private long user_id;                                                 //Data type could be changed to long
@@ -33,7 +33,7 @@ public class NewEntryActivity extends AppCompatActivity  {
     String AM_PM ;
     Button buttonstartSetDialog,buttonChangeDate;
     TextView text;
-    static String date;
+    public static String date;
     private HashMap<Long, Float> map = new HashMap<>();                   //HashMap contains entry_id(Long value) and lambda(Float value)
 
     TimePickerDialog timePickerDialog;
@@ -41,6 +41,10 @@ public class NewEntryActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
+
+        navigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        navigationView.setOnNavigationItemSelectedListener(this);
+
         text = (TextView)findViewById(R.id.searched_address);//Check
 
         buttonChangeDate = (Button)findViewById(R.id.SetTime);
@@ -59,6 +63,18 @@ public class NewEntryActivity extends AppCompatActivity  {
                 DialogFragment newFragment = new DatePickerFragment();
                 newFragment.show(getFragmentManager(),"Date Picker");
             }});
+    }
+
+    @Override
+    int getContentViewId()
+    {
+        return R.layout.activity_new_entry;
+    }
+
+    @Override
+    int getNavigationMenuItemId()
+    {
+        return R.id.navigation_newEntry;
     }
 
     private void openTimePickerDialog(boolean is24r){

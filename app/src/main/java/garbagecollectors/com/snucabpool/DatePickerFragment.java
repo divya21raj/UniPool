@@ -11,7 +11,7 @@ import android.widget.DatePicker;
 import android.app.Dialog;
 import java.util.Calendar;
 
-import garbagecollectors.com.snucabpool.Actvities.NewEntryActivity;
+import garbagecollectors.com.snucabpool.activities.NewEntryActivity;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
