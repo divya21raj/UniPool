@@ -11,6 +11,8 @@ import android.widget.DatePicker;
 import android.app.Dialog;
 import java.util.Calendar;
 
+import garbagecollectors.com.snucabpool.activities.NewEntryActivity;
+
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     String stringOfDate;
@@ -41,6 +43,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
         stringOfDate = day + "/" + month + "/" + year;
         tv.setText(tv.getText() + "\n\nFormatted date: " + stringOfDate);
-        NewEntry.date=stringOfDate;
+        NewEntryActivity.date=stringOfDate;
     }
 }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="garbagecollectors.com.snucabpool.NewEntry">
+    tools:context="garbagecollectors.com.snucabpool.activities.NewEntryActivity">
 
     <Button
         android:id="@+id/findSource"
@@ -54,12 +54,23 @@
         android:id="@+id/finalSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:onClick="finalSave"
         android:text="Save"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="463dp" />
+        tools:layout_editor_absoluteY="463dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="103dp"/>
+
+    <include
+        layout="@layout/element_bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
 
 </RelativeLayout>

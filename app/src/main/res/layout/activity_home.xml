@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="garbagecollectors.com.snucabpool.MainActivity">
+    tools:context="garbagecollectors.com.snucabpool.activities.HomeActivity">
 
     <FrameLayout
         android:id="@+id/content"
@@ -41,12 +41,13 @@
         android:text="@string/sign_out"
         android:onClick="onClick"/>
 
-    <android.support.design.widget.BottomNavigationView
+    <include
         android:id="@+id/navigation"
+        layout="@layout/element_bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/navigation" />
+        android:layout_alignParentBottom="true"
+        />
+
 
 </LinearLayout>

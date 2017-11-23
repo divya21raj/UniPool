@@ -1,4 +1,4 @@
-package garbagecollectors.com.snucabpool;
+package garbagecollectors.com.snucabpool.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -22,6 +22,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import garbagecollectors.com.snucabpool.R;
 
 public class LoginActivity extends Activity implements View.OnClickListener
 {
@@ -151,8 +153,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
     {
         if(currentUser != null)
         {
+            progressDialog.dismiss();
             finish();
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         }
     }
 }
