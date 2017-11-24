@@ -33,7 +33,8 @@ public class NewEntryActivity extends BaseActivity  {
 
     int count=0;
 
-    String source, destination,time;
+    Place source, destination;
+    String time;
     String AM_PM ;
     Button buttonstartSetDialog,buttonChangeDate, buttonFinalSave;
     TextView text;
@@ -62,8 +63,9 @@ public class NewEntryActivity extends BaseActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
 
-        source = "";
-        destination = "";
+        source = null;
+        destination = null;
+
         time = "";
 
         navigationView = (BottomNavigationView) findViewById(R.id.navigation);
@@ -175,14 +177,12 @@ public class NewEntryActivity extends BaseActivity  {
                 Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber());
                 if(count==0)
                 {
-                    source=(place.getName()+",\n"+
-                            place.getAddress() +"\n" + place.getPhoneNumber());//check
+                    source = place;//check
                     //((TextView) findViewById(R.id.searched_address)).setText(source);
                 }
                 else
                 {
-                    destination=(place.getName()+",\n"+
-                            place.getAddress() +"\n" + place.getPhoneNumber());//check
+                    destination = place;
                     //((TextView) findViewById(R.id.searched_address)).setText(destination);
                 }
 
@@ -219,13 +219,13 @@ public class NewEntryActivity extends BaseActivity  {
 
     public void finalSave(View view)
     {
-        if(!(time.isEmpty()||source.isEmpty()||destination.isEmpty()))
+        if(!(time.isEmpty()||source == null||destination == null))
         {
             String entryId = entryDatabaseReference.push().getKey();
 
             //initialise lambda map for this entry here!!!!
 
-            Entry entry = new Entry(entryId, currentUser.getUid(), source, destination, time, date, null);
+            Entry entry = new Entry(entryId, currentUser.getUid(), time, date, source, destination, null);
 
             entryDatabaseReference.child(entryId).setValue(entry);
 
