@@ -37,7 +37,7 @@ public class HomeActivity extends BaseActivity {
 
         if(currentUser != null)
         {
-            mTextMessage.setText(currentUser.getEmail());
+            mTextMessage.setText(currentUser.getDisplayName());
         }
         else
         {
