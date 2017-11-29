@@ -1,5 +1,7 @@
 package garbagecollectors.com.snucabpool;
 
+import com.google.android.gms.location.places.Place;
+
 import java.util.HashMap;
 
 public class Entry
@@ -7,11 +9,12 @@ public class Entry
     private String entry_id;
     private String user_id;                               //Data type could be changed to long
 
-    String source, destination,time, date;
+    private Place source, destination;
+    private String time, date;
 
     private HashMap<String, Float> lambdaMap = new HashMap<>(); //HashMap contains entry_id(String value) as key and lambda(Float value) as value
 
-    public Entry(String entry_id, String user_id, String source, String destination, String time, String date, HashMap<String, Float> map)
+    public Entry(String entry_id, String user_id, Place source, Place destination, String time, String date, HashMap<String, Float> map)
     {
         this.entry_id = entry_id;
         this.user_id = user_id;
@@ -35,12 +38,12 @@ public class Entry
         return user_id;
     }
 
-    public String getSource()
+    public Place getSource()
     {
         return source;
     }
 
-    public String getDestination()
+    public Place getDestination()
     {
         return destination;
     }

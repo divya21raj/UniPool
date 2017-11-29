@@ -1,5 +1,7 @@
 package garbagecollectors.com.snucabpool;
 
+import android.location.Location;
+
 import com.google.android.gms.location.places.Place;
 
 import java.util.ArrayList;
@@ -10,7 +12,8 @@ import java.util.ArrayList;
 
 public class Sorting_Filtering
 {
-    Place place;
+    Location l1, l2;
+
     final int src_wt = 100;
     final int dest_wt = 50;
     final int time_wt = 25;
@@ -19,9 +22,10 @@ public class Sorting_Filtering
 
     float calc_lambda(Entry e1, Entry e2)
     {
-        
-        float lambda = 0;
+        //l1 = (Location)e1.getSource();
+        //l2 = (Location)e2.getSource();
 
+        float lambda = 0;
         //lambda = (src_wt/dist(e1.source, e2.source))+(dest_wt/dist(e1.destination, e2.destination))+(time_wt/diff(e1.time,e2.time));
 
         return lambda;
