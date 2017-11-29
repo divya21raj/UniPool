@@ -22,8 +22,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.User;
 
 public class LoginActivity extends Activity implements View.OnClickListener
 {
@@ -34,6 +40,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
     private GoogleSignInClient mGoogleSignInClient;
 
     private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+
+    protected static DatabaseReference userDatabaseReference;
 
     private ProgressDialog progressDialog;
 
@@ -56,6 +65,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         mAuth = FirebaseAuth.getInstance();
 
+        userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
+
         progressDialog = new ProgressDialog(this);
 
         signInButton = (SignInButton) findViewById(R.id.sign_in_button);
@@ -69,7 +80,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
         super.onStart();
 
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
 
@@ -85,7 +96,10 @@ public class LoginActivity extends Activity implements View.OnClickListener
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
+
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            createUserOnDatabase(user);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -147,6 +161,35 @@ public class LoginActivity extends Activity implements View.OnClickListener
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
             updateUI(null);
         }
+    }
+
+    private void createUserOnDatabase(FirebaseUser user)
+    {
+        User finalCurrentUser = new User(user.getUid(), user.getDisplayName(), null, null);
+
+        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot snapshot)
+            {
+                if (!snapshot.child(finalCurrentUser.getUserId()).exists())
+                {
+                    userDatabaseReference.child(finalCurrentUser.getUserId()).setValue(finalCurrentUser);
+
+                    Toast.makeText(getApplicationContext(), "User added to database!", Toast.LENGTH_SHORT).show();
+                }
+
+                else
+                    Toast.makeText(getApplicationContext(), "User already there, no need to add!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                Toast.makeText(getApplicationContext(), "Couldn't make it!", Toast.LENGTH_SHORT).show();
+            }
+
+        });
     }
 
     private void updateUI(FirebaseUser currentUser)

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import garbagecollectors.com.snucabpool.Entry;
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.User;
 
 public class HomeActivity extends BaseActivity {
 
