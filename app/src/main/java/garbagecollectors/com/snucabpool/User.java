@@ -1,8 +1,7 @@
 package garbagecollectors.com.snucabpool;
 
-import com.google.firebase.auth.FirebaseUser;
-
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by D2R on 29/11/2017.
@@ -12,19 +11,17 @@ public class User
 {
     private String userId;
     private String name;
-    private ArrayList<Entry> requestedEntries;
-    private ArrayList<User> requestsRecieved;
 
-    public User(String userId, String name, ArrayList<Entry> requestedEntries, ArrayList<User> requestsRecieved)
+    private ArrayList<Entry> requestedEntries;
+    private Map<String, Entry> requestsRecieved;    //String is the userId of requester, Entry is the entry that he requested
+
+    public User(String userId, String name, ArrayList<Entry> requestedEntries, Map<String, Entry> requestsRecieved)
     {
         this.userId = userId;
         this.name = name;
         this.requestedEntries = requestedEntries;
         this.requestsRecieved = requestsRecieved;
     }
-
-    public User()
-    {}
 
     public String getUserId()
     {
@@ -56,13 +53,17 @@ public class User
         this.requestedEntries = requestedEntries;
     }
 
-    public ArrayList<User> getRequestsRecieved()
+    public Map<String, Entry> getRequestsRecieved()
     {
         return requestsRecieved;
     }
 
-    public void setRequestsRecieved(ArrayList<User> requestsRecieved)
+    public void setRequestsRecieved(Map<String, Entry> requestsRecieved)
     {
         this.requestsRecieved = requestsRecieved;
+    }
+
+    public User()
+    {
     }
 }
