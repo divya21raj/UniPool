@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "560852588496-964sg4la0pr111uc9somotn444hmbbpr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "garbagecollectors.com.snucabpool",
+            "certificate_hash": "9cdf311e1c16b9786405d84eba0fac231d3cded8"
+          }
+        },
+        {
+          "client_id": "560852588496-b6r1pudq3mv7gu6emsq0gvn6ljhnn63u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "garbagecollectors.com.snucabpool",
+            "certificate_hash": "22bb7869c9e5ec47b5061c7002e1a6e0fcc2ab1a"
+          }
+        },
+        {
           "client_id": "560852588496-0s3msr6b2m8chbs8aks12kuv8j2233f5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
