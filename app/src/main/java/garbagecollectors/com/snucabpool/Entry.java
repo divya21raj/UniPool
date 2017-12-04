@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class Entry
 {
     private String entry_id;
-    private String user_id;                               //Data type could be changed to long
+    private String user_id;
 
     String time, date;
 
