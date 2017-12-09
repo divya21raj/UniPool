@@ -81,7 +81,7 @@ public class HomeActivity extends BaseActivity {
 
                     try
                     {
-                        setLambdaMap();
+                        setLambdaMapForAllEntries();
                     } catch (ParseException e)
                     {
                         e.printStackTrace();
@@ -111,12 +111,16 @@ public class HomeActivity extends BaseActivity {
     });
 
 }
-    void setLambdaMap() throws ParseException
+    void setLambdaMapForAllEntries() throws ParseException
     {
-        for(Entry e : sf.entry_list)
+        for(Entry e_user: finalCurrentUser.user_entries)
         {
-            this.lambdaMap.put(e.getEntry_id(), sf.calc_lambda(this, e));
+            for(Entry e : sf.entry_list)
+            {
+                e_user.lambdaMap.put(e.getEntry_id(), sf.calc_lambda(e_user, e));
+            }
         }
+
     }
     @Override
     int getNavigationMenuItemId()

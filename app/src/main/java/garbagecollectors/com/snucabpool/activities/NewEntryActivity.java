@@ -232,6 +232,7 @@ public class NewEntryActivity extends BaseActivity  {
             //initialise lambda map for this entry here!!!
             Entry entry = new Entry(name,entryId, currentUser.getUid(), time, date, source, destination, null);
 
+            finalCurrentUser.user_entries.add(entry);
             entryDatabaseReference.child(entryId).setValue(entry);
 
             Toast.makeText(this, "Entry created!", Toast.LENGTH_SHORT).show();
