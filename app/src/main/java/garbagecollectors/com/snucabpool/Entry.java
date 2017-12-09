@@ -27,6 +27,7 @@ public class Entry
         this.date = date;
         this.source = source;
         this.destination = destination;
+        this.name = name;
     }
 
 

@@ -54,7 +54,7 @@ public class HomeActivity extends BaseActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
+        setFinalCurrentUser();
 
         entryDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -111,14 +111,54 @@ public class HomeActivity extends BaseActivity {
     });
 
 }
+
+    private void setFinalCurrentUser()
+    {
+        {
+            userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    if(finalCurrentUser == null)
+                    {
+                        for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
+                        {
+                            User user = dataSnapshot1.getValue(User.class);
+
+                            if(user.getUserId().equals(currentUser.getUid()))
+                            {
+                                finalCurrentUser = user;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+                    // ...
+                }
+            });
+        }
+    }
+
     void setLambdaMapForAllEntries() throws ParseException
     {
-        for(Entry e_user: finalCurrentUser.user_entries)
+        try
         {
-            for(Entry e : sf.entry_list)
+            for(Entry e_user: finalCurrentUser.user_entries)
             {
-                e_user.lambdaMap.put(e.getEntry_id(), sf.calc_lambda(e_user, e));
+                for(Entry e : sf.entry_list)
+                {
+                    e_user.lambdaMap.put(e.getEntry_id(), sf.calc_lambda(e_user, e));
+                }
             }
+
+        }catch (NullPointerException nlp)
+        {
+
         }
 
     }

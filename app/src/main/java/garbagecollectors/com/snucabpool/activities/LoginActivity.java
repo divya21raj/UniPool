@@ -169,8 +169,6 @@ public class LoginActivity extends Activity implements View.OnClickListener
     {
         finalCurrentUser = new User(user.getUid(), user.getDisplayName(), null, null, null);
 
-
-
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
