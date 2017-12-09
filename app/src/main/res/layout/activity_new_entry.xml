@@ -27,8 +27,7 @@
         android:onClick="findDestination"
         android:text="Search Destination"
         android:layout_below="@+id/searched_source"
-        android:layout_alignRight="@+id/searched_time"
-        android:layout_alignEnd="@+id/searched_time"/>
+        />
 
     <TextView
         android:id="@+id/searched_destination"
@@ -43,8 +42,7 @@
         android:layout_height="wrap_content"
         android:text="Set Target Time"
         android:layout_below="@+id/searched_destination"
-        android:layout_alignRight="@+id/searched_date"
-        android:layout_alignEnd="@+id/searched_date"/>
+        />
 
     <TextView
         android:id="@+id/searched_time"
