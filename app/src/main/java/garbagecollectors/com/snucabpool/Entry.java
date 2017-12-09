@@ -11,6 +11,8 @@ public class Entry
 
     private String user_id;     //Data type could be changed to long
 
+    String name;
+
     Sorting_Filtering sf = new Sorting_Filtering();
 
     String time, date;
@@ -39,6 +41,11 @@ public class Entry
         }
     }
 
+    public HashMap<String, Float> getLambdaMap()
+    {
+        return lambdaMap;
+    }
+
     public Entry()
     {
     }
@@ -51,6 +58,16 @@ public class Entry
     public void setEntry_id(String entry_id)
     {
         this.entry_id = entry_id;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     public String getUser_id()

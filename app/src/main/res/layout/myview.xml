@@ -14,7 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
+            android:background="@drawable/cardview_bg"
             android:layout_alignParentBottom="true">
 
             <LinearLayout
@@ -30,7 +30,7 @@
                     android:layout_width="0dp"
                     android:layout_height="55dp"
                     android:layout_weight="1"
-
+                    android:src="@mipmap/falls"
                     />
 
                 <LinearLayout
@@ -45,30 +45,31 @@
                         android:id="@+id/vname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/profile_image"
-
+                        android:paddingBottom="@dimen/songs_count_padding_bottom"
+                        android:paddingLeft="@dimen/album_title_padding"
+                        android:paddingRight="@dimen/album_title_padding"
                         android:text="name"
-                         />
+                        android:textSize="@dimen/album_title" />
 
                     <TextView
                         android:id="@+id/vuser_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/vname"
-
+                        android:paddingBottom="@dimen/songs_count_padding_bottom"
+                        android:paddingLeft="@dimen/album_title_padding"
+                        android:paddingRight="@dimen/album_title_padding"
                         android:text="user id"
-                         />
-
+                        android:textSize="@dimen/songs_count" />
+                  
                     <TextView
                         android:id="@+id/vdate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/vuser_id"
-
+                        android:paddingBottom="@dimen/songs_count_padding_bottom"
+                        android:paddingLeft="@dimen/album_title_padding"
+                        android:paddingRight="@dimen/album_title_padding"
                         android:text="date"
-                         />
+                        android:textSize="@dimen/songs_count" />
 
                     <TextView
                         android:id="@+id/vtime"
@@ -77,8 +78,11 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/vdate"
+                        android:paddingBottom="@dimen/songs_count_padding_bottom"
+                        android:paddingLeft="@dimen/album_title_padding"
+                        android:paddingRight="@dimen/album_title_padding"
                         android:text="time"
-                       />
+                        android:textSize="@dimen/songs_count" />
 
                     <TextView
                         android:id="@+id/vsource"
@@ -87,26 +91,36 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/vdate"
+                        android:paddingLeft="@dimen/album_title_padding"
+                        android:paddingRight="@dimen/album_title_padding"
+                        android:paddingTop="@dimen/album_title_padding"
+                        android:text="source"
+                        android:textColor="@color/album_title"
+                        android:textSize="@dimen/songs_count" />
 
-                        android:text="source" />
                     <TextView
                         android:id="@+id/vdestination"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-
+                        android:paddingLeft="@dimen/album_title_padding"
+                        android:paddingRight="@dimen/album_title_padding"
+                        android:paddingTop="@dimen/album_title_padding"
                         android:text="source"
-                         />
+                        android:textColor="@color/album_title"
+                        android:textSize="@dimen/songs_count"
+                        android:visibility="visible" />
 
                     <ImageView
                         android:id="@+id/overflow"
-                        android:layout_height="match_parent"
-                        android:layout_width="match_parent"
+                        android:layout_width="@dimen/ic_album_overflow_width"
+                        android:layout_height="@dimen/ic_album_overflow_height"
                         android:layout_alignParentRight="true"
-
+                        android:layout_below="@id/thumbnail"
+                        android:layout_marginTop="@dimen/ic_album_overflow_margin_top"
                         android:scaleType="centerCrop"
-                         />
+                        android:src="@drawable/menu" />
 
                 </LinearLayout>
 
@@ -122,7 +136,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
+                        android:background="@drawable/roun_rect_orange"
                         android:text="Invited"
                         android:layout_marginTop="0dp"
                         android:id="@+id/invited"

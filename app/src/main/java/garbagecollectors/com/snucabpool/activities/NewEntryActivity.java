@@ -20,6 +20,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -105,7 +106,13 @@ public class NewEntryActivity extends BaseActivity  {
             @Override
             public void onClick(View v)
             {
-                finalSave(v);
+                try
+                {
+                    finalSave(v);
+                } catch (ParseException e)
+                {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -227,7 +234,7 @@ public class NewEntryActivity extends BaseActivity  {
         }
     }
 
-    public void finalSave(View view)
+    public void finalSave(View view) throws ParseException
     {
         if(!(time.isEmpty()||source == null||destination == null))
         {
