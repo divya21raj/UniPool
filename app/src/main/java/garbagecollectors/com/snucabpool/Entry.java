@@ -13,8 +13,6 @@ public class Entry
 
     String name;
 
-    Sorting_Filtering sf = new Sorting_Filtering();
-
     String time, date;
 
     Object source, destination;
@@ -29,17 +27,9 @@ public class Entry
         this.date = date;
         this.source = source;
         this.destination = destination;
-
-        this.setLambdaMap();
     }
 
-    void setLambdaMap() throws ParseException
-    {
-        for(Entry e : sf.entry_list)
-        {
-            this.lambdaMap.put(e.getEntry_id(), sf.calc_lambda(this, e));
-        }
-    }
+
 
     public HashMap<String, Float> getLambdaMap()
     {
@@ -78,16 +68,6 @@ public class Entry
     public void setUser_id(String user_id)
     {
         this.user_id = user_id;
-    }
-
-    public Sorting_Filtering getSf()
-    {
-        return sf;
-    }
-
-    public void setSf(Sorting_Filtering sf)
-    {
-        this.sf = sf;
     }
 
     public String getTime()

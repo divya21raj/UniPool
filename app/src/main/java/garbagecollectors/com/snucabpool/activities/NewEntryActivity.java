@@ -35,7 +35,7 @@ public class NewEntryActivity extends BaseActivity  {
     int count=0;
 
     Place source, destination;
-    String time, sourceset, destinationset;
+    String time, sourceSet, destinationSet;
     String AM_PM ;
     Button buttonstartSetDialog,buttonChangeDate, buttonFinalSave;
     TextView text_source,text_destination,text_time;
@@ -45,18 +45,6 @@ public class NewEntryActivity extends BaseActivity  {
     private HashMap<Long, Float> map = new HashMap<>();                   //HashMap contains entry_id(Long value) and lambda(Float value)
 
     TimePickerDialog timePickerDialog;
-    @Override
-
-    int getContentViewId()
-    {
-        return R.layout.activity_new_entry;
-    }
-
-    @Override
-    int getNavigationMenuItemId()
-    {
-        return R.id.navigation_newEntry;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -189,17 +177,17 @@ public class NewEntryActivity extends BaseActivity  {
                 if(count==0)
                 {
                     source = place;//check
-                    sourceset=(place.getName()+",\n"+
+                    sourceSet=(place.getName()+",\n"+
                             place.getAddress() +"\n" + place.getPhoneNumber());//check
-                    text_source.setText(sourceset);
+                    text_source.setText(sourceSet);
                     //((TextView) findViewById(R.id.searched_address)).setText(source);
                 }
                 else
                 {
                     destination = place;
-                    destinationset=(place.getName()+",\n"+
+                    destinationSet=(place.getName()+",\n"+
                             place.getAddress() +"\n" + place.getPhoneNumber());//check
-                    text_destination.setText(destinationset);
+                    text_destination.setText(destinationSet);
                     //((TextView) findViewById(R.id.searched_address)).setText(destination);
                 }
 
@@ -257,4 +245,18 @@ public class NewEntryActivity extends BaseActivity  {
             Toast.makeText(this, "Fill in all the details!", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    int getContentViewId()
+    {
+        return R.layout.activity_new_entry;
+    }
+
+    @Override
+    int getNavigationMenuItemId()
+    {
+        return R.id.navigation_newEntry;
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package garbagecollectors.com.snucabpool.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,9 +28,14 @@ public class RequestActivity extends BaseActivity {
     User u = new User();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
+
+        navigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        navigationView.setOnNavigationItemSelectedListener(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -69,11 +75,11 @@ public class RequestActivity extends BaseActivity {
 
     @Override
     int getContentViewId() {
-        return 0;
+        return R.layout.activity_request;
     }
 
     @Override
     int getNavigationMenuItemId() {
-        return 0;
-    };
+        return R.id.navigation_requests;
     }
+}
