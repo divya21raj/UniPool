@@ -114,6 +114,9 @@ public class HomeActivity extends BaseActivity {
                 mAuth.signOut();
                 finish();
                 startActivity(new Intent(this, LoginActivity.class));
+                break;
+            case R.id.navigation:
+                startActivity(new Intent(this,RequestActivity.class));
         }
     }*/
     view.setOnClickListener(v -> {

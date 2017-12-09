@@ -247,7 +247,7 @@ public class NewEntryActivity extends BaseActivity  {
 
         else
         {
-            Toast.makeText(this, "Fill all the details, you monkey!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Fill in all the details!", Toast.LENGTH_SHORT).show();
         }
     }
 }
