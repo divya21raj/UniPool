@@ -18,28 +18,26 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import garbagecollectors.com.snucabpool.Entry;
 import garbagecollectors.com.snucabpool.MyAdapter;
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.Sorting_Filtering;
 import garbagecollectors.com.snucabpool.User;
 
 public class HomeActivity extends BaseActivity {
 
     private TextView mTextMessage;
 
-    @Override
-    int getContentViewId()
-    {
-        return R.layout.activity_home;
-    }
    // static ArrayList<Entry> entry_list = new ArrayList<>();                            //To store all the entries
     List<Entry> list;
     RecyclerView recycle;
     Button view;
 
+    Sorting_Filtering sf = new Sorting_Filtering();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,22 +50,11 @@ public class HomeActivity extends BaseActivity {
 
         view = (Button) findViewById(R.id.view);
         recycle = (RecyclerView) findViewById(R.id.recycle);
-        //mTextMessage = (TextView) findViewById(R.id.info_text);
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
         entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
-
-      /*  if(currentUser != null)
-        {
-            mTextMessage.setText(currentUser.getDisplayName());
-        }
-        else
-        {
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-        }*/
 
         entryDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -92,6 +79,14 @@ public class HomeActivity extends BaseActivity {
                     entry.setName(name);
                     list.add(entry);
 
+                    try
+                    {
+                        setLambdaMap();
+                    } catch (ParseException e)
+                    {
+                        e.printStackTrace();
+                    }
+
                 }
 
             }
@@ -103,22 +98,6 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
-
-
-
-    /*public void onClick(View view)
-    {
-        switch (view.getId())
-        {
-            case R.id.sign_out_button:
-                mAuth.signOut();
-                finish();
-                startActivity(new Intent(this, LoginActivity.class));
-                break;
-            case R.id.navigation:
-                startActivity(new Intent(this,RequestActivity.class));
-        }
-    }*/
     view.setOnClickListener(v -> {
 
         MyAdapter recyclerAdapter = new MyAdapter(list,HomeActivity.this);
@@ -132,9 +111,22 @@ public class HomeActivity extends BaseActivity {
     });
 
 }
+    void setLambdaMap() throws ParseException
+    {
+        for(Entry e : sf.entry_list)
+        {
+            this.lambdaMap.put(e.getEntry_id(), sf.calc_lambda(this, e));
+        }
+    }
     @Override
     int getNavigationMenuItemId()
     {
         return R.id.navigation_home;
     }
+    @Override
+    int getContentViewId()
+    {
+        return R.layout.activity_home;
+    }
+
 }
