@@ -30,20 +30,13 @@ public class Entry
         this.name = name;
     }
 
-
-
-    public HashMap<String, Float> getLambdaMap()
-    {
-        return lambdaMap;
-    }
-
-    public HashMap<String, Float> getLambdaMap()
-    {
-        return lambdaMap;
-    }
-
     public Entry()
     {
+    }
+
+    public HashMap<String, Float> getLambdaMap()
+    {
+        return lambdaMap;
     }
 
     public String getEntry_id()

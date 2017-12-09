@@ -2,6 +2,7 @@ package garbagecollectors.com.snucabpool.activities;
 
 import android.os.Bundle;
 
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -51,6 +52,8 @@ public class RequestActivity extends BaseActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        reqButton = (Button) findViewById(R.id.reqButton);
+
         //DataSnapshot dataSnapshot = new DataSnapshot();
         /*for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren())
         {
@@ -66,12 +69,10 @@ public class RequestActivity extends BaseActivity {
 
         }*/
 
-        userDatabaseRef = FirebaseDatabase.getInstance().getReference("users");
         ArrayList list = new ArrayList<User>();
-        userDatabaseRef.addValueEventListener(new ValueEventListener() {
+        userDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
 
                 for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren()){
 
@@ -127,14 +128,6 @@ public class RequestActivity extends BaseActivity {
     });
 
     }
-        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        //fab.setOnClickListener(new View.OnClickListener() {
-            //@Override
-        public void onClick(TextView view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-
 
     @Override
     int getContentViewId() {
