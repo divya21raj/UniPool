@@ -40,7 +40,7 @@ public class NewEntryActivity extends BaseActivity  {
     Button buttonstartSetDialog,buttonChangeDate, buttonFinalSave;
     TextView text_source,text_destination,text_time;
 
-    public static String date;
+    String date;
 
     private HashMap<Long, Float> map = new HashMap<>();                   //HashMap contains entry_id(Long value) and lambda(Float value)
 
@@ -84,6 +84,7 @@ public class NewEntryActivity extends BaseActivity  {
             public void onClick(View v)
             {
                 DialogFragment newFragment = new DatePickerFragment();
+                date=DatePickerFragment.getDate();
                 newFragment.show(getFragmentManager(),"Date Picker");
             }
         });
