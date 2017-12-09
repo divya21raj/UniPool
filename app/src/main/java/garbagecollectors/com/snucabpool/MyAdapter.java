@@ -62,7 +62,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(List<Entry> list,Context context) {
+    public MyAdapter(List<Entry> list, Context context) {
        this.context=context;
        this.list=list;
     }

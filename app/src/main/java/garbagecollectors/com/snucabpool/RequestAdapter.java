@@ -1,5 +1,6 @@
 package garbagecollectors.com.snucabpool;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,7 +42,9 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     //TODO display requests receieved
     // Provide a suitable constructor (depends on the kind of dataset)
     public RequestAdapter(ArrayList<User> myDataset) {
+
         mDataset = myDataset;
+
     }
 
     // Create new views (invoked by the layout manager)

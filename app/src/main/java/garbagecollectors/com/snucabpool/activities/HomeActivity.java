@@ -1,17 +1,14 @@
 package garbagecollectors.com.snucabpool.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.location.places.Place;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,7 +21,6 @@ import java.util.List;
 import garbagecollectors.com.snucabpool.Entry;
 import garbagecollectors.com.snucabpool.MyAdapter;
 import garbagecollectors.com.snucabpool.R;
-import garbagecollectors.com.snucabpool.User;
 
 public class HomeActivity extends BaseActivity {
 
@@ -57,7 +53,7 @@ public class HomeActivity extends BaseActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
+        userDatabaseRef = FirebaseDatabase.getInstance().getReference("entries");
 
       /*  if(currentUser != null)
         {
@@ -69,7 +65,7 @@ public class HomeActivity extends BaseActivity {
             startActivity(new Intent(this, LoginActivity.class));
         }*/
 
-        entryDatabaseReference.addValueEventListener(new ValueEventListener() {
+        userDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -104,21 +100,6 @@ public class HomeActivity extends BaseActivity {
         });
 
 
-
-
-    /*public void onClick(View view)
-    {
-        switch (view.getId())
-        {
-            case R.id.sign_out_button:
-                mAuth.signOut();
-                finish();
-                startActivity(new Intent(this, LoginActivity.class));
-                break;
-            case R.id.navigation:
-                startActivity(new Intent(this,RequestActivity.class));
-        }
-    }*/
     view.setOnClickListener(v -> {
 
         MyAdapter recyclerAdapter = new MyAdapter(list,HomeActivity.this);
