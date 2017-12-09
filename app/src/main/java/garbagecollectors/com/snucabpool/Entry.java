@@ -11,6 +11,8 @@ public class Entry
 
     private String user_id;     //Data type could be changed to long
 
+    String name;
+
     Sorting_Filtering sf = new Sorting_Filtering();
 
     String time, date;
@@ -39,46 +41,15 @@ public class Entry
         }
     }
 
+    public HashMap<String, Float> getLambdaMap()
+    {
+        return lambdaMap;
+    }
+
     public Entry()
     {
     }
 
-    public void setName(String name)
-    {
-        this.name=name;
-    }
-    public void setEntry_id(String entry_id) {
-        this.entry_id = entry_id;
-    }
-
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public void setSource(Object source) {
-        this.source = source;
-    }
-
-    public void setDestination(Object destination) {
-        this.destination = destination;
-    }
-
-    public void setLambdaMap(HashMap<String, Float> lambdaMap) {
-        this.lambdaMap = lambdaMap;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
     public String getEntry_id()
     {
         return entry_id;
@@ -87,6 +58,16 @@ public class Entry
     public void setEntry_id(String entry_id)
     {
         this.entry_id = entry_id;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     public String getUser_id()
