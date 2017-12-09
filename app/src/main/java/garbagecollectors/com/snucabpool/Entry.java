@@ -2,14 +2,19 @@ package garbagecollectors.com.snucabpool;
 
 import com.google.android.gms.location.places.Place;
 
+import java.text.ParseException;
 import java.util.HashMap;
 
 public class Entry
 {
     private String entry_id;
-    String user_id;                               //Data type could be changed to long
-    String name;
+
+    private String user_id;     //Data type could be changed to long
+
+    Sorting_Filtering sf = new Sorting_Filtering();
+
     String time, date;
+
     Object source, destination;
 
     private HashMap<String, Float> lambdaMap = new HashMap<>(); //HashMap contains entry_id(String value) as key and lambda(Float value) as value
@@ -22,8 +27,16 @@ public class Entry
         this.date = date;
         this.source = source;
         this.destination = destination;
-        this.lambdaMap = lambdaMap;
-        this.name = name;
+
+        this.setLambdaMap();
+    }
+
+    void setLambdaMap() throws ParseException
+    {
+        for(Entry e : sf.entry_list)
+        {
+            this.lambdaMap.put(e.getEntry_id(), sf.calc_lambda(this, e));
+        }
     }
 
     public Entry()
