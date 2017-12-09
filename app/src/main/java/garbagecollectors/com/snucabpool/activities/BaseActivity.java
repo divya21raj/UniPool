@@ -63,8 +63,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 startActivity(new Intent(this, NewEntryActivity.class));
             } else if (itemId == R.id.navigation_notifications)
             {
-                Toast.makeText(this, "No third Activity yet, back to home!", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(this, HomeActivity.class));
+                startActivity(new Intent(this, RequestActivity.class));
             }
             finish();
         }, 300);
