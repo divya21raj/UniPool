@@ -27,7 +27,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     static User finalCurrentUser;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15sp"
+        android:text="Show Requests"
+        android:textStyle="bold" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:layout_marginLeft="14sp"
-        android:layout_marginRight="14sp"
-        android:layout_marginTop="14sp"
-        android:layout_above="@+id/include"/>
+        android:layout_height="440dp"
+        android:layout_margin="14sp"
+        android:scrollbars="vertical" />
 
     <TextView
         android:id="@+id/request_text_view"

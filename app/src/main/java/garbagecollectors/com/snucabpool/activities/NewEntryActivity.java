@@ -226,7 +226,7 @@ public class NewEntryActivity extends BaseActivity  {
     {
         if(!(time.isEmpty()||source == null||destination == null))
         {
-            String entryId = entryDatabaseReference.push().getKey();
+            String entryId = userDatabaseRef.push().getKey();
             String name= currentUser.getDisplayName();
 
             //initialise lambda map for this entry here!!!

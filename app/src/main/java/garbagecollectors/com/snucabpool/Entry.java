@@ -37,6 +37,11 @@ public class Entry
         return lambdaMap;
     }
 
+    public HashMap<String, Float> getLambdaMap()
+    {
+        return lambdaMap;
+    }
+
     public Entry()
     {
     }

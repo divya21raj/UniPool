@@ -52,7 +52,7 @@ public class HomeActivity extends BaseActivity {
 
         setFinalCurrentUser();
 
-        entryDatabaseReference.addValueEventListener(new ValueEventListener() {
+        userDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
