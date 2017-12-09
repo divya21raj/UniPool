@@ -1,6 +1,8 @@
 package garbagecollectors.com.snucabpool;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,14 +11,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import garbagecollectors.com.snucabpool.activities.HomeActivity;
+
+import static java.security.AccessController.getContext;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     //private String[] mDataset;
-
+    LayoutInflater inflater;
     List<Entry> list;
     Context context;
+
+    public MyAdapter(Context context){
+        this.context = context;
+        inflater = LayoutInflater.from(context);
+    }
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -28,6 +48,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         public TextView destination;
         public TextView name_user;
         public TextView travel_time;
+
 
         public MyHolder(View v) {
             super(v);
@@ -55,24 +76,53 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         View v = LayoutInflater.from(context).inflate(R.layout.card, parent, false);
         // set the view's size, margins, paddings and layout parameters...
 
-        MyHolder vh = new MyHolder(v);
-        return vh;
+        MyHolder holder = new MyHolder(v);
+        return holder;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(MyHolder holder, int position) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+        @Override
+            public void onClick(View view) {
+            FirebaseAuth mAuth;
+            FirebaseUser currentUser;
+            mAuth = FirebaseAuth.getInstance();
+            currentUser = mAuth.getCurrentUser();
+            Entry entry = list.get(position);
+
+            //NOTES: mylist has the entry being displayed on the card. currentUSer has teh user
+            User user = new User(currentUser.getUid(), currentUser.getDisplayName(), new ArrayList<Entry>(), new HashMap<String, String>(), new ArrayList<Entry>());
+            user.getRequestSent().add(entry);
+            DatabaseReference mDatabase;
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            //update fiebase database to include arraylist that contains name of the card clicked in requests sent
+            mDatabase.child("users").child(entry.getUser_id()).child("requestReceived").setValue(user.getRequestSent().toString());
+            mDatabase.child("users").child(user.getUserId()).child("requestSent").setValue(entry.getUser_id()+", ");
+
+            mDatabase.child("users").child(user.getUserId()).child("friends").setValue(entry.getUser_id()+", ");
+            mDatabase.child("users").child(entry.getUser_id()).child("friends").setValue(user.getRequestSent().toString());
+            //magic over!
+
+            Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG);
+
+               //Intent intent = new Intent(view.getContext(), HomeActivity.class);
+               //view.getContext().startActivity(intent);
+               }
+           });
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         // holder.mTextView.setText(mDataset[position]);
-        Entry mylist = list.get(position);
 
+        Entry mylist = list.get(position);
         holder.date.setText(mylist.getDate());
         holder.user_id.setText(mylist.getUser_id());
         holder.name_user.setText(mylist.getName());
         holder.travel_time.setText(mylist.getTime());
 
-        //Toast.makeText(this, "Entry created!", Toast.LENGTH_SHORT).show();
+
         //System.out.println("Time is "+holder.travel_time);
         //Object temp_Source=(Place)mylist.getSource();
        // Place temp_Destination=(Place)mylist.getDestination();
