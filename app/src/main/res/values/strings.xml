@@ -6,9 +6,4 @@
     <string name="WebClientId">560852588496-baos0qb9om1qmvade33hbh1l2ic70l00.apps.googleusercontent.com</string>
     <string name="sign_out">Sign Out</string>
     <string name="new_entry">New Entry</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_add_favourite">Add to Favourites</string>
-    <string name="action_play_next">Play Next</string>
-    <string name="backdrop_title">LOVE MUSIC</string>
-    <string name="backdrop_subtitle">This season top 20 albums</string>
 </resources>
