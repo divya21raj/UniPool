@@ -70,28 +70,22 @@ public class RequestActivity extends BaseActivity {
         }*/
 
         ArrayList list = new ArrayList<User>();
-        userDatabaseReference.addValueEventListener(new ValueEventListener() {
+        userDatabaseReference.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren()){
-
-                    User value = dataSnapshot1.getValue(User.class);
-                    User user = new User();
-
-                    String user_id = value.getUserId();
-
-                    String name = value.getName();
-                    user.setUserId(user_id);
-                    user.setName(name);
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
+                {
+                    User user = dataSnapshot1.getValue(User.class);
                     list.add(user);
-
                 }
 
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError)
+            {
                 Log.w("Hello", "Failed to read value.", databaseError.toException());
             }
 
