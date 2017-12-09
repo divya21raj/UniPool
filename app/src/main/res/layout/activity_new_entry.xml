@@ -7,70 +7,79 @@
 
     <Button
         android:id="@+id/findSource"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Search Source"
-        android:onClick="findSource"/>
+        android:layout_alignParentTop="true"
+        android:onClick="findSource"
+        android:text="Search Source" />
+
+    <TextView
+        android:id="@+id/searched_source"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@+id/findSource"
+        android:textSize="25dp" />
 
     <Button
         android:id="@+id/findDestination"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Search Destination"
+        android:layout_below="@+id/searched_source"
         android:onClick="findDestination"
-        android:layout_marginTop="28dp"
-        android:layout_below="@+id/findSource"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:text="Search Destination"
+        android:layout_marginTop="20dp"
+        />
+
+    <TextView
+        android:id="@+id/searched_destination"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@+id/findDestination"
+        android:textSize="25dp" />
 
     <Button
         android:id="@+id/SetTime"
-        android:layout_width="fill_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/findDestination"
-        android:layout_marginTop="33dp"
+        android:layout_below="@+id/searched_destination"
+        android:layout_marginTop="20dp"
         android:text="Set Target Time" />
 
     <TextView
-        android:id="@+id/searched_address"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/finalSave"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/btnChangeDate"
+        android:id="@+id/searched_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/SetTime"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/searched_destination"
         android:textSize="25dp" />
 
     <Button
         android:id="@+id/btnChangeDate"
-        android:layout_width="fill_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
+
         android:layout_below="@+id/SetTime"
         android:text="Change Date" />
+
+    <TextView
+        android:id="@+id/searched_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/btnChangeDate"
+        android:layout_below="@+id/SetTime"
+        android:layout_marginBottom="20dp"
+        android:textSize="25dp" />
 
     <Button
         android:id="@+id/finalSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="finalSave"
         android:text="Save"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="463dp"
+        android:onClick="finalSave"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="103dp"/>
-
-    <include
-        layout="@layout/element_bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
-
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
+

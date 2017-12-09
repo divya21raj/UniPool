@@ -34,10 +34,10 @@ public class NewEntryActivity extends BaseActivity  {
     int count=0;
 
     Place source, destination;
-    String time;
+    String time, sourceset, destinationset;
     String AM_PM ;
     Button buttonstartSetDialog,buttonChangeDate, buttonFinalSave;
-    TextView text;
+    TextView text_source,text_destination,text_time;
 
     public static String date;
 
@@ -71,7 +71,11 @@ public class NewEntryActivity extends BaseActivity  {
         navigationView = (BottomNavigationView) findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
 
-        text = (TextView)findViewById(R.id.searched_address);//Check
+        text_source = (TextView)findViewById(R.id.searched_source);//Check
+        text_source.setText("Select Pickup Point");
+        text_destination = (TextView)findViewById(R.id.searched_destination);
+        text_destination.setText("Select Drop Location");
+        text_time = (TextView)findViewById(R.id.searched_time);
 
         buttonChangeDate = (Button)findViewById(R.id.SetTime);
 
@@ -143,7 +147,7 @@ public class NewEntryActivity extends BaseActivity  {
                 AM_PM = "PM";
 
             time=HourOfDay+":"+minOfDay+" "+AM_PM;
-            //text.setText(time);
+            text_time.setText(time);
         }
     };
 
@@ -178,11 +182,17 @@ public class NewEntryActivity extends BaseActivity  {
                 if(count==0)
                 {
                     source = place;//check
+                    sourceset=(place.getName()+",\n"+
+                            place.getAddress() +"\n" + place.getPhoneNumber());//check
+                    text_source.setText(sourceset);
                     //((TextView) findViewById(R.id.searched_address)).setText(source);
                 }
                 else
                 {
                     destination = place;
+                    destinationset=(place.getName()+",\n"+
+                            place.getAddress() +"\n" + place.getPhoneNumber());//check
+                    text_destination.setText(destinationset);
                     //((TextView) findViewById(R.id.searched_address)).setText(destination);
                 }
 
@@ -237,7 +247,7 @@ public class NewEntryActivity extends BaseActivity  {
 
         else
         {
-            Toast.makeText(this, "Fill all the details, you monkey!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Fill in all the details!", Toast.LENGTH_SHORT).show();
         }
     }
 }

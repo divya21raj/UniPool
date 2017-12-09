@@ -2,19 +2,24 @@ package garbagecollectors.com.snucabpool;
 
 import com.google.android.gms.location.places.Place;
 
+import java.text.ParseException;
 import java.util.HashMap;
 
 public class Entry
 {
     private String entry_id;
-    String user_id;                               //Data type could be changed to long
-    String name;
+
+    private String user_id;     //Data type could be changed to long
+
+    Sorting_Filtering sf = new Sorting_Filtering();
+
     String time, date;
+
     Object source, destination;
 
     private HashMap<String, Float> lambdaMap = new HashMap<>(); //HashMap contains entry_id(String value) as key and lambda(Float value) as value
 
-    public Entry(String name, String entry_id, String user_id, String time, String date, Object source, Object destination, HashMap<String, Float> lambdaMap)
+    public Entry(String name, String entry_id, String user_id, String time, String date, Object source, Object destination, HashMap<String, Float> lambdaMap) throws ParseException
     {
         this.entry_id = entry_id;
         this.user_id = user_id;
@@ -22,8 +27,16 @@ public class Entry
         this.date = date;
         this.source = source;
         this.destination = destination;
-        this.lambdaMap = lambdaMap;
-        this.name = name;
+
+        this.setLambdaMap();
+    }
+
+    void setLambdaMap() throws ParseException
+    {
+        for(Entry e : sf.entry_list)
+        {
+            this.lambdaMap.put(e.getEntry_id(), sf.calc_lambda(this, e));
+        }
     }
 
     public Entry()
@@ -71,9 +84,29 @@ public class Entry
         return entry_id;
     }
 
+    public void setEntry_id(String entry_id)
+    {
+        this.entry_id = entry_id;
+    }
+
     public String getUser_id()
     {
         return user_id;
+    }
+
+    public void setUser_id(String user_id)
+    {
+        this.user_id = user_id;
+    }
+
+    public Sorting_Filtering getSf()
+    {
+        return sf;
+    }
+
+    public void setSf(Sorting_Filtering sf)
+    {
+        this.sf = sf;
     }
 
     public String getTime()
@@ -81,9 +114,19 @@ public class Entry
         return time;
     }
 
+    public void setTime(String time)
+    {
+        this.time = time;
+    }
+
     public String getDate()
     {
         return date;
+    }
+
+    public void setDate(String date)
+    {
+        this.date = date;
     }
 
     public Object getSource()
@@ -91,13 +134,18 @@ public class Entry
         return source;
     }
 
+    public void setSource(Object source)
+    {
+        this.source = source;
+    }
+
     public Object getDestination()
     {
         return destination;
     }
 
-    public HashMap<String, Float> getLambdaMap()
+    public void setDestination(Object destination)
     {
-        return lambdaMap;
+        this.destination = destination;
     }
 }

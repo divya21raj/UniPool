@@ -165,7 +165,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void createUserOnDatabase(FirebaseUser user)
     {
-        User finalCurrentUser = new User(user.getUid(), user.getDisplayName(), null, null);
+        User finalCurrentUser = new User(user.getUid(), user.getDisplayName(), null, null, null);
 
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
