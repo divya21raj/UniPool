@@ -232,10 +232,10 @@ public class NewEntryActivity extends BaseActivity  {
         if(!(time.isEmpty()||source == null||destination == null))
         {
             String entryId = entryDatabaseReference.push().getKey();
+            String name= currentUser.getDisplayName();
 
-            //initialise lambda map for this entry here!!!!
-
-            Entry entry = new Entry(entryId, currentUser.getUid(), time, date, source, destination, null);
+            //initialise lambda map for this entry here!!!
+            Entry entry = new Entry(name,entryId, currentUser.getUid(), time, date, source, destination, null);
 
             entryDatabaseReference.child(entryId).setValue(entry);
 
