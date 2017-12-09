@@ -17,7 +17,7 @@ public class Entry
 
     Object source, destination;
 
-    private HashMap<String, Float> lambdaMap = new HashMap<>(); //HashMap contains entry_id(String value) as key and lambda(Float value) as value
+    public HashMap<String, Float> lambdaMap = new HashMap<>(); //HashMap contains entry_id(String value) as key and lambda(Float value) as value
 
     public Entry(String name, String entry_id, String user_id, String time, String date, Object source, Object destination, HashMap<String, Float> lambdaMap) throws ParseException
     {

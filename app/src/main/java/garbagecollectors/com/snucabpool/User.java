@@ -11,6 +11,7 @@ public class User
 {
     private String userId;
     private String name;
+    public ArrayList<Entry> user_entries =new ArrayList<>();
 
     private ArrayList<Entry> requestSent;//String is the userId of requester, Entry is the entry that he requested
     private Map<String, String> requestsRecieved;//We have Map because we're taking Entry object of the entry that we have made (that the other person has clicked on)

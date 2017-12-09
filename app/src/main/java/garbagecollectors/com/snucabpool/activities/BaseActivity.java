@@ -24,6 +24,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static FirebaseUser currentUser;
     protected static DatabaseReference userDatabaseReference;
     protected static DatabaseReference entryDatabaseReference;
+    static User finalCurrentUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
