@@ -160,6 +160,7 @@ public class HomeActivity extends BaseActivity {
         {
 
         }
+
     }
     @Override
     int getNavigationMenuItemId()

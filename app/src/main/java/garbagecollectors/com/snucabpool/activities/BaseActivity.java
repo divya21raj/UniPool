@@ -23,6 +23,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     protected FirebaseAuth mAuth;
     protected static FirebaseUser currentUser;
+
     protected static DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     static User finalCurrentUser;
