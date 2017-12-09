@@ -7,11 +7,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.User;
@@ -22,8 +22,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     protected FirebaseAuth mAuth;
     protected static FirebaseUser currentUser;
-    protected static DatabaseReference userDatabaseReference;
-    protected static DatabaseReference entryDatabaseReference;
+
+    protected static DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
+    protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
+    static User finalCurrentUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -61,7 +64,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             } else if (itemId == R.id.navigation_newEntry)
             {
                 startActivity(new Intent(this, NewEntryActivity.class));
-            } else if (itemId == R.id.navigation_notifications)
+            } else if (itemId == R.id.navigation_requests)
             {
                 startActivity(new Intent(this, RequestActivity.class));
             }

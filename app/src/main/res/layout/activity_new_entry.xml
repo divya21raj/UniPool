@@ -16,34 +16,33 @@
     <TextView
         android:id="@+id/searched_source"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="100dp"
         android:layout_below="@+id/findSource"
-        android:textSize="25dp" />
+        android:textSize="15dp" />
 
     <Button
         android:id="@+id/findDestination"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/searched_source"
         android:onClick="findDestination"
         android:text="Search Destination"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/searched_source"
         />
 
     <TextView
         android:id="@+id/searched_destination"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="100dp"
         android:layout_below="@+id/findDestination"
-        android:textSize="25dp" />
+        android:textSize="15dp" />
 
     <Button
         android:id="@+id/SetTime"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:text="Set Target Time"
         android:layout_below="@+id/searched_destination"
-        android:layout_marginTop="20dp"
-        android:text="Set Target Time" />
+        />
 
     <TextView
         android:id="@+id/searched_time"
@@ -52,7 +51,7 @@
         android:layout_toRightOf="@+id/SetTime"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/searched_destination"
-        android:textSize="25dp" />
+        android:textSize="15dp" />
 
     <Button
         android:id="@+id/btnChangeDate"
@@ -69,7 +68,7 @@
         android:layout_toRightOf="@+id/btnChangeDate"
         android:layout_below="@+id/SetTime"
         android:layout_marginBottom="20dp"
-        android:textSize="25dp" />
+        android:textSize="15dp" />
 
     <Button
         android:id="@+id/finalSave"
@@ -77,9 +76,19 @@
         android:layout_height="wrap_content"
         android:text="Save"
         android:onClick="finalSave"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/btnChangeDate"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentStart="true"/>
+
+    <include
+        layout="@layout/element_bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"/>
 
 </RelativeLayout>
 

@@ -1,45 +1,39 @@
 package garbagecollectors.com.snucabpool.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.location.places.Place;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import garbagecollectors.com.snucabpool.Entry;
 import garbagecollectors.com.snucabpool.MyAdapter;
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.Sorting_Filtering;
 import garbagecollectors.com.snucabpool.User;
 
 public class HomeActivity extends BaseActivity {
 
     private TextView mTextMessage;
 
-    @Override
-    int getContentViewId()
-    {
-        return R.layout.activity_home;
-    }
    // static ArrayList<Entry> entry_list = new ArrayList<>();                            //To store all the entries
     List<Entry> list;
     RecyclerView recycle;
     Button view;
 
+    Sorting_Filtering sf = new Sorting_Filtering();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,22 +46,11 @@ public class HomeActivity extends BaseActivity {
 
         view = (Button) findViewById(R.id.view);
         recycle = (RecyclerView) findViewById(R.id.recycle);
-        //mTextMessage = (TextView) findViewById(R.id.info_text);
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
-
-      /*  if(currentUser != null)
-        {
-            mTextMessage.setText(currentUser.getDisplayName());
-        }
-        else
-        {
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-        }*/
+        setFinalCurrentUser();
 
         entryDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -92,6 +75,14 @@ public class HomeActivity extends BaseActivity {
                     entry.setName(name);
                     list.add(entry);
 
+                    try
+                    {
+                        setLambdaMapForAllEntries();
+                    } catch (ParseException e)
+                    {
+                        e.printStackTrace();
+                    }
+
                 }
 
             }
@@ -103,22 +94,6 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
-
-
-
-    /*public void onClick(View view)
-    {
-        switch (view.getId())
-        {
-            case R.id.sign_out_button:
-                mAuth.signOut();
-                finish();
-                startActivity(new Intent(this, LoginActivity.class));
-                break;
-            case R.id.navigation:
-                startActivity(new Intent(this,RequestActivity.class));
-        }
-    }*/
     view.setOnClickListener(v -> {
 
         MyAdapter recyclerAdapter = new MyAdapter(list,HomeActivity.this);
@@ -132,9 +107,66 @@ public class HomeActivity extends BaseActivity {
     });
 
 }
+
+    private void setFinalCurrentUser()
+    {
+        {
+            userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    if(finalCurrentUser == null)
+                    {
+                        for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
+                        {
+                            User user = dataSnapshot1.getValue(User.class);
+
+                            if(user.getUserId().equals(currentUser.getUid()))
+                            {
+                                finalCurrentUser = user;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+                    // ...
+                }
+            });
+        }
+    }
+
+    void setLambdaMapForAllEntries() throws ParseException
+    {
+        try
+        {
+            for(Entry e_user: finalCurrentUser.user_entries)
+            {
+                for(Entry e : sf.entry_list)
+                {
+                    e_user.lambdaMap.put(e.getEntry_id(), sf.calc_lambda(e_user, e));
+                }
+            }
+
+        }catch (NullPointerException nlp)
+        {
+
+        }
+
+    }
     @Override
     int getNavigationMenuItemId()
     {
         return R.id.navigation_home;
     }
+    @Override
+    int getContentViewId()
+    {
+        return R.layout.activity_home;
+    }
+
 }

@@ -27,7 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/recycle"
-            android:layout_below="@+id/view">
+            android:layout_below="@+id/view"
+            android:layout_above="@+id/navigation">
 
         </android.support.v7.widget.RecyclerView>
 
@@ -37,8 +38,10 @@
         layout="@layout/element_bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
-        />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
 </RelativeLayout>
 
