@@ -12,15 +12,16 @@ public class User
     private String userId;
     private String name;
 
-    private ArrayList<Entry> requestedEntries;
-    private Map<String, Entry> requestsRecieved;    //String is the userId of requester, Entry is the entry that he requested
-
-    public User(String userId, String name, ArrayList<Entry> requestedEntries, Map<String, Entry> requestsRecieved)
+    private ArrayList<Entry> requestSent;//String is the userId of requester, Entry is the entry that he requested
+    private Map<String, String> requestsRecieved;//We have Map because we're taking Entry object of the entry that we have made (that the other person has clicked on)
+    private ArrayList<Entry> friends;
+    public User(String userId, String name, ArrayList<Entry> requestSent, Map<String, String> requestsRecieved, ArrayList<Entry> friends)
     {
         this.userId = userId;
         this.name = name;
-        this.requestedEntries = requestedEntries;
+        this.requestSent = requestSent;
         this.requestsRecieved = requestsRecieved;
+        this.friends = friends;
     }
 
     public String getUserId()
@@ -43,22 +44,22 @@ public class User
         this.name = name;
     }
 
-    public ArrayList<Entry> getRequestedEntries()
+    public ArrayList<Entry> getRequestSent()
     {
-        return requestedEntries;
+        return requestSent;
     }
 
-    public void setRequestedEntries(ArrayList<Entry> requestedEntries)
+    public void setRequestSent(ArrayList<Entry> requestSent)
     {
-        this.requestedEntries = requestedEntries;
+        this.requestSent = requestSent;
     }
 
-    public Map<String, Entry> getRequestsRecieved()
+    public Map<String, String> getRequestsRecieved()
     {
         return requestsRecieved;
     }
 
-    public void setRequestsRecieved(Map<String, Entry> requestsRecieved)
+    public void setRequestsRecieved(Map<String, String> requestsRecieved)
     {
         this.requestsRecieved = requestsRecieved;
     }
