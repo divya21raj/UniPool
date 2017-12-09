@@ -1,6 +1,7 @@
 package garbagecollectors.com.snucabpool.activities;
 
 import android.os.Bundle;
+
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,12 +19,14 @@ import com.google.firebase.database.DatabaseError;
 import java.util.ArrayList;
 
 import garbagecollectors.com.snucabpool.MyAdapter;
+
 import garbagecollectors.com.snucabpool.RequestAdapter;
 import garbagecollectors.com.snucabpool.User;
 
 import garbagecollectors.com.snucabpool.R;
 
 import static android.R.id.list;
+import static garbagecollectors.com.snucabpool.R.styleable.View;
 
 public class RequestActivity extends BaseActivity {
 
@@ -39,7 +42,9 @@ public class RequestActivity extends BaseActivity {
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
-
+        
+        navigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        navigationView.setOnNavigationItemSelectedListener(this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
@@ -133,11 +138,11 @@ public class RequestActivity extends BaseActivity {
 
     @Override
     int getContentViewId() {
-        return 0;
+        return R.layout.activity_request;
     }
 
     @Override
     int getNavigationMenuItemId() {
-        return 0;
-    };
+        return R.id.navigation_requests;
     }
+}

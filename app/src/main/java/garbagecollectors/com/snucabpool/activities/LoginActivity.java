@@ -31,6 +31,8 @@ import com.google.firebase.database.ValueEventListener;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.User;
 
+import static garbagecollectors.com.snucabpool.activities.BaseActivity.finalCurrentUser;
+
 public class LoginActivity extends Activity implements View.OnClickListener
 {
     private static final int RC_SIGN_IN = 9001;
@@ -165,7 +167,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void createUserOnDatabase(FirebaseUser user)
     {
-        User finalCurrentUser = new User(user.getUid(), user.getDisplayName(), null, null, null);
+        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), null, null, null);
 
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {

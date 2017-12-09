@@ -13,13 +13,11 @@ public class Entry
 
     String name;
 
-    Sorting_Filtering sf = new Sorting_Filtering();
-
     String time, date;
 
     Object source, destination;
 
-    private HashMap<String, Float> lambdaMap = new HashMap<>(); //HashMap contains entry_id(String value) as key and lambda(Float value) as value
+    public HashMap<String, Float> lambdaMap = new HashMap<>(); //HashMap contains entry_id(String value) as key and lambda(Float value) as value
 
     public Entry(String name, String entry_id, String user_id, String time, String date, Object source, Object destination, HashMap<String, Float> lambdaMap) throws ParseException
     {
@@ -29,16 +27,14 @@ public class Entry
         this.date = date;
         this.source = source;
         this.destination = destination;
-
-        this.setLambdaMap();
+        this.name = name;
     }
 
-    void setLambdaMap() throws ParseException
+
+
+    public HashMap<String, Float> getLambdaMap()
     {
-        for(Entry e : sf.entry_list)
-        {
-            this.lambdaMap.put(e.getEntry_id(), sf.calc_lambda(this, e));
-        }
+        return lambdaMap;
     }
 
     public HashMap<String, Float> getLambdaMap()
@@ -78,16 +74,6 @@ public class Entry
     public void setUser_id(String user_id)
     {
         this.user_id = user_id;
-    }
-
-    public Sorting_Filtering getSf()
-    {
-        return sf;
-    }
-
-    public void setSf(Sorting_Filtering sf)
-    {
-        this.sf = sf;
     }
 
     public String getTime()

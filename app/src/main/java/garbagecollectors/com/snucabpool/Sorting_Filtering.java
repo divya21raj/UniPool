@@ -21,9 +21,9 @@ public class Sorting_Filtering
     final int dest_wt = 50;
     final int time_wt = 25;
 
-    static ArrayList<Entry> entry_list = entry_list = new ArrayList<>();
+    public static ArrayList<Entry> entry_list = entry_list = new ArrayList<>();
 
-    float calc_lambda(Entry e1, Entry e2) throws ParseException {
+    public float calc_lambda(Entry e1, Entry e2) throws ParseException {
         float lambda = 0;
 
         src1 = (Location)e1.getSource();
