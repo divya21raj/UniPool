@@ -1,8 +1,6 @@
 package garbagecollectors.com.snucabpool;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,28 +8,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.places.Place;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import garbagecollectors.com.snucabpool.activities.HomeActivity;
-
-import static java.security.AccessController.getContext;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     //private String[] mDataset;
-    LayoutInflater inflater;
-    List<Entry> list;
-    Context context;
+    private LayoutInflater inflater;
+    private List<Entry> list;
+    private Context context;
 
     public MyAdapter(Context context){
         this.context = context;
@@ -43,14 +33,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     class MyHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView date;
-        public TextView user_id;
-        public TextView source;
-        public TextView destination;
-        public TextView name_user;
-        public TextView travel_time;
+        TextView user_id;
+        TextView source;
+        TextView destination;
+        TextView name_user;
+        TextView travel_time;
 
 
-        public MyHolder(View v) {
+        MyHolder(View v) {
             super(v);
             date=(TextView)v.findViewById(R.id.vdate);
             user_id=(TextView)v.findViewById(R.id.vuser_id);
@@ -98,7 +88,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
             user.getRequestSent().add(entry);
             DatabaseReference mDatabase;
             mDatabase = FirebaseDatabase.getInstance().getReference();
-            //update fiebase database to include arraylist that contains name of the card clicked in requests sent
+            //update firebase database to include arrayList that contains name of the card clicked in requests sent
             mDatabase.child("users").child(entry.getUser_id()).child("requestReceived").setValue(user.getRequestSent().toString());
             mDatabase.child("users").child(user.getUserId()).child("requestSent").setValue(entry.getUser_id()+", ");
 
@@ -106,7 +96,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
             mDatabase.child("users").child(entry.getUser_id()).child("friends").setValue(user.getRequestSent().toString());
             //magic over!
 
-            Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG);
+            Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG).show();
 
                //Intent intent = new Intent(view.getContext(), HomeActivity.class);
                //view.getContext().startActivity(intent);
@@ -146,11 +136,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
                 arr=list.size();
             }
 
-
-
         }catch (Exception e){
-
-
 
         }
 
