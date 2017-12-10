@@ -1,20 +1,21 @@
 package garbagecollectors.com.snucabpool.activities;
 
-import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 
 import garbagecollectors.com.snucabpool.R;
 
-public class RequestActivity extends BaseActivity {
-
+public class ChatMainActivity extends BaseActivity
+{
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_request);
+        setContentView(R.layout.activity_main);
 
         navigationView = (BottomNavigationView) findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
-
     }
 
     @Override
@@ -25,6 +26,6 @@ public class RequestActivity extends BaseActivity {
 
     @Override
     int getNavigationMenuItemId() {
-        return R.id.navigation_requests;
+        return 0;
     }
 }

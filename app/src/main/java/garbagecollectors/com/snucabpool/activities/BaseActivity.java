@@ -65,7 +65,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 startActivity(new Intent(this, NewEntryActivity.class));
             } else if (itemId == R.id.navigation_requests)
             {
-                startActivity(new Intent(this, RequestActivity.class));
+                startActivity(new Intent(this, Users.class));
             }
             finish();
         }, 300);

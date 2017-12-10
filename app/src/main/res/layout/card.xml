@@ -45,6 +45,20 @@
                 android:textSize="@dimen/songs_count" />
 
             <TextView
+                android:id="@+id/vuser_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/vname"
+                android:paddingBottom="2dp"
+                android:paddingLeft="@dimen/album_title_padding"
+                android:paddingRight="@dimen/album_title_padding"
+                android:text="date"
+                android:textColor="#3E2723"
+                android:textSize="@dimen/songs_count" />
+
+            <TextView
                 android:id="@+id/vtime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

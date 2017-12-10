@@ -35,6 +35,9 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.ChatMainActivity" />
+        <activity android:name=".activities.Users" />
+        <activity android:name=".activities.Chat" />
         <activity
             android:name=".activities.RequestActivity"
             android:label="@string/title_activity_requests"
