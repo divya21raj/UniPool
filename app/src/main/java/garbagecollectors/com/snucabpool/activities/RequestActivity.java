@@ -87,7 +87,7 @@ public class RequestActivity extends BaseActivity {
             public void onCancelled(DatabaseError databaseError)
             {
                 Log.w("Hello", "Failed to read value.", databaseError.toException());
-            }*/
+            }
 
             // Get Post object and use the values to update the UI
             /*    User user = dataSnapshot.getValue(User.class);
