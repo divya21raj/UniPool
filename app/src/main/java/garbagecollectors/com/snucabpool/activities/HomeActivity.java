@@ -139,7 +139,7 @@ public class HomeActivity extends BaseActivity {
             });
         }
     }
-
+    
     void setLambdaMapForAllEntries() throws ParseException
     {
         try

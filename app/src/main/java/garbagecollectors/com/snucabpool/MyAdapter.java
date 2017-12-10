@@ -73,7 +73,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(MyHolder holder, int position) {
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        /*holder.itemView.setOnClickListener(new View.OnClickListener() {
 
         @Override
             public void onClick(View view) {
@@ -104,7 +104,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
            });
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        // holder.mTextView.setText(mDataset[position]);
+        // holder.mTextView.setText(mDataset[position]);*/
 
         Entry mylist = list.get(position);
         holder.date.setText(mylist.getDate());
