@@ -14,7 +14,7 @@ import java.util.Calendar;
 import garbagecollectors.com.snucabpool.activities.NewEntryActivity;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-    static String stringOfDate;
+    String stringOfDate;
 
     public DatePickerFragment(){
 
@@ -38,9 +38,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
-    public static String getDate() {
-        return stringOfDate;
-    }
 
     private void setDateNow(int year, int month, int day) {
         this.day_now=day;
@@ -56,6 +53,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
             stringOfDate = day + "/" + month + "/" + year;
 
             text_date.setText(stringOfDate);
+            NewEntryActivity.date=stringOfDate;
         }else{
             text_date.setText("Invalid Date");
         }
