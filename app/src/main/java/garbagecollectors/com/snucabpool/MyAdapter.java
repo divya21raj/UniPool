@@ -108,7 +108,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
         Entry mylist = list.get(position);
         holder.date.setText(mylist.getDate());
-        holder.user_id.setText(mylist.getUser_id());
+//        holder.user_id.setText(mylist.getUser_id());
         holder.name_user.setText(mylist.getName());
         holder.travel_time.setText(mylist.getTime());
 

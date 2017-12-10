@@ -97,7 +97,7 @@ public class HomeActivity extends BaseActivity {
     view.setOnClickListener(v -> {
 
         MyAdapter recyclerAdapter = new MyAdapter(list,HomeActivity.this);
-        RecyclerView.LayoutManager recyce = new GridLayoutManager(HomeActivity.this,2);
+        RecyclerView.LayoutManager recyce = new GridLayoutManager(HomeActivity.this,1);
         /// RecyclerView.LayoutManager recyce = new LinearLayoutManager(MainActivity.this);
         // recycle.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recycle.setLayoutManager(recyce);
