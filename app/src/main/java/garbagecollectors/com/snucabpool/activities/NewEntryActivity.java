@@ -25,13 +25,11 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import garbagecollectors.com.snucabpool.DatePickerFragment;
-
 import garbagecollectors.com.snucabpool.Entry;
-
 import garbagecollectors.com.snucabpool.R;
 
-public class NewEntryActivity extends BaseActivity  {
-
+public class NewEntryActivity extends BaseActivity
+{
     int count=0;
 
     Place source, destination;
@@ -68,7 +66,8 @@ public class NewEntryActivity extends BaseActivity  {
 
         buttonChangeDate = (Button)findViewById(R.id.SetTime);
 
-        buttonChangeDate.setOnClickListener(new OnClickListener() {
+        buttonChangeDate.setOnClickListener(new OnClickListener()
+        {
 
             @Override
             public void onClick(View v)
@@ -78,7 +77,8 @@ public class NewEntryActivity extends BaseActivity  {
         });
 
         buttonstartSetDialog = (Button)findViewById(R.id.btnChangeDate);
-        buttonstartSetDialog.setOnClickListener(new OnClickListener(){
+        buttonstartSetDialog.setOnClickListener(new OnClickListener()
+        {
 
             @Override
             public void onClick(View v)
@@ -89,7 +89,8 @@ public class NewEntryActivity extends BaseActivity  {
         });
 
         buttonFinalSave = (Button)findViewById(R.id.finalSave);
-        buttonFinalSave.setOnClickListener(new OnClickListener() {
+        buttonFinalSave.setOnClickListener(new OnClickListener()
+        {
 
             @Override
             public void onClick(View v)
@@ -231,7 +232,7 @@ public class NewEntryActivity extends BaseActivity  {
             //initialise lambda map for this entry here!!!
             Entry entry = new Entry(name,entryId, currentUser.getUid(), time, date, source, destination, null);
 
-            finalCurrentUser.user_entries.add(entry);
+            finalCurrentUser.getUser_entries().add(entry);
             entryDatabaseReference.child(entryId).setValue(entry);
 
             Toast.makeText(this, "Entry created!", Toast.LENGTH_SHORT).show();

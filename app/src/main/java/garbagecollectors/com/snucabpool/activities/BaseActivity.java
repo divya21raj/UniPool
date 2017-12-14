@@ -94,4 +94,44 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     abstract int getContentViewId();
 
     abstract int getNavigationMenuItemId();
+
+    public static FirebaseUser getCurrentUser()
+    {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(FirebaseUser currentUser)
+    {
+        BaseActivity.currentUser = currentUser;
+    }
+
+    public static DatabaseReference getUserDatabaseReference()
+    {
+        return userDatabaseReference;
+    }
+
+    public static void setUserDatabaseReference(DatabaseReference userDatabaseReference)
+    {
+        BaseActivity.userDatabaseReference = userDatabaseReference;
+    }
+
+    public static DatabaseReference getEntryDatabaseReference()
+    {
+        return entryDatabaseReference;
+    }
+
+    public static void setEntryDatabaseReference(DatabaseReference entryDatabaseReference)
+    {
+        BaseActivity.entryDatabaseReference = entryDatabaseReference;
+    }
+
+    public static User getFinalCurrentUser()
+    {
+        return finalCurrentUser;
+    }
+
+    public static void setFinalCurrentUser(User finalCurrentUser)
+    {
+        BaseActivity.finalCurrentUser = finalCurrentUser;
+    }
 }

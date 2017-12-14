@@ -7,7 +7,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -22,16 +21,14 @@ import garbagecollectors.com.snucabpool.Entry;
 import garbagecollectors.com.snucabpool.MyAdapter;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.Sorting_Filtering;
-import garbagecollectors.com.snucabpool.User;
 
-public class HomeActivity extends BaseActivity {
+import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabase;
 
-    private TextView mTextMessage;
-
-   // static ArrayList<Entry> entry_list = new ArrayList<>();                            //To store all the entries
-    List<Entry> list;
+public class HomeActivity extends BaseActivity
+{
+    List<Entry> entryList;
     RecyclerView recycle;
-    Button view;
+    Button viewButton;
 
     Sorting_Filtering sf = new Sorting_Filtering();
 
@@ -44,21 +41,28 @@ public class HomeActivity extends BaseActivity {
         navigationView = (BottomNavigationView) findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
 
-        view = (Button) findViewById(R.id.view);
+        viewButton = (Button) findViewById(R.id.view);
         recycle = (RecyclerView) findViewById(R.id.recycle);
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        setFinalCurrentUser();
+        if(finalCurrentUser == null)
+        {
+            assert currentUser != null;
+            finalCurrentUser = getUserFromDatabase(currentUser.getUid());
+        }
 
-        entryDatabaseReference.addValueEventListener(new ValueEventListener() {
+        entryDatabaseReference.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                list = new ArrayList<Entry>();
-                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren()){
+                entryList = new ArrayList<>();
+                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
+                {
 
                     Entry value = dataSnapshot1.getValue(Entry.class);
                     Entry entry = new Entry();
@@ -73,7 +77,7 @@ public class HomeActivity extends BaseActivity {
                     entry.setDestination(destination);
                     entry.setUser_id(user_id);
                     entry.setName(name);
-                    list.add(entry);
+                    entryList.add(entry);
 
                     try
                     {
@@ -88,76 +92,44 @@ public class HomeActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(DatabaseError error)
+            {
                 // Failed to read value
                 Log.w("Hello", "Failed to read value.", error.toException());
             }
         });
 
-    view.setOnClickListener(v -> {
-
-        MyAdapter recyclerAdapter = new MyAdapter(list,HomeActivity.this);
-        RecyclerView.LayoutManager recyce = new GridLayoutManager(HomeActivity.this,1);
-        /// RecyclerView.LayoutManager recyce = new LinearLayoutManager(MainActivity.this);
-        // recycle.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-        recycle.setLayoutManager(recyce);
-        recycle.setItemAnimator( new DefaultItemAnimator());
-        recycle.setAdapter(recyclerAdapter);
-
-    });
-
-}
-
-    private void setFinalCurrentUser()
-    {
+        viewButton.setOnClickListener(v ->
         {
-            userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
-            {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot)
-                {
-                    if(finalCurrentUser == null)
-                    {
-                        for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
-                        {
-                            User user = dataSnapshot1.getValue(User.class);
+            MyAdapter recyclerAdapter = new MyAdapter(entryList,HomeActivity.this);
+            RecyclerView.LayoutManager recyce = new GridLayoutManager(HomeActivity.this,1);
+            /// RecyclerView.LayoutManager recyce = new LinearLayoutManager(MainActivity.this);
+            // recycle.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+            recycle.setLayoutManager(recyce);
+            recycle.setItemAnimator( new DefaultItemAnimator());
+            recycle.setAdapter(recyclerAdapter);
 
-                            if(user.getUserId().equals(currentUser.getUid()))
-                            {
-                                finalCurrentUser = user;
-                                break;
-                            }
-                        }
-                    }
-                }
+        });
 
-                @Override
-                public void onCancelled(DatabaseError databaseError)
-                {
-                    // ...
-                }
-            });
-        }
     }
 
     void setLambdaMapForAllEntries() throws ParseException
     {
         try
         {
-            for(Entry e_user: finalCurrentUser.user_entries)
+            for(Entry e_user: finalCurrentUser.getUser_entries())
             {
-                for(Entry e : sf.entry_list)
+                for(Entry e : entryList)
                 {
                     e_user.lambdaMap.put(e.getEntry_id(), sf.calc_lambda(e_user, e));
                 }
             }
 
-        }catch (NullPointerException nlp)
-        {
-
-        }
+        }catch (NullPointerException ignored)
+        { }
 
     }
+
     @Override
     int getNavigationMenuItemId()
     {

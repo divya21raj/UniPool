@@ -8,29 +8,32 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
+import garbagecollectors.com.snucabpool.activities.BaseActivity;
+
+import static garbagecollectors.com.snucabpool.UtilityMethods.*;
+
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
+{
     //private String[] mDataset;
     private LayoutInflater inflater;
     private List<Entry> list;
     private Context context;
 
-    public MyAdapter(Context context){
+    public MyAdapter(Context context)
+    {
         this.context = context;
         inflater = LayoutInflater.from(context);
     }
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    class MyHolder extends RecyclerView.ViewHolder {
+    class MyHolder extends RecyclerView.ViewHolder
+    {
         // each data item is just a string in this case
         public TextView date;
         TextView user_id;
@@ -40,7 +43,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         TextView travel_time;
 
 
-        MyHolder(View v) {
+        MyHolder(View v)
+        {
             super(v);
             date=(TextView)v.findViewById(R.id.vdate);
             user_id=(TextView)v.findViewById(R.id.vuser_id);
@@ -52,7 +56,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(List<Entry> list, Context context) {
+    public MyAdapter(List<Entry> list, Context context)
+    {
        this.context=context;
        this.list=list;
     }
@@ -60,7 +65,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     // Create new views (invoked by the layout manager)
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+                                                   int viewType)
+    {
         // create a new view
 
         View v = LayoutInflater.from(context).inflate(R.layout.card, parent, false);
@@ -72,73 +78,74 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MyHolder holder, int position) {
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+    public void onBindViewHolder(MyHolder holder, int position)
+    {
+        holder.itemView.setOnClickListener(view ->
+        {
+            User user = BaseActivity.getFinalCurrentUser();
 
-        @Override
-            public void onClick(View view) {
-            FirebaseAuth mAuth;
-            FirebaseUser currentUser;
-            mAuth = FirebaseAuth.getInstance();
-            currentUser = mAuth.getCurrentUser();
             Entry entry = list.get(position);
 
-            //NOTES: mylist has the entry being displayed on the card. currentUSer has teh user
-            User user = new User(currentUser.getUid(), currentUser.getDisplayName(), new ArrayList<Entry>(), new HashMap<String, String>(), new ArrayList<Entry>());
-            user.getRequestSent().add(entry);
-            DatabaseReference mDatabase;
-            mDatabase = FirebaseDatabase.getInstance().getReference();
-            //update firebase database to include arrayList that contains name of the card clicked in requests sent
-            mDatabase.child("users").child(entry.getUser_id()).child("requestReceived").setValue(user.getRequestSent().toString());
-            mDatabase.child("users").child(user.getUserId()).child("requestSent").setValue(entry.getUser_id()+", ");
+            User entryUser = getUserFromDatabase(entry.getUser_id());    //the user that created the clicked entry
 
-            mDatabase.child("users").child(user.getUserId()).child("friends").setValue(entry.getUser_id()+", ");
-            mDatabase.child("users").child(entry.getUser_id()).child("friends").setValue(user.getRequestSent().toString());
-            //magic over!
+            DatabaseReference databaseReference = BaseActivity.getUserDatabaseReference();
+
+            Map<Entry, User> requestsRecieved = entryUser.getRequestsRecieved();
+
+            if(!UtilityMethods.checkEntryInEntryList(user.getRequestSent(), entry))
+                user.getRequestSent().add(entry);
+
+            if(!checkRequestInMap(requestsRecieved, entry, entryUser))
+            {
+
+            }
+
+            //update firebase database to include arrayList that contains name of the card clicked in requests sent...
+            databaseReference.child("users").child(entryUser.getUserId()).child("requestReceived").setValue(entryUser.getRequestsRecieved());
+            databaseReference.child("users").child(user.getUserId()).child("requestSent").setValue(user.getRequestSent());
+
+            /*databaseReference.child("users").child(user.getUserId()).child("friends").setValue(entry.getUser_id()+", ");
+            databaseReference.child("users").child(entry.getUser_id()).child("friends").setValue(user.getRequestSent().toString());
+            magic over!*/
 
             Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG).show();
 
                //Intent intent = new Intent(view.getContext(), HomeActivity.class);
                //view.getContext().startActivity(intent);
-               }
-           });
+
+        });
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         // holder.mTextView.setText(mDataset[position]);
 
-        Entry mylist = list.get(position);
-        holder.date.setText(mylist.getDate());
-//        holder.user_id.setText(mylist.getUser_id());
-        holder.name_user.setText(mylist.getName());
-        holder.travel_time.setText(mylist.getTime());
+        Entry myList = list.get(position);
+        holder.date.setText(myList.getDate());
+//      holder.user_id.setText(myList.getUser_id());
+        holder.name_user.setText(myList.getName());
+        holder.travel_time.setText(myList.getTime());
 
 
         //System.out.println("Time is "+holder.travel_time);
-        //Object temp_Source=(Place)mylist.getSource();
-       // Place temp_Destination=(Place)mylist.getDestination();
+        //Object temp_Source=(Place)myList.getSource();
+       // Place temp_Destination=(Place)myList.getDestination();
        // holder.source.setText(temp_Source.getName());
         //holder.destination.setText(temp_Destination.getName());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
         int arr = 0;
 
-        try{
-            if(list.size()==0){
-
+        try
+        {
+            if(list.size()==0)
                 arr = 0;
+            else
+                arr = list.size();
 
-            }
-            else{
-
-                arr=list.size();
-            }
-
-        }catch (Exception e){
-
-        }
+        }catch (Exception ignored){}
 
         return arr;
     }

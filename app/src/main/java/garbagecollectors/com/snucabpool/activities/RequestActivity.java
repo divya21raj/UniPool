@@ -1,43 +1,34 @@
 package garbagecollectors.com.snucabpool.activities;
 
 import android.os.Bundle;
-
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import garbagecollectors.com.snucabpool.MyAdapter;
-
+import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.RequestAdapter;
 import garbagecollectors.com.snucabpool.User;
 
-import garbagecollectors.com.snucabpool.R;
-
-import static android.R.id.list;
-import static garbagecollectors.com.snucabpool.R.styleable.View;
-
-public class RequestActivity extends BaseActivity {
-
+public class RequestActivity extends BaseActivity
+{
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private Button reqButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
 
@@ -109,18 +100,16 @@ public class RequestActivity extends BaseActivity {
 
         });
 
-        reqButton.setOnClickListener(v -> {
-
-        RequestAdapter recyclerAdapter = new RequestAdapter(list);
-        RecyclerView.LayoutManager recyce = new GridLayoutManager(RequestActivity.this,2);
-        /// RecyclerView.LayoutManager recyce = new LinearLayoutManager(MainActivity.this);
-        // recycle.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-        mRecyclerView.setLayoutManager(recyce);
-        mRecyclerView.setItemAnimator( new DefaultItemAnimator());
-        mRecyclerView.setAdapter(mAdapter);
-
-    });
-
+        reqButton.setOnClickListener(v ->
+        {
+            RequestAdapter recyclerAdapter = new RequestAdapter(list);
+            RecyclerView.LayoutManager recyce = new GridLayoutManager(RequestActivity.this,2);
+            /// RecyclerView.LayoutManager recyce = new LinearLayoutManager(MainActivity.this);
+            // recycle.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+            mRecyclerView.setLayoutManager(recyce);
+            mRecyclerView.setItemAnimator( new DefaultItemAnimator());
+            mRecyclerView.setAdapter(mAdapter);
+        });
     }
 
     @Override
