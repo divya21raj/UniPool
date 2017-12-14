@@ -21,7 +21,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
 {
     //private String[] mDataset;
     private LayoutInflater inflater;
-    private List<Entry> list;
+    private List<TripEntry> list;
     private Context context;
 
     public MyAdapter(Context context)
@@ -56,7 +56,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(List<Entry> list, Context context)
+    public MyAdapter(List<TripEntry> list, Context context)
     {
        this.context=context;
        this.list=list;
@@ -84,28 +84,28 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
         {
             User user = BaseActivity.getFinalCurrentUser();
 
-            Entry entry = list.get(position);
+            TripEntry tripEntry = list.get(position);
 
-            User entryUser = getUserFromDatabase(entry.getUser_id());    //the user that created the clicked entry
+            User tripEntryUser = getUserFromDatabase(tripEntry.getUser_id());    //the user that created the clicked tripEntry
 
             DatabaseReference databaseReference = BaseActivity.getUserDatabaseReference();
 
-            Map<Entry, User> requestsRecieved = entryUser.getRequestsRecieved();
+            Map<TripEntry, User> requestsRecieved = tripEntryUser.getRequestsRecieved();
 
-            if(!UtilityMethods.checkEntryInEntryList(user.getRequestSent(), entry))
-                user.getRequestSent().add(entry);
+            if(!UtilityMethods.checkEntryInEntryList(user.getRequestSent(), tripEntry))
+                user.getRequestSent().add(tripEntry);
 
-            if(!checkRequestInMap(requestsRecieved, entry, entryUser))
+            if(!checkRequestInMap(requestsRecieved, tripEntry, tripEntryUser))
             {
 
             }
 
             //update firebase database to include arrayList that contains name of the card clicked in requests sent...
-            databaseReference.child("users").child(entryUser.getUserId()).child("requestReceived").setValue(entryUser.getRequestsRecieved());
+            databaseReference.child("users").child(tripEntryUser.getUserId()).child("requestReceived").setValue(tripEntryUser.getRequestsRecieved());
             databaseReference.child("users").child(user.getUserId()).child("requestSent").setValue(user.getRequestSent());
 
-            /*databaseReference.child("users").child(user.getUserId()).child("friends").setValue(entry.getUser_id()+", ");
-            databaseReference.child("users").child(entry.getUser_id()).child("friends").setValue(user.getRequestSent().toString());
+            /*databaseReference.child("users").child(user.getUserId()).child("friends").setValue(tripEntry.getUser_id()+", ");
+            databaseReference.child("users").child(tripEntry.getUser_id()).child("friends").setValue(user.getRequestSent().toString());
             magic over!*/
 
             Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG).show();
@@ -118,7 +118,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
         // - replace the contents of the view with that element
         // holder.mTextView.setText(mDataset[position]);
 
-        Entry myList = list.get(position);
+        TripEntry myList = list.get(position);
         holder.date.setText(myList.getDate());
 //      holder.user_id.setText(myList.getUser_id());
         holder.name_user.setText(myList.getName());

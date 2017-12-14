@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import garbagecollectors.com.snucabpool.DatePickerFragment;
-import garbagecollectors.com.snucabpool.Entry;
+import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.R;
 
 public class NewEntryActivity extends BaseActivity
@@ -229,13 +229,13 @@ public class NewEntryActivity extends BaseActivity
             String entryId = entryDatabaseReference.push().getKey();
             String name= currentUser.getDisplayName();
 
-            //initialise lambda map for this entry here!!!
-            Entry entry = new Entry(name,entryId, currentUser.getUid(), time, date, source, destination, null);
+            //initialise lambda map for this tripEntry here!!!
+            TripEntry tripEntry = new TripEntry(name,entryId, currentUser.getUid(), time, date, source, destination, null);
 
-            finalCurrentUser.getUser_entries().add(entry);
-            entryDatabaseReference.child(entryId).setValue(entry);
+            finalCurrentUser.getUser_entries().add(tripEntry);
+            entryDatabaseReference.child(entryId).setValue(tripEntry);
 
-            Toast.makeText(this, "Entry created!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "TripEntry created!", Toast.LENGTH_SHORT).show();
 
             finish();
             startActivity(new Intent(this, HomeActivity.class));

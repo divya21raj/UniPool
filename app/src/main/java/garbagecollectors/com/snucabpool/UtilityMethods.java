@@ -42,13 +42,13 @@ public class UtilityMethods
         return entryUser[0];
     }
 
-    static boolean checkEntryInEntryList(ArrayList<Entry> requestSent, Entry entry)
+    static boolean checkEntryInEntryList(ArrayList<TripEntry> requestSent, TripEntry tripEntry)
     {
         boolean flag = false;
 
-        for(Entry e: requestSent)
+        for(TripEntry e: requestSent)
         {
-            if(e.getEntry_id().equals(entry.getEntry_id()))
+            if(e.getEntry_id().equals(tripEntry.getEntry_id()))
             {
                 flag = true;
                 break;
@@ -58,7 +58,7 @@ public class UtilityMethods
         return flag;
     }
 
-    static boolean checkRequestInMap(Map<Entry, User> requestsRecieved, Entry entry, User entryUser)
+    static boolean checkRequestInMap(Map<TripEntry, User> requestsRecieved, TripEntry tripEntry, User entryUser)
     {
         boolean flag = false;
 

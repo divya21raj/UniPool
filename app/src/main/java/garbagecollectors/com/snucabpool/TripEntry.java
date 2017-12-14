@@ -5,7 +5,7 @@ import com.google.android.gms.location.places.Place;
 import java.text.ParseException;
 import java.util.HashMap;
 
-public class Entry
+public class TripEntry
 {
     private String entry_id;
 
@@ -19,7 +19,7 @@ public class Entry
 
     public HashMap<String, Float> lambdaMap = new HashMap<>(); //HashMap contains entry_id(String value) as key and lambda(Float value) as value
 
-    public Entry(String name, String entry_id, String user_id, String time, String date, Object source, Object destination, HashMap<String, Float> lambdaMap) throws ParseException
+    public TripEntry(String name, String entry_id, String user_id, String time, String date, Object source, Object destination, HashMap<String, Float> lambdaMap) throws ParseException
     {
         this.entry_id = entry_id;
         this.user_id = user_id;
@@ -30,7 +30,7 @@ public class Entry
         this.name = name;
     }
 
-    public Entry()
+    public TripEntry()
     {
     }
 

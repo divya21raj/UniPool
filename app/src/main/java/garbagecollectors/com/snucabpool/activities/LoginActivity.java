@@ -31,7 +31,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import garbagecollectors.com.snucabpool.Entry;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.User;
 

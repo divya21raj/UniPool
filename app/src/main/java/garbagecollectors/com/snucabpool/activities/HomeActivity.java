@@ -17,7 +17,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import garbagecollectors.com.snucabpool.Entry;
+import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.MyAdapter;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.Sorting_Filtering;
@@ -26,7 +26,7 @@ import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabas
 
 public class HomeActivity extends BaseActivity
 {
-    List<Entry> entryList;
+    List<TripEntry> tripEntryList;
     RecyclerView recycle;
     Button viewButton;
 
@@ -60,24 +60,24 @@ public class HomeActivity extends BaseActivity
             {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                entryList = new ArrayList<>();
+                tripEntryList = new ArrayList<>();
                 for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
                 {
 
-                    Entry value = dataSnapshot1.getValue(Entry.class);
-                    Entry entry = new Entry();
+                    TripEntry value = dataSnapshot1.getValue(TripEntry.class);
+                    TripEntry tripEntry = new TripEntry();
                     String date = value.getDate();
                     String user_id = value.getUser_id();
                     Object destination = value.getDestination();
                     Object source = value.getSource();
                     String name = value.getName();
 
-                    entry.setDate(date);
-                    entry.setSource(source);
-                    entry.setDestination(destination);
-                    entry.setUser_id(user_id);
-                    entry.setName(name);
-                    entryList.add(entry);
+                    tripEntry.setDate(date);
+                    tripEntry.setSource(source);
+                    tripEntry.setDestination(destination);
+                    tripEntry.setUser_id(user_id);
+                    tripEntry.setName(name);
+                    tripEntryList.add(tripEntry);
 
                     try
                     {
@@ -101,7 +101,7 @@ public class HomeActivity extends BaseActivity
 
         viewButton.setOnClickListener(v ->
         {
-            MyAdapter recyclerAdapter = new MyAdapter(entryList,HomeActivity.this);
+            MyAdapter recyclerAdapter = new MyAdapter(tripEntryList,HomeActivity.this);
             RecyclerView.LayoutManager recyce = new GridLayoutManager(HomeActivity.this,1);
             /// RecyclerView.LayoutManager recyce = new LinearLayoutManager(MainActivity.this);
             // recycle.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
@@ -117,9 +117,9 @@ public class HomeActivity extends BaseActivity
     {
         try
         {
-            for(Entry e_user: finalCurrentUser.getUser_entries())
+            for(TripEntry e_user: finalCurrentUser.getUser_entries())
             {
-                for(Entry e : entryList)
+                for(TripEntry e : tripEntryList)
                 {
                     e_user.lambdaMap.put(e.getEntry_id(), sf.calc_lambda(e_user, e));
                 }
