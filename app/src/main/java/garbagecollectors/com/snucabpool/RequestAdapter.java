@@ -21,7 +21,8 @@ import java.util.Map;
  * Created by Atishay Arjav on 29-11-2017.
  */
 
-public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder> {
+public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder>
+{
     private ArrayList<User> mDataset;
 
     protected static DatabaseReference userDatabaseReference;
@@ -30,7 +31,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder
+    {
         // each data item is just a string in this case
         public TextView mTextView;
         public ViewHolder(TextView v) {
@@ -41,7 +43,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     //TODO accepting requests: aded to frineds list
     //TODO display requests receieved
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RequestAdapter(ArrayList<User> myDataset) {
+    public RequestAdapter(ArrayList<User> myDataset)
+    {
 
         mDataset = myDataset;
 
@@ -50,7 +53,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     // Create new views (invoked by the layout manager)
     @Override
     public RequestAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                        int viewType) {
+                                                        int viewType)
+    {
         // create a new view
         TextView v = (TextView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_request, parent, false);
@@ -62,9 +66,11 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position)
+    {
         userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
-        userDatabaseReference.addValueEventListener(new ValueEventListener() {
+        userDatabaseReference.addValueEventListener(new ValueEventListener()
+        {
             /*@Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
