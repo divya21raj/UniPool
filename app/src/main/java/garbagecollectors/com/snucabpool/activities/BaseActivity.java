@@ -150,4 +150,14 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     {
         BaseActivity.tripEntryList = tripEntryList;
     }
+
+    public static List<User> getUserList()
+    {
+        return userList;
+    }
+
+    public static void setUserList(List<User> userList)
+    {
+        BaseActivity.userList = userList;
+    }
 }

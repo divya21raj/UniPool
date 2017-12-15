@@ -16,7 +16,9 @@ import java.util.Map;
 
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
 
-import static garbagecollectors.com.snucabpool.UtilityMethods.*;
+import static garbagecollectors.com.snucabpool.UtilityMethods.addRequestInList;
+import static garbagecollectors.com.snucabpool.UtilityMethods.addRequestInMap;
+import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabase;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
 {
@@ -74,7 +76,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
         // create a new view
 
         View v = LayoutInflater.from(context).inflate(R.layout.card, parent, false);
-        // set the view's size, margins, paddings and layout parameters...
+        // set the view's size, margins, padding and layout parameters...
 
         MyHolder holder = new MyHolder(v);
         return holder;

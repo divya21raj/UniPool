@@ -15,12 +15,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 
-import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.MyAdapter;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.Sorting_Filtering;
+import garbagecollectors.com.snucabpool.TripEntry;
 
 import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabase;
 

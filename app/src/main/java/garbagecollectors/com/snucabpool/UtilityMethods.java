@@ -1,10 +1,5 @@
 package garbagecollectors.com.snucabpool;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,38 +8,20 @@ import garbagecollectors.com.snucabpool.activities.BaseActivity;
 
 public class UtilityMethods
 {
-    static DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
-    static DatabaseReference entryDatabaseReference = BaseActivity.getEntryDatabaseReference();
-
     public static User getUserFromDatabase(String uid)
     {
-        final User[] entryUser = {null};
+        User userToBeFound = null;
 
-        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+        for(User user: BaseActivity.getUserList())
         {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
+            if(user.getUserId().equals(uid))
             {
-                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
-                {
-                    User user = dataSnapshot1.getValue(User.class);
-
-                    if(user.getUserId().equals(uid))
-                    {
-                        entryUser[0] = user;
-                        break;
-                    }
-                }
+                userToBeFound = user;
+                break;
             }
+        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-                // ...
-            }
-        });
-
-        return entryUser[0];
+        return userToBeFound;
     }
 
     static boolean addRequestInList(ArrayList<TripEntry> requestSent, TripEntry tripEntry)
