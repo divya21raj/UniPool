@@ -13,7 +13,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.List;
+
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
@@ -26,6 +29,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     static User finalCurrentUser;
+
+    static List<TripEntry> tripEntryList;
+    static List<User> userList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -133,5 +139,15 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public static void setFinalCurrentUser(User finalCurrentUser)
     {
         BaseActivity.finalCurrentUser = finalCurrentUser;
+    }
+
+    public static List<TripEntry> getTripEntryList()
+    {
+        return tripEntryList;
+    }
+
+    public static void setTripEntryList(List<TripEntry> tripEntryList)
+    {
+        BaseActivity.tripEntryList = tripEntryList;
     }
 }

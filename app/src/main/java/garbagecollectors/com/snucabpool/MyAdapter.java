@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
     private LayoutInflater inflater;
     private List<TripEntry> list;
     private Context context;
+
+    private boolean isRequestAlreadyInMap;
+    private Boolean isAlreadyRequested;
 
     public MyAdapter(Context context)
     {
@@ -86,29 +90,42 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
 
             TripEntry tripEntry = list.get(position);
 
-            User tripEntryUser = getUserFromDatabase(tripEntry.getUser_id());    //the user that created the clicked tripEntry
-
-            DatabaseReference databaseReference = BaseActivity.getUserDatabaseReference();
-
-            Map<TripEntry, User> requestsRecieved = tripEntryUser.getRequestsRecieved();
-
-            if(!UtilityMethods.checkEntryInEntryList(user.getRequestSent(), tripEntry))
-                user.getRequestSent().add(tripEntry);
-
-            if(!checkRequestInMap(requestsRecieved, tripEntry, tripEntryUser))
+            if(tripEntry.getUser_id().equals(user.getUserId()))
             {
-
+                Toast.makeText(view.getContext(), "Can't pool with yourself, that feature isn't ready yet...", Toast.LENGTH_SHORT).show();
+                return;
             }
 
-            //update firebase database to include arrayList that contains name of the card clicked in requests sent...
-            databaseReference.child("users").child(tripEntryUser.getUserId()).child("requestReceived").setValue(tripEntryUser.getRequestsRecieved());
-            databaseReference.child("users").child(user.getUserId()).child("requestSent").setValue(user.getRequestSent());
+            User tripEntryUser = getUserFromDatabase(tripEntry.getUser_id());    //the user that created the clicked tripEntry
 
-            /*databaseReference.child("users").child(user.getUserId()).child("friends").setValue(tripEntry.getUser_id()+", ");
-            databaseReference.child("users").child(tripEntry.getUser_id()).child("friends").setValue(user.getRequestSent().toString());
+            DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
+
+            ArrayList<TripEntry> requestSent = user.getRequestSent();
+            Map<String, ArrayList<User>> requestsRecieved = tripEntryUser.getRequestsRecieved();
+
+            isAlreadyRequested = addRequestInList(requestSent, tripEntry);
+
+            if(!isAlreadyRequested)
+                isRequestAlreadyInMap = addRequestInMap(requestsRecieved, tripEntry.getEntry_id(), user);
+
+            user.setRequestSent(requestSent);
+            tripEntryUser.setRequestsRecieved(requestsRecieved);
+
+            if(!isAlreadyRequested && !isRequestAlreadyInMap)
+            {
+                //update firebase database to include arrayList that contains name of the card clicked in requests sent...
+                userDatabaseReference.child("users").child(tripEntryUser.getUserId()).setValue(tripEntryUser);
+                userDatabaseReference.child("users").child(user.getUserId()).setValue(user);
+
+            /*userDatabaseReference.child("users").child(user.getUserId()).child("friends").setValue(tripEntry.getUser_id()+", ");
+            userDatabaseReference.child("users").child(tripEntry.getUser_id()).child("friends").setValue(user.getRequestSent().toString());
             magic over!*/
 
-            Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG).show();
+                Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG).show();
+            }
+
+            else
+                Toast.makeText(view.getContext(), "Request already sent", Toast.LENGTH_LONG).show();
 
                //Intent intent = new Intent(view.getContext(), HomeActivity.class);
                //view.getContext().startActivity(intent);

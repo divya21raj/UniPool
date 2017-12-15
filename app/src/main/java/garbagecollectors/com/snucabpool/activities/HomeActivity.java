@@ -26,7 +26,6 @@ import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabas
 
 public class HomeActivity extends BaseActivity
 {
-    List<TripEntry> tripEntryList;
     RecyclerView recycle;
     Button viewButton;
 

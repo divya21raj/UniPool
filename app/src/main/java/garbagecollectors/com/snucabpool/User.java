@@ -13,11 +13,14 @@ public class User
     private String name;
     private ArrayList<TripEntry> user_entries =new ArrayList<>();
 
-    private ArrayList<TripEntry> requestSent;//String is the userId of requester, TripEntry is the entry that he requested
-    private Map<TripEntry, User> requestsRecieved;//We have Map because we're taking TripEntry object of the entry that we have made (that the other person has clicked on)
+    private ArrayList<TripEntry> requestSent;
     private ArrayList<TripEntry> friends;
 
-    public User(String userId, String name, ArrayList<TripEntry> requestSent, Map<TripEntry, User> requestsRecieved, ArrayList<TripEntry> friends)
+    private Map<String, ArrayList<User>> requestsRecieved;
+    //We have Map because we're taking TripEntry object of the entry that we have made (that the other person has clicked on)
+    //Key is the entryId of entry requested, Value is list of users who've requested that entry
+
+    public User(String userId, String name, ArrayList<TripEntry> requestSent, Map<String, ArrayList<User>> requestsRecieved, ArrayList<TripEntry> friends)
     {
         this.userId = userId;
         this.name = name;
@@ -51,12 +54,17 @@ public class User
         return requestSent;
     }
 
-    public Map<TripEntry, User> getRequestsRecieved()
+    public void setRequestSent(ArrayList<TripEntry> requestSent)
+    {
+        this.requestSent = requestSent;
+    }
+
+    public Map<String, ArrayList<User>> getRequestsRecieved()
     {
         return requestsRecieved;
     }
 
-    public void setRequestsRecieved(Map<TripEntry, User> requestsRecieved)
+    public void setRequestsRecieved(Map<String, ArrayList<User>> requestsRecieved)
     {
         this.requestsRecieved = requestsRecieved;
     }
