@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,4 +8,12 @@
     tools:context="garbagecollectors.com.snucabpool.activities.SplashActivity"
     android:background="@color/colorPrimary">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="ENTER A GLORIOUS ANIMATION HERE!"
+        android:textSize="20dp"/>
+
+</RelativeLayout>
