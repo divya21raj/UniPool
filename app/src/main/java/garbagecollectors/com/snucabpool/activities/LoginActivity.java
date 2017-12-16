@@ -28,6 +28,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.User;
 
@@ -167,7 +170,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void createUserOnDatabase(FirebaseUser user)
     {
-        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), null, null, null);
+        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), new ArrayList<>(), new HashMap<>(), new ArrayList<>());
 
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
@@ -200,7 +203,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
         {
             progressDialog.dismiss();
             finish();
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            startActivity(new Intent(getApplicationContext(), SplashActivity.class));
         }
     }
 }

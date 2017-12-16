@@ -10,43 +10,25 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
         android:elevation="3dp"
-        card_view:cardCornerRadius="@dimen/card_album_radius">
+        card_view:cardBackgroundColor="#C8E6C9"
+        card_view:cardCornerRadius="10dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/thumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                android:src="@mipmap/falls"
-                />
 
             <TextView
                 android:id="@+id/vname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/thumbnail"
-                android:paddingBottom="@dimen/songs_count_padding_bottom"
+                android:paddingBottom="2dp"
                 android:paddingLeft="@dimen/album_title_padding"
                 android:paddingRight="@dimen/album_title_padding"
                 android:text="name"
-                android:textSize="@dimen/album_title" />
+                android:textColor="#3E2723"
+                android:textSize="20dp" />
 
-            <TextView
-                android:id="@+id/vuser_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/vname"
-                android:paddingBottom="@dimen/songs_count_padding_bottom"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
-                android:text="user id"
-                android:textSize="@dimen/songs_count" />
 
             <TextView
                 android:id="@+id/vdate"
@@ -54,11 +36,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/vuser_id"
-                android:paddingBottom="@dimen/songs_count_padding_bottom"
+                android:layout_below="@id/vname"
+                android:paddingBottom="2dp"
                 android:paddingLeft="@dimen/album_title_padding"
                 android:paddingRight="@dimen/album_title_padding"
                 android:text="date"
+                android:textColor="#3E2723"
                 android:textSize="@dimen/songs_count" />
 
             <TextView
@@ -67,10 +50,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/vdate"
-                android:paddingBottom="@dimen/songs_count_padding_bottom"
+                android:layout_below="@id/vdate"
+                android:paddingBottom="2dp"
                 android:paddingLeft="@dimen/album_title_padding"
                 android:paddingRight="@dimen/album_title_padding"
+                android:textColor="#3E2723"
                 android:text="time"
                 android:textSize="@dimen/songs_count" />
 
@@ -80,24 +64,25 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/vdate"
+                android:layout_below="@id/vtime"
                 android:paddingLeft="@dimen/album_title_padding"
                 android:paddingRight="@dimen/album_title_padding"
-                android:paddingTop="@dimen/album_title_padding"
                 android:text="source"
-                android:textColor="@color/album_title"
+                android:textColor="#3E2723"
                 android:textSize="@dimen/songs_count" />
 
-            <ImageView
-                android:id="@+id/overflow"
-                android:layout_width="@dimen/ic_album_overflow_width"
-                android:layout_height="@dimen/ic_album_overflow_height"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/thumbnail"
-                android:layout_marginTop="@dimen/ic_album_overflow_margin_top"
-                android:scaleType="centerCrop"
-                android:src="@drawable/menu" />
-
+            <TextView
+                android:id="@+id/vdestination"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/vsource"
+                android:paddingLeft="@dimen/album_title_padding"
+                android:paddingRight="@dimen/album_title_padding"
+                android:text="destination"
+                android:textColor="#3E2723"
+                android:textSize="@dimen/songs_count" />
 
 
         </RelativeLayout>

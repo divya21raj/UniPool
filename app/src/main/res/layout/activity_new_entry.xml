@@ -11,18 +11,20 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:onClick="findSource"
+        android:background="@drawable/mybutton"
         android:text="Search Source" />
 
     <TextView
         android:id="@+id/searched_source"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="90dp"
         android:layout_below="@+id/findSource"
         android:textSize="15dp" />
 
     <Button
         android:id="@+id/findDestination"
         android:layout_width="200dp"
+        android:background="@drawable/mybutton"
         android:layout_height="wrap_content"
         android:onClick="findDestination"
         android:text="Search Destination"
@@ -32,13 +34,14 @@
     <TextView
         android:id="@+id/searched_destination"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="90dp"
         android:layout_below="@+id/findDestination"
         android:textSize="15dp" />
 
     <Button
         android:id="@+id/SetTime"
         android:layout_width="200dp"
+        android:background="@drawable/mybutton"
         android:layout_height="wrap_content"
         android:text="Set Target Time"
         android:layout_below="@+id/searched_destination"
@@ -57,9 +60,10 @@
         android:id="@+id/btnChangeDate"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-
+        android:background="@drawable/mybutton"
         android:layout_below="@+id/SetTime"
-        android:text="Change Date" />
+        android:text="Change Date"
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:id="@+id/searched_date"
@@ -75,6 +79,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Save"
+        android:background="@drawable/mybutton"
         android:onClick="finalSave"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/btnChangeDate"
