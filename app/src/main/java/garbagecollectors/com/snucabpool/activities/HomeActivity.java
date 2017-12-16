@@ -76,14 +76,14 @@ public class HomeActivity extends BaseActivity
                     TripEntry tripEntry = dataSnapshot1.getValue(TripEntry.class);
 
                     UtilityMethods.updateTripList(tripEntryList, tripEntry);
-
+                    /*
                     try
                     {
                         setLambdaMapForAllEntries();
                     } catch (ParseException e)
                     {
                         e.printStackTrace();
-                    }
+                    }*/
                 }
             }
 
