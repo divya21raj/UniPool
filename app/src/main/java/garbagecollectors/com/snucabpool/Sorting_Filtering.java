@@ -14,16 +14,17 @@ import static java.lang.Math.abs;
 
 public class Sorting_Filtering
 {
-    Location src1, dest1, src2, dest2;
+    private Location src1, dest1, src2, dest2;
     java.text.DateFormat df = new java.text.SimpleDateFormat("hh:mm:ss");
 
-    final int src_wt = 100;
-    final int dest_wt = 50;
-    final int time_wt = 25;
+    private final int src_wt = 100;
+    private final int dest_wt = 50;
+    private final int time_wt = 25;
 
-    public static ArrayList<Entry> entry_list = entry_list = new ArrayList<>();
+    private static ArrayList<TripEntry> tripEntry_list;
 
-    public float calc_lambda(Entry e1, Entry e2) throws ParseException {
+    public float calc_lambda(TripEntry e1, TripEntry e2) throws ParseException
+    {
         float lambda = 0;
 
         src1 = (Location)e1.getSource();
@@ -43,14 +44,20 @@ public class Sorting_Filtering
 
     private void entry_sort()
     {
-        Collections.sort(entry_list, new Comparator<Entry>() {
+        Collections.sort(tripEntry_list, new Comparator<TripEntry>()
+        {
             @Override
-            public int compare(Entry o1, Entry o2) {
+            public int compare(TripEntry o1, TripEntry o2) {
                 float lambda1 = o1.getLambdaMap().get(o1.getEntry_id());
                 float lambda2 = o2.getLambdaMap().get(o2.getEntry_id());
 
                 return lambda1 < lambda2 ? -1 : lambda1 == lambda2 ? 0 : 1;
             }
         });
+    }
+
+    public static void setTripEntry_list(ArrayList<TripEntry> tripEntry_list)
+    {
+        Sorting_Filtering.tripEntry_list = tripEntry_list;
     }
 }

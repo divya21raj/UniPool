@@ -13,7 +13,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
@@ -26,6 +31,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     static User finalCurrentUser;
+
+    static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
+    static ArrayList<User> userList = SplashActivity.getUserList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -94,4 +102,64 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     abstract int getContentViewId();
 
     abstract int getNavigationMenuItemId();
+
+    public static FirebaseUser getCurrentUser()
+    {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(FirebaseUser currentUser)
+    {
+        BaseActivity.currentUser = currentUser;
+    }
+
+    public static DatabaseReference getUserDatabaseReference()
+    {
+        return userDatabaseReference;
+    }
+
+    public static void setUserDatabaseReference(DatabaseReference userDatabaseReference)
+    {
+        BaseActivity.userDatabaseReference = userDatabaseReference;
+    }
+
+    public static DatabaseReference getEntryDatabaseReference()
+    {
+        return entryDatabaseReference;
+    }
+
+    public static void setEntryDatabaseReference(DatabaseReference entryDatabaseReference)
+    {
+        BaseActivity.entryDatabaseReference = entryDatabaseReference;
+    }
+
+    public static User getFinalCurrentUser()
+    {
+        return finalCurrentUser;
+    }
+
+    public static void setFinalCurrentUser(User finalCurrentUser)
+    {
+        BaseActivity.finalCurrentUser = finalCurrentUser;
+    }
+
+    public static ArrayList<TripEntry> getTripEntryList()
+    {
+        return tripEntryList;
+    }
+
+    public static void setTripEntryList(ArrayList<TripEntry> tripEntryList)
+    {
+        BaseActivity.tripEntryList = tripEntryList;
+    }
+
+    public static ArrayList<User> getUserList()
+    {
+        return userList;
+    }
+
+    public static void setUserList(ArrayList<User> userList)
+    {
+        BaseActivity.userList = userList;
+    }
 }
