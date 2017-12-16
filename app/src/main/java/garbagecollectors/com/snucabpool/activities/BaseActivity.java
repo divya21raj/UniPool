@@ -13,6 +13,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import garbagecollectors.com.snucabpool.R;
@@ -30,8 +32,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     static User finalCurrentUser;
 
-    static List<TripEntry> tripEntryList;
-    static List<User> userList;
+    static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
+    static ArrayList<User> userList = SplashActivity.getUserList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -141,22 +143,22 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         BaseActivity.finalCurrentUser = finalCurrentUser;
     }
 
-    public static List<TripEntry> getTripEntryList()
+    public static ArrayList<TripEntry> getTripEntryList()
     {
         return tripEntryList;
     }
 
-    public static void setTripEntryList(List<TripEntry> tripEntryList)
+    public static void setTripEntryList(ArrayList<TripEntry> tripEntryList)
     {
         BaseActivity.tripEntryList = tripEntryList;
     }
 
-    public static List<User> getUserList()
+    public static ArrayList<User> getUserList()
     {
         return userList;
     }
 
-    public static void setUserList(List<User> userList)
+    public static void setUserList(ArrayList<User> userList)
     {
         BaseActivity.userList = userList;
     }

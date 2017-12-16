@@ -203,7 +203,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
         {
             progressDialog.dismiss();
             finish();
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            startActivity(new Intent(getApplicationContext(), SplashActivity.class));
         }
     }
 }

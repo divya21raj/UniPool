@@ -233,6 +233,7 @@ public class NewEntryActivity extends BaseActivity
             TripEntry tripEntry = new TripEntry(name,entryId, currentUser.getUid(), time, date, source, destination, null);
 
             finalCurrentUser.getUser_entries().add(tripEntry);
+
             entryDatabaseReference.child(entryId).setValue(tripEntry);
 
             Toast.makeText(this, "TripEntry created!", Toast.LENGTH_SHORT).show();

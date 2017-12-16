@@ -11,8 +11,8 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
 
@@ -103,7 +103,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
             DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
 
             ArrayList<TripEntry> requestSent = user.getRequestSent();
-            Map<String, ArrayList<User>> requestsRecieved = tripEntryUser.getRequestsRecieved();
+            HashMap<String, ArrayList<User>> requestsRecieved = tripEntryUser.getRequestsRecieved();
 
             isAlreadyRequested = addRequestInList(requestSent, tripEntry);
 
@@ -116,8 +116,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
             if(!isAlreadyRequested && !isRequestAlreadyInMap)
             {
                 //update firebase database to include arrayList that contains name of the card clicked in requests sent...
-                userDatabaseReference.child("users").child(tripEntryUser.getUserId()).setValue(tripEntryUser);
-                userDatabaseReference.child("users").child(user.getUserId()).setValue(user);
+                userDatabaseReference.child(tripEntryUser.getUserId()).removeValue();
+                userDatabaseReference.child(tripEntryUser.getUserId()).setValue(tripEntryUser);
+
+                userDatabaseReference.child(user.getUserId()).removeValue();
+                userDatabaseReference.child(user.getUserId()).setValue(user);
 
             /*userDatabaseReference.child("users").child(user.getUserId()).child("friends").setValue(tripEntry.getUser_id()+", ");
             userDatabaseReference.child("users").child(tripEntry.getUser_id()).child("friends").setValue(user.getRequestSent().toString());

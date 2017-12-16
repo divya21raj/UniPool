@@ -14,12 +14,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 
 import garbagecollectors.com.snucabpool.MyAdapter;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.Sorting_Filtering;
 import garbagecollectors.com.snucabpool.TripEntry;
+import garbagecollectors.com.snucabpool.User;
+import garbagecollectors.com.snucabpool.UtilityMethods;
 
 import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabase;
 
@@ -51,52 +52,6 @@ public class HomeActivity extends BaseActivity
             finalCurrentUser = getUserFromDatabase(currentUser.getUid());
         }
 
-        entryDatabaseReference.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                tripEntryList = new ArrayList<>();
-                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
-                {
-
-                    TripEntry value = dataSnapshot1.getValue(TripEntry.class);
-                    TripEntry tripEntry = new TripEntry();
-                    String date = value.getDate();
-                    String user_id = value.getUser_id();
-                    Object destination = value.getDestination();
-                    Object source = value.getSource();
-                    String name = value.getName();
-
-                    tripEntry.setDate(date);
-                    tripEntry.setSource(source);
-                    tripEntry.setDestination(destination);
-                    tripEntry.setUser_id(user_id);
-                    tripEntry.setName(name);
-                    tripEntryList.add(tripEntry);
-
-                    try
-                    {
-                        setLambdaMapForAllEntries();
-                    } catch (ParseException e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error)
-            {
-                // Failed to read value
-                Log.w("Hello", "Failed to read value.", error.toException());
-            }
-        });
-
         viewButton.setOnClickListener(v ->
         {
             MyAdapter recyclerAdapter = new MyAdapter(tripEntryList,HomeActivity.this);
@@ -109,6 +64,60 @@ public class HomeActivity extends BaseActivity
 
         });
 
+        entryDatabaseReference.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
+                {
+                    TripEntry tripEntry = dataSnapshot1.getValue(TripEntry.class);
+
+                    UtilityMethods.updateTripList(tripEntryList, tripEntry);
+
+                    try
+                    {
+                        setLambdaMapForAllEntries();
+                    } catch (ParseException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error)
+            {
+                // Failed to read value
+                Log.w("Hello", "Failed to read value.", error.toException());
+            }
+        });
+
+        userDatabaseReference.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
+                {
+                    User user = dataSnapshot1.getValue(User.class);
+                    UtilityMethods.updateUserList(userList, user);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error)
+            {
+                // Failed to read value
+                Log.w("Hello", "Failed to read value.", error.toException());
+            }
+        });
     }
 
     void setLambdaMapForAllEntries() throws ParseException

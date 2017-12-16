@@ -1,6 +1,7 @@
 package garbagecollectors.com.snucabpool;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -11,8 +12,9 @@ public class UtilityMethods
     public static User getUserFromDatabase(String uid)
     {
         User userToBeFound = null;
+        ArrayList<User> userList = BaseActivity.getUserList();
 
-        for(User user: BaseActivity.getUserList())
+        for(User user: userList)
         {
             if(user.getUserId().equals(uid))
             {
@@ -27,6 +29,9 @@ public class UtilityMethods
     static boolean addRequestInList(ArrayList<TripEntry> requestSent, TripEntry tripEntry)
     {
         boolean flag = false;
+
+        if(requestSent == null)
+            requestSent = new ArrayList<>();
 
         for(TripEntry e: requestSent)
         {
@@ -43,26 +48,27 @@ public class UtilityMethods
         return flag;
     }
 
-    static boolean addRequestInMap(Map<String, ArrayList<User>> requestsRecieved, String key, User entryUser)
+    static boolean addRequestInMap(HashMap<String, ArrayList<User>> requestsRecieved, String key, User entryUser)
     {
         boolean flag = false;
 
-        for (Iterator<Map.Entry<String, ArrayList<User>>> entries = requestsRecieved.entrySet().iterator(); entries.hasNext(); )
-        {
-            Map.Entry<String, ArrayList<User>> entry = entries.next();
+        if(requestsRecieved == null)
+            requestsRecieved = new HashMap<>();
 
-            if(entry.getKey().equals(key))
+        for (Map.Entry<String, ArrayList<User>> entry : requestsRecieved.entrySet())
+        {
+            if (entry.getKey().equals(key))
             {
-                for(User user: entry.getValue())
+                for (User user : entry.getValue())
                 {
-                    if(user.getUserId().equals(entryUser.getUserId()))
+                    if (user.getUserId().equals(entryUser.getUserId()))
                     {
                         flag = true;
                         break;
                     }
                 }
 
-                if(!flag)
+                if (!flag)
                 {
                     entry.getValue().add(entryUser);
                     break;
@@ -71,5 +77,41 @@ public class UtilityMethods
         }
 
         return flag;
+    }
+
+    public static void updateTripList(ArrayList<TripEntry> tripEntryList, TripEntry tripEntry)
+    {
+        Iterator<TripEntry> iterator = tripEntryList.iterator();
+
+        while (iterator.hasNext())
+        {
+            TripEntry tripEntryFromList = iterator.next();
+
+            if(tripEntryFromList.getEntry_id().equals(tripEntry.getEntry_id()))
+            {
+                iterator.remove();
+                break;
+            }
+        }
+
+        tripEntryList.add(tripEntry);
+    }
+
+    public static void updateUserList(ArrayList<User> userList, User user)
+    {
+        Iterator<User> iterator = userList.iterator();
+
+        while (iterator.hasNext())
+        {
+            User userFromList = iterator.next();
+
+            if(userFromList.getUserId().equals(user.getUserId()))
+            {
+                iterator.remove();
+                break;
+            }
+        }
+
+        userList.add(user);
     }
 }
