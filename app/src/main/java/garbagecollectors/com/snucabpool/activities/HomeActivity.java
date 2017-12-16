@@ -1,5 +1,6 @@
 package garbagecollectors.com.snucabpool.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -27,7 +28,7 @@ import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabas
 public class HomeActivity extends BaseActivity
 {
     RecyclerView recycle;
-    Button viewButton;
+    Button viewButton, signOutButton;
 
     Sorting_Filtering sf = new Sorting_Filtering();
 
@@ -40,7 +41,8 @@ public class HomeActivity extends BaseActivity
         navigationView = (BottomNavigationView) findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
 
-        viewButton = (Button) findViewById(R.id.view);
+        viewButton = (Button) findViewById(R.id.viewButton);
+        signOutButton = (Button) findViewById(R.id.sign_out_button);
         recycle = (RecyclerView) findViewById(R.id.recycle);
 
         mAuth = FirebaseAuth.getInstance();
@@ -62,6 +64,13 @@ public class HomeActivity extends BaseActivity
             recycle.setItemAnimator( new DefaultItemAnimator());
             recycle.setAdapter(recyclerAdapter);
 
+        });
+
+        signOutButton.setOnClickListener(v ->
+        {
+            mAuth.signOut();
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
         });
 
         entryDatabaseReference.addValueEventListener(new ValueEventListener()
