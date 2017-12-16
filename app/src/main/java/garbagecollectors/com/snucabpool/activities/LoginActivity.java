@@ -28,10 +28,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 
 import static garbagecollectors.com.snucabpool.activities.BaseActivity.finalCurrentUser;
@@ -104,7 +106,13 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            createUserOnDatabase(user);
+                            try
+                            {
+                                createUserOnDatabase(user);
+                            } catch (ParseException e)
+                            {
+                                e.printStackTrace();
+                            }
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -168,9 +176,21 @@ public class LoginActivity extends Activity implements View.OnClickListener
         }
     }
 
-    private void createUserOnDatabase(FirebaseUser user)
+    private void createUserOnDatabase(FirebaseUser user) throws ParseException
     {
-        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), new ArrayList<>(), new HashMap<>(), new ArrayList<>());
+        ArrayList<User> users = new ArrayList<>();
+        users.add(new User("DummyUser", "Dud", null, null, null));
+
+        ArrayList<TripEntry> requestSent = new ArrayList<>();
+        requestSent.add(new TripEntry("dummy", "0", "DummyUser", "12:00", null, null, null, null));
+
+        HashMap<String, ArrayList<User>> requestRecieved = new HashMap<>();
+        requestRecieved.put("dummy", users);
+
+        ArrayList<TripEntry> friends = new ArrayList<>();
+        friends.add(new TripEntry("dummy", "0", "DummyUser", "12:00", null, null, null, null));
+
+        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), requestSent, requestRecieved, friends);
 
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
