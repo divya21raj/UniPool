@@ -178,19 +178,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void createUserOnDatabase(FirebaseUser user) throws ParseException
     {
-        ArrayList<TripEntry> requestSent = new ArrayList<>();
-        requestSent.add(new TripEntry("dummy", "0", "DummyUser", "12:00", "1/11/12", "", "", new HashMap<>()));
-
-        ArrayList<User> users = new ArrayList<>();
-        users.add(new User("DummyUser", "Dud", requestSent, new HashMap<>(), new ArrayList<>()));
-
-        HashMap<String, ArrayList<User>> requestRecieved = new HashMap<>();
-        requestRecieved.put("dummy", users);
-
-        ArrayList<TripEntry> friends = new ArrayList<>();
-        friends.add(new TripEntry("dummy", "0", "DummyUser", "12:00", "1/11/12", "", "", new HashMap<>()));
-
-        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), requestSent, requestRecieved, friends);
+        dummyInitFinalCurrentUser(user);
 
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
@@ -215,6 +203,28 @@ public class LoginActivity extends Activity implements View.OnClickListener
             }
 
         });
+    }
+
+    private void dummyInitFinalCurrentUser(FirebaseUser user) throws ParseException
+    {
+        HashMap<String, Float> dummyLambdaMap = new HashMap<>();
+        dummyLambdaMap.put("123", 0f);
+
+        TripEntry dummyTripEntry = new TripEntry("dummy", "0", "DummyUser", "12:00", "1/11/12", "", "", dummyLambdaMap);
+
+        ArrayList<TripEntry> dummyFriends = new ArrayList<>();
+        dummyFriends.add(dummyTripEntry);
+
+        ArrayList<TripEntry> dummyRequestSent = new ArrayList<>();
+        dummyRequestSent.add(dummyTripEntry);
+
+        ArrayList<String> dummyUserIdList = new ArrayList<>();
+        dummyUserIdList.add("dummy");
+
+        HashMap<String, ArrayList<String>> dummyRequestRecieved = new HashMap<>();
+        dummyRequestRecieved.put("dummy", dummyUserIdList);
+
+        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), dummyRequestSent, dummyRequestRecieved, dummyFriends);
     }
 
     private void updateUI(FirebaseUser currentUser)

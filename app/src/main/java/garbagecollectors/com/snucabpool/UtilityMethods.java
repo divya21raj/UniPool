@@ -48,32 +48,41 @@ public class UtilityMethods
         return flag;
     }
 
-    static boolean addRequestInMap(HashMap<String, ArrayList<User>> requestsRecieved, String key, User entryUser)
+    static boolean addRequestInMap(HashMap<String, ArrayList<String>> requestsRecieved, String key, String entryUserId)
     {
-        boolean flag = false;
+        boolean flag = false, flag2 = false;
 
         if(requestsRecieved == null)
             requestsRecieved = new HashMap<>();
 
-        for (Map.Entry<String, ArrayList<User>> entry : requestsRecieved.entrySet())
+        for (Map.Entry<String, ArrayList<String>> entry : requestsRecieved.entrySet())
         {
             if (entry.getKey().equals(key))
             {
-                for (User user : entry.getValue())
+                for (String userId : entry.getValue())
                 {
-                    if (user.getUserId().equals(entryUser.getUserId()))
+                    if (userId.equals(entryUserId))
                     {
                         flag = true;
                         break;
                     }
                 }
 
-                if (!flag)
+                if(!flag)
                 {
-                    entry.getValue().add(entryUser);
+                    entry.getValue().add(entryUserId);
+                    flag2 = true;
                     break;
                 }
             }
+        }
+
+        if(!flag && !flag2)
+        {
+            ArrayList<String> userIdList = new ArrayList<>();
+            userIdList.add(entryUserId);
+
+            requestsRecieved.put(key, userIdList);
         }
 
         return flag;

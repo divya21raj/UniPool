@@ -14,13 +14,13 @@ public class User
     private ArrayList<TripEntry> user_entries =new ArrayList<>();
 
     private ArrayList<TripEntry> requestSent;
+    private HashMap<String, ArrayList<String>> requestsRecieved;
+    //Key is the entryId of entry requested, Value is list of userIDs who've requested that entry
+    //We have Map because we're taking TripEntry object of the entry that we have made (that the other person has clicked on)
+
     private ArrayList<TripEntry> friends;
 
-    private HashMap<String, ArrayList<User>> requestsRecieved;
-    //We have Map because we're taking TripEntry object of the entry that we have made (that the other person has clicked on)
-    //Key is the entryId of entry requested, Value is list of users who've requested that entry
-
-    public User(String userId, String name, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<User>> requestsRecieved, ArrayList<TripEntry> friends)
+    public User(String userId, String name, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsRecieved, ArrayList<TripEntry> friends)
     {
         this.userId = userId;
         this.name = name;
@@ -59,12 +59,12 @@ public class User
         this.requestSent = requestSent;
     }
 
-    public HashMap<String, ArrayList<User>> getRequestsRecieved()
+    public HashMap<String, ArrayList<String>> getRequestsRecieved()
     {
         return requestsRecieved;
     }
 
-    public void setRequestsRecieved(HashMap<String, ArrayList<User>> requestsRecieved)
+    public void setRequestsRecieved(HashMap<String, ArrayList<String>> requestsRecieved)
     {
         this.requestsRecieved = requestsRecieved;
     }

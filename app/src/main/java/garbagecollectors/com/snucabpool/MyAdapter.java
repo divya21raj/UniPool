@@ -103,12 +103,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
             DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
 
             ArrayList<TripEntry> requestSent = user.getRequestSent();
-            HashMap<String, ArrayList<User>> requestsRecieved = tripEntryUser.getRequestsRecieved();
+            HashMap<String, ArrayList<String>> requestsRecieved = tripEntryUser.getRequestsRecieved();
 
             isAlreadyRequested = addRequestInList(requestSent, tripEntry);
 
             if(!isAlreadyRequested)
-                isRequestAlreadyInMap = addRequestInMap(requestsRecieved, tripEntry.getEntry_id(), user);
+                isRequestAlreadyInMap = addRequestInMap(requestsRecieved, tripEntry.getEntry_id(), user.getUserId());
 
             user.setRequestSent(requestSent);
             tripEntryUser.setRequestsRecieved(requestsRecieved);
