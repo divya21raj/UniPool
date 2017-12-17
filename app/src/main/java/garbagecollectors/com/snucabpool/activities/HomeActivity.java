@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Button;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -22,8 +21,6 @@ import garbagecollectors.com.snucabpool.Sorting_Filtering;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
-
-import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabase;
 
 public class HomeActivity extends BaseActivity
 {
@@ -74,7 +71,6 @@ public class HomeActivity extends BaseActivity
                 for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
                 {
                     TripEntry tripEntry = dataSnapshot1.getValue(TripEntry.class);
-
                     UtilityMethods.updateTripList(tripEntryList, tripEntry);
                     /*
                     try

@@ -178,17 +178,17 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void createUserOnDatabase(FirebaseUser user) throws ParseException
     {
-        ArrayList<User> users = new ArrayList<>();
-        users.add(new User("DummyUser", "Dud", null, null, null));
-
         ArrayList<TripEntry> requestSent = new ArrayList<>();
-        requestSent.add(new TripEntry("dummy", "0", "DummyUser", "12:00", null, null, null, null));
+        requestSent.add(new TripEntry("dummy", "0", "DummyUser", "12:00", "1/11/12", "", "", new HashMap<>()));
+
+        ArrayList<User> users = new ArrayList<>();
+        users.add(new User("DummyUser", "Dud", requestSent, new HashMap<>(), new ArrayList<>()));
 
         HashMap<String, ArrayList<User>> requestRecieved = new HashMap<>();
         requestRecieved.put("dummy", users);
 
         ArrayList<TripEntry> friends = new ArrayList<>();
-        friends.add(new TripEntry("dummy", "0", "DummyUser", "12:00", null, null, null, null));
+        friends.add(new TripEntry("dummy", "0", "DummyUser", "12:00", "1/11/12", "", "", new HashMap<>()));
 
         finalCurrentUser = new User(user.getUid(), user.getDisplayName(), requestSent, requestRecieved, friends);
 
