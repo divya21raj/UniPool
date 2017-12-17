@@ -45,15 +45,6 @@ public class HomeActivity extends BaseActivity
         signOutButton = (Button) findViewById(R.id.sign_out_button);
         recycle = (RecyclerView) findViewById(R.id.recycle);
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-
-        if(finalCurrentUser == null)
-        {
-            assert currentUser != null;
-            finalCurrentUser = getUserFromDatabase(currentUser.getUid());
-        }
-
         viewButton.setOnClickListener(v ->
         {
             MyAdapter recyclerAdapter = new MyAdapter(tripEntryList,HomeActivity.this);

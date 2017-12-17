@@ -1,14 +1,11 @@
 package garbagecollectors.com.snucabpool.activities;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
@@ -18,13 +15,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
+import garbagecollectors.com.snucabpool.UtilityMethods;
 
 public class SplashActivity extends AppCompatActivity
 {
@@ -90,13 +86,13 @@ public class SplashActivity extends AppCompatActivity
             for(DataSnapshot dataSnapshot :entryData.getChildren())
             {
                 TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                tripEntryList.add(tripEntry);
+                UtilityMethods.updateTripList(tripEntryList, tripEntry);
             }
 
             for(DataSnapshot dataSnapshot1 : userData.getChildren())
             {
                 User user = dataSnapshot1.getValue(User.class);
-                userList.add(user);
+                UtilityMethods.updateUserList(userList, user);
             }
 
             finish();
