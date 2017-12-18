@@ -39,8 +39,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             mTextView = v;
         }
     }
-    //TODO accepting requests: aded to frineds list
-    //TODO display requests receieved
+    //TODO accepting requests: added to friends list
+    //TODO display requests recieved
     // Provide a suitable constructor (depends on the kind of dataset)
     public RequestAdapter(ArrayList<User> myDataset)
     {

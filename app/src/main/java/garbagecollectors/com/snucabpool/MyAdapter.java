@@ -78,8 +78,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
         View v = LayoutInflater.from(context).inflate(R.layout.card, parent, false);
         // set the view's size, margins, padding and layout parameters...
 
-        MyHolder holder = new MyHolder(v);
-        return holder;
+        return new MyHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
