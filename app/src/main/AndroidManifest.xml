@@ -36,11 +36,12 @@
         </activity>
         <activity
             android:name=".activities.RequestActivity"
-            android:label="@string/title_activity_requests"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/title_activity_requests"/>
+
         <activity android:name=".activities.SplashActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN"
+                        android:theme="@style/AppTheme.NoActionBar"/>
             </intent-filter>
         </activity>
     </application>
