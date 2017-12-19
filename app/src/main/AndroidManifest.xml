@@ -11,38 +11,46 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB8Ik3P9bFz_prcjauv0oGMM_4gQmK2U_I"/>
+
         <activity
-            android:name=".activities.HomeActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-            </intent-filter>
-        </activity>
-        <activity android:name=".activities.LoginActivity">
+            android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB8Ik3P9bFz_prcjauv0oGMM_4gQmK2U_I"/>
-
-        <activity android:name=".activities.NewEntryActivity">
+        <activity
+            android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activities.HomeActivity"
+            android:label="Home">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.NewEntryActivity"
+            android:label="Create a New Entry">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".activities.RequestActivity"
-            android:label="@string/title_activity_requests"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-            </intent-filter>
-        </activity>
+            android:label="@string/title_activity_requests"/>
+
     </application>
 
 </manifest>
