@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -25,8 +24,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import garbagecollectors.com.snucabpool.DatePickerFragment;
-import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.TripEntry;
 
 public class NewEntryActivity extends BaseActivity
 {
@@ -66,42 +65,24 @@ public class NewEntryActivity extends BaseActivity
 
         buttonChangeDate = (Button)findViewById(R.id.SetTime);
 
-        buttonChangeDate.setOnClickListener(new OnClickListener()
-        {
-
-            @Override
-            public void onClick(View v)
-            {
-                openTimePickerDialog(false);
-            }
-        });
+        buttonChangeDate.setOnClickListener(v -> openTimePickerDialog(false));
 
         buttonstartSetDialog = (Button)findViewById(R.id.btnChangeDate);
-        buttonstartSetDialog.setOnClickListener(new OnClickListener()
+        buttonstartSetDialog.setOnClickListener(v ->
         {
-
-            @Override
-            public void onClick(View v)
-            {
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getFragmentManager(),"Date Picker");
-            }
+            DialogFragment newFragment = new DatePickerFragment();
+            newFragment.show(getFragmentManager(),"Date Picker");
         });
 
         buttonFinalSave = (Button)findViewById(R.id.finalSave);
-        buttonFinalSave.setOnClickListener(new OnClickListener()
+        buttonFinalSave.setOnClickListener(v ->
         {
-
-            @Override
-            public void onClick(View v)
+            try
             {
-                try
-                {
-                    finalSave(v);
-                } catch (ParseException e)
-                {
-                    e.printStackTrace();
-                }
+                finalSave(v);
+            } catch (ParseException e)
+            {
+                e.printStackTrace();
             }
         });
 
@@ -243,9 +224,7 @@ public class NewEntryActivity extends BaseActivity
         }
 
         else
-        {
             Toast.makeText(this, "Fill in all the details!", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override

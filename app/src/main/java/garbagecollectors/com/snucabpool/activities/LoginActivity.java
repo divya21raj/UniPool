@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -15,10 +14,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -28,10 +25,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 
 import static garbagecollectors.com.snucabpool.activities.BaseActivity.finalCurrentUser;
@@ -95,27 +94,31 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
+                .addOnCompleteListener(this, task ->
+                {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithCredential:success");
 
-                            FirebaseUser user = mAuth.getCurrentUser();
+                        FirebaseUser user = mAuth.getCurrentUser();
 
+                        try
+                        {
                             createUserOnDatabase(user);
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                        } catch (ParseException e)
+                        {
+                            e.printStackTrace();
                         }
-
-                        // ...
+                        updateUI(user);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                        updateUI(null);
                     }
+
+                    // ...
                 });
     }
 
@@ -168,9 +171,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
         }
     }
 
-    private void createUserOnDatabase(FirebaseUser user)
+    private void createUserOnDatabase(FirebaseUser user) throws ParseException
     {
-        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), new ArrayList<>(), new HashMap<>(), new ArrayList<>());
+        dummyInitFinalCurrentUser(user);
 
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
@@ -197,11 +200,34 @@ public class LoginActivity extends Activity implements View.OnClickListener
         });
     }
 
+    private void dummyInitFinalCurrentUser(FirebaseUser user) throws ParseException
+    {
+        HashMap<String, Float> dummyLambdaMap = new HashMap<>();
+        dummyLambdaMap.put("123", 0f);
+
+        TripEntry dummyTripEntry = new TripEntry("dummy", "0", "DummyUser", "12:00", "1/11/12", "", "", dummyLambdaMap);
+
+        ArrayList<TripEntry> dummyFriends = new ArrayList<>();
+        dummyFriends.add(dummyTripEntry);
+
+        ArrayList<TripEntry> dummyRequestSent = new ArrayList<>();
+        dummyRequestSent.add(dummyTripEntry);
+
+        ArrayList<String> dummyUserIdList = new ArrayList<>();
+        dummyUserIdList.add("dummy");
+
+        HashMap<String, ArrayList<String>> dummyRequestRecieved = new HashMap<>();
+        dummyRequestRecieved.put("dummy", dummyUserIdList);
+
+        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), dummyRequestSent, dummyRequestRecieved, dummyFriends);
+    }
+
     private void updateUI(FirebaseUser currentUser)
     {
+        progressDialog.dismiss();
+
         if(currentUser != null)
         {
-            progressDialog.dismiss();
             finish();
             startActivity(new Intent(getApplicationContext(), SplashActivity.class));
         }

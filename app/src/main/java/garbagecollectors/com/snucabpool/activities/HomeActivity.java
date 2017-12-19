@@ -1,5 +1,6 @@
 package garbagecollectors.com.snucabpool.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -8,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Button;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -22,12 +22,10 @@ import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
 
-import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabase;
-
 public class HomeActivity extends BaseActivity
 {
     RecyclerView recycle;
-    Button viewButton;
+    Button viewButton, signOutButton;
 
     Sorting_Filtering sf = new Sorting_Filtering();
 
@@ -40,17 +38,9 @@ public class HomeActivity extends BaseActivity
         navigationView = (BottomNavigationView) findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
 
-        viewButton = (Button) findViewById(R.id.view);
+        viewButton = (Button) findViewById(R.id.viewButton);
+        signOutButton = (Button) findViewById(R.id.sign_out_button);
         recycle = (RecyclerView) findViewById(R.id.recycle);
-
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-
-        if(finalCurrentUser == null)
-        {
-            assert currentUser != null;
-            finalCurrentUser = getUserFromDatabase(currentUser.getUid());
-        }
 
         viewButton.setOnClickListener(v ->
         {
@@ -64,6 +54,13 @@ public class HomeActivity extends BaseActivity
 
         });
 
+        signOutButton.setOnClickListener(v ->
+        {
+            mAuth.signOut();
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+        });
+
         entryDatabaseReference.addValueEventListener(new ValueEventListener()
         {
             @Override
@@ -74,16 +71,15 @@ public class HomeActivity extends BaseActivity
                 for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
                 {
                     TripEntry tripEntry = dataSnapshot1.getValue(TripEntry.class);
-
                     UtilityMethods.updateTripList(tripEntryList, tripEntry);
-
+                    /*
                     try
                     {
                         setLambdaMapForAllEntries();
                     } catch (ParseException e)
                     {
                         e.printStackTrace();
-                    }
+                    }*/
                 }
             }
 

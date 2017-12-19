@@ -13,13 +13,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
+
+import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabase;
 
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
@@ -30,6 +30,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     protected static DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
+
     static User finalCurrentUser;
 
     static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
@@ -40,6 +41,15 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        if(finalCurrentUser == null)
+        {
+            assert currentUser != null;
+            finalCurrentUser = getUserFromDatabase(currentUser.getUid());
+        }
 
         navigationView = (BottomNavigationView) findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
