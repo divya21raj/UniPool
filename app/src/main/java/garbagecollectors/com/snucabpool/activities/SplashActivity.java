@@ -1,5 +1,6 @@
 package garbagecollectors.com.snucabpool.activities;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -45,8 +46,8 @@ public class SplashActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_activity);
-
+        setContentView(R.layout.activity_splash);
+        
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
@@ -99,12 +100,12 @@ public class SplashActivity extends AppCompatActivity
             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
 
         });
+
         allTask.addOnFailureListener(e ->
         {
             // apologize profusely to the user!
             Toast.makeText(this, "FAIL", Toast.LENGTH_LONG).show();
         });
-
     }
 
     public static ArrayList<TripEntry> getTripEntryList()
