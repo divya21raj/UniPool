@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
+import garbagecollectors.com.snucabpool.adapters.TripEntryAdapter;
 
 public class UtilityMethods
 {
@@ -169,5 +170,28 @@ public class UtilityMethods
         }
 
         return tripEntry;
+    }
+
+    public static ArrayList<TripEntry> removeNullEntry(ArrayList<TripEntry> sentRequests)
+    {
+        Iterator<TripEntry> iterator = sentRequests.iterator();
+
+        while (iterator.hasNext())
+        {
+            if (iterator.next().getName().equals("dummy"))
+            {
+                iterator.remove();
+                break;
+            }
+        }
+
+        return sentRequests;
+    }
+
+    public static void fillHolder(TripEntryAdapter.MyHolder holder, TripEntry tripEntry)
+    {
+        holder.date.setText(tripEntry.getDate());
+        holder.name_user.setText(tripEntry.getName());
+        holder.travel_time.setText(tripEntry.getTime());
     }
 }

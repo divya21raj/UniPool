@@ -34,15 +34,15 @@ public abstract class TripEntryAdapter extends RecyclerView.Adapter<TripEntryAda
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    class MyHolder extends RecyclerView.ViewHolder
+    public class MyHolder extends RecyclerView.ViewHolder
     {
         // each data item is just a string in this case
         public TextView date;
-        TextView user_id;
-        TextView source;
-        TextView destination;
-        TextView name_user;
-        TextView travel_time;
+        public TextView user_id;
+        public TextView source;
+        public TextView destination;
+        public TextView name_user;
+        public TextView travel_time;
 
 
         MyHolder(View v)

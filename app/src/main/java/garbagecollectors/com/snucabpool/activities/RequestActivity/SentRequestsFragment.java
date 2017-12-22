@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
+import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.HomeActivity;
 import garbagecollectors.com.snucabpool.adapters.HomeActivityTEA;
 import garbagecollectors.com.snucabpool.adapters.SentRequestsTEA;
@@ -44,10 +45,13 @@ public class SentRequestsFragment extends Fragment
         user = HomeActivity.getFinalCurrentUser();
         sentRequests = user.getRequestSent();
 
+
         recycle = (RecyclerView) view.findViewById(R.id.recycle_requests);
 
         if(sentRequests.size() > 1)
         {
+            sentRequests = UtilityMethods.removeNullEntry(sentRequests);
+
             SentRequestsTEA recyclerAdapter = new SentRequestsTEA(sentRequests,getContext());
 
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);

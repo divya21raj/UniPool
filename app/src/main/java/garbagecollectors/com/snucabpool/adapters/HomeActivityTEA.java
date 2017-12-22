@@ -115,16 +115,16 @@ public class HomeActivityTEA extends TripEntryAdapter
         // - replace the contents of the view with that element
         // holder.mTextView.setText(mDataset[position]);
 
-        TripEntry myList = list.get(position);
-        holder.date.setText(myList.getDate());
-//      holder.user_id.setText(myList.getUser_id());
-        holder.name_user.setText(myList.getName());
-        holder.travel_time.setText(myList.getTime());
+        TripEntry tripEntry = list.get(position);
+        holder.date.setText(tripEntry.getDate());
+//      holder.user_id.setText(tripEntry.getUser_id());
+        holder.name_user.setText(tripEntry.getName());
+        holder.travel_time.setText(tripEntry.getTime());
 
 
         //System.out.println("Time is "+holder.travel_time);
-        //Object temp_Source=(Place)myList.getSource();
-       // Place temp_Destination=(Place)myList.getDestination();
+        //Object temp_Source=(Place)tripEntry.getSource();
+       // Place temp_Destination=(Place)tripEntry.getDestination();
        // holder.source.setText(temp_Source.getName());
         //holder.destination.setText(temp_Destination.getName());
     }

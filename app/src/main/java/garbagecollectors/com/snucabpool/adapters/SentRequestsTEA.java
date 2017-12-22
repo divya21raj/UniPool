@@ -11,6 +11,7 @@ import java.util.List;
 
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
+import garbagecollectors.com.snucabpool.UtilityMethods;
 
 public class SentRequestsTEA extends TripEntryAdapter
 {
@@ -59,19 +60,13 @@ public class SentRequestsTEA extends TripEntryAdapter
         // - replace the contents of the view with that element
         // holder.mTextView.setText(mDataset[position]);
 
+        TripEntry tripEntry = list.get(position);
 
-        TripEntry myList = list.get(position);
-
-        if(!(myList.getName().equals("dummy") || myList.getName().equals("name")))   //checking for first dummy entry
-        {
-            holder.date.setText(myList.getDate());
-            holder.name_user.setText(myList.getName());
-            holder.travel_time.setText(myList.getTime());
-        }
-
+        UtilityMethods.fillHolder(holder, tripEntry);
+        
         //System.out.println("Time is "+holder.travel_time);
-        //Object temp_Source=(Place)myList.getSource();
-        // Place temp_Destination=(Place)myList.getDestination();
+        //Object temp_Source=(Place)tripEntry.getSource();
+        // Place temp_Destination=(Place)tripEntry.getDestination();
         // holder.source.setText(temp_Source.getName());
         //holder.destination.setText(temp_Destination.getName());
     }
