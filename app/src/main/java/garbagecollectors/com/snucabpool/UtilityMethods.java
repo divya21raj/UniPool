@@ -123,4 +123,13 @@ public class UtilityMethods
 
         userList.add(user);
     }
+
+    public static ArrayList<TripEntry> populateRecievedRequestsList(HashMap<String, ArrayList<String>> recievedRequestsMap, ArrayList<TripEntry> tripEntries)
+    {
+        ArrayList<TripEntry> recievedRequestsList = new ArrayList<>();
+
+                
+
+        return recievedRequestsList;
+    }
 }

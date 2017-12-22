@@ -45,10 +45,10 @@ public class HomeActivity extends BaseActivity
         viewButton.setOnClickListener(v ->
         {
             HomeActivityTEA recyclerAdapter = new HomeActivityTEA(tripEntryList,HomeActivity.this);
-            RecyclerView.LayoutManager recyce = new GridLayoutManager(HomeActivity.this,1);
-            /// RecyclerView.LayoutManager recyce = new LinearLayoutManager(MainActivity.this);
+            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(HomeActivity.this,1);
+            /// RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
             // recycle.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-            recycle.setLayoutManager(recyce);
+            recycle.setLayoutManager(layoutManager);
             recycle.setItemAnimator( new DefaultItemAnimator());
             recycle.setAdapter(recyclerAdapter);
 
