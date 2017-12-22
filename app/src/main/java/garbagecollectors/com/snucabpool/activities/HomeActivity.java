@@ -15,7 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 
-import garbagecollectors.com.snucabpool.TripEntryAdapter;
+import garbagecollectors.com.snucabpool.adapters.TripEntryAdapter;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.Sorting_Filtering;
 import garbagecollectors.com.snucabpool.TripEntry;

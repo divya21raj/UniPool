@@ -1,4 +1,4 @@
-package garbagecollectors.com.snucabpool;
+package garbagecollectors.com.snucabpool.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.TripEntry;
+import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
 
 import static garbagecollectors.com.snucabpool.UtilityMethods.addRequestInList;
