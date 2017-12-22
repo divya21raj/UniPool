@@ -8,9 +8,10 @@ import android.view.ViewGroup;
 
 import garbagecollectors.com.snucabpool.R;
 
-public class ChatFragment extends Fragment{
-
-    public ChatFragment() {
+public class ChatFragment extends Fragment
+{
+    public ChatFragment()
+    {
         // Required empty public constructor
     }
 
@@ -21,7 +22,8 @@ public class ChatFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_chat, container, false);
     }

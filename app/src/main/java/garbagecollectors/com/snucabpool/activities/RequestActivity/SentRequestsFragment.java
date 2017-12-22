@@ -8,20 +8,23 @@ import android.view.ViewGroup;
 
 import garbagecollectors.com.snucabpool.R;
 
-public class SentRequestsFragment extends Fragment{
-
-    public SentRequestsFragment() {
+public class SentRequestsFragment extends Fragment
+{
+    public SentRequestsFragment()
+    {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sent_requests, container, false);
     }
