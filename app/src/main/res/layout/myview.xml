@@ -45,31 +45,31 @@
                         android:id="@+id/vname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/songs_count_padding_bottom"
+                        android:paddingBottom="@dimen/card_text_padding_bottom"
                         android:paddingLeft="@dimen/album_title_padding"
                         android:paddingRight="@dimen/album_title_padding"
                         android:text="name"
-                        android:textSize="@dimen/album_title" />
+                        android:textSize="@dimen/card_title" />
 
                     <TextView
                         android:id="@+id/vuser_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/songs_count_padding_bottom"
+                        android:paddingBottom="@dimen/card_text_padding_bottom"
                         android:paddingLeft="@dimen/album_title_padding"
                         android:paddingRight="@dimen/album_title_padding"
                         android:text="user id"
-                        android:textSize="@dimen/songs_count" />
+                        android:textSize="@dimen/card_text_size" />
 
                     <TextView
                         android:id="@+id/vdate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/songs_count_padding_bottom"
+                        android:paddingBottom="@dimen/card_text_padding_bottom"
                         android:paddingLeft="@dimen/album_title_padding"
                         android:paddingRight="@dimen/album_title_padding"
                         android:text="date"
-                        android:textSize="@dimen/songs_count" />
+                        android:textSize="@dimen/card_text_size" />
 
                     <TextView
                         android:id="@+id/vtime"
@@ -78,11 +78,11 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/vdate"
-                        android:paddingBottom="@dimen/songs_count_padding_bottom"
+                        android:paddingBottom="@dimen/card_text_padding_bottom"
                         android:paddingLeft="@dimen/album_title_padding"
                         android:paddingRight="@dimen/album_title_padding"
                         android:text="time"
-                        android:textSize="@dimen/songs_count" />
+                        android:textSize="@dimen/card_text_size" />
 
                     <TextView
                         android:id="@+id/vsource"
@@ -95,8 +95,8 @@
                         android:paddingRight="@dimen/album_title_padding"
                         android:paddingTop="@dimen/album_title_padding"
                         android:text="source"
-                        android:textColor="@color/album_title"
-                        android:textSize="@dimen/songs_count" />
+                        android:textColor="@color/card_title"
+                        android:textSize="@dimen/card_text_size" />
 
                     <TextView
                         android:id="@+id/vdestination"
@@ -108,8 +108,8 @@
                         android:paddingRight="@dimen/album_title_padding"
                         android:paddingTop="@dimen/album_title_padding"
                         android:text="source"
-                        android:textColor="@color/album_title"
-                        android:textSize="@dimen/songs_count"
+                        android:textColor="@color/card_title"
+                        android:textSize="@dimen/card_text_size"
                         android:visibility="visible" />
 
 
