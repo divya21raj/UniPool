@@ -134,12 +134,12 @@ public class HomeActivity extends BaseActivity
     }
 
     @Override
-    int getNavigationMenuItemId()
+    protected int getNavigationMenuItemId()
     {
         return R.id.navigation_home;
     }
     @Override
-    int getContentViewId()
+    protected int getContentViewId()
     {
         return R.layout.activity_home;
     }

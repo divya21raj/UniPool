@@ -101,10 +101,6 @@ public class HomeActivityTEA extends TripEntryAdapter
                 userDatabaseReference.child(user.getUserId()).removeValue();
                 userDatabaseReference.child(user.getUserId()).setValue(user);
 
-            /*userDatabaseReference.child("users").child(user.getUserId()).child("friends").setValue(tripEntry.getUser_id()+", ");
-            userDatabaseReference.child("users").child(tripEntry.getUser_id()).child("friends").setValue(user.getRequestSent().toString());
-            magic over!*/
-
                 Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG).show();
             }
 

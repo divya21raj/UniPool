@@ -48,8 +48,8 @@
         </activity>
 
         <activity
-            android:name=".activities.RequestActivity"
-            android:label="@string/title_activity_requests"/>
+            android:name=".activities.RequestActivity.RequestActivity"
+            android:label="@string/title_requests"/>
 
     </application>
 
