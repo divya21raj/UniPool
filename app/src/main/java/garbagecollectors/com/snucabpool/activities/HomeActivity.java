@@ -15,7 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 
-import garbagecollectors.com.snucabpool.MyAdapter;
+import garbagecollectors.com.snucabpool.TripEntryAdapter;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.Sorting_Filtering;
 import garbagecollectors.com.snucabpool.TripEntry;
@@ -44,7 +44,7 @@ public class HomeActivity extends BaseActivity
 
         viewButton.setOnClickListener(v ->
         {
-            MyAdapter recyclerAdapter = new MyAdapter(tripEntryList,HomeActivity.this);
+            TripEntryAdapter recyclerAdapter = new TripEntryAdapter(tripEntryList,HomeActivity.this);
             RecyclerView.LayoutManager recyce = new GridLayoutManager(HomeActivity.this,1);
             /// RecyclerView.LayoutManager recyce = new LinearLayoutManager(MainActivity.this);
             // recycle.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));

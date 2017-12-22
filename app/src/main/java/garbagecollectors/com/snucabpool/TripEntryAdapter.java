@@ -20,7 +20,7 @@ import static garbagecollectors.com.snucabpool.UtilityMethods.addRequestInList;
 import static garbagecollectors.com.snucabpool.UtilityMethods.addRequestInMap;
 import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabase;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
+public class TripEntryAdapter extends RecyclerView.Adapter<TripEntryAdapter.MyHolder>
 {
     //private String[] mDataset;
     private LayoutInflater inflater;
@@ -30,7 +30,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
     private boolean isRequestAlreadyInMap;
     private Boolean isAlreadyRequested;
 
-    public MyAdapter(Context context)
+    public TripEntryAdapter(Context context)
     {
         this.context = context;
         inflater = LayoutInflater.from(context);
@@ -62,7 +62,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder>
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(List<TripEntry> list, Context context)
+    public TripEntryAdapter(List<TripEntry> list, Context context)
     {
        this.context=context;
        this.list=list;
