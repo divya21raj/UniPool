@@ -15,7 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 
-import garbagecollectors.com.snucabpool.MyAdapter;
+import garbagecollectors.com.snucabpool.adapters.HomeActivityTEA;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.Sorting_Filtering;
 import garbagecollectors.com.snucabpool.TripEntry;
@@ -44,11 +44,11 @@ public class HomeActivity extends BaseActivity
 
         viewButton.setOnClickListener(v ->
         {
-            MyAdapter recyclerAdapter = new MyAdapter(tripEntryList,HomeActivity.this);
-            RecyclerView.LayoutManager recyce = new GridLayoutManager(HomeActivity.this,1);
-            /// RecyclerView.LayoutManager recyce = new LinearLayoutManager(MainActivity.this);
+            HomeActivityTEA recyclerAdapter = new HomeActivityTEA(tripEntryList,HomeActivity.this);
+            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(HomeActivity.this,1);
+            /// RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
             // recycle.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-            recycle.setLayoutManager(recyce);
+            recycle.setLayoutManager(layoutManager);
             recycle.setItemAnimator( new DefaultItemAnimator());
             recycle.setAdapter(recyclerAdapter);
 
@@ -134,12 +134,12 @@ public class HomeActivity extends BaseActivity
     }
 
     @Override
-    int getNavigationMenuItemId()
+    protected int getNavigationMenuItemId()
     {
         return R.id.navigation_home;
     }
     @Override
-    int getContentViewId()
+    protected int getContentViewId()
     {
         return R.layout.activity_home;
     }

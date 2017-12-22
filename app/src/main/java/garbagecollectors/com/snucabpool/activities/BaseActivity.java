@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
+import garbagecollectors.com.snucabpool.activities.RequestActivity.RequestActivity;
 
 import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabase;
 
@@ -109,9 +110,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         }
     }
 
-    abstract int getContentViewId();
+    protected abstract int getContentViewId();
 
-    abstract int getNavigationMenuItemId();
+    protected abstract int getNavigationMenuItemId();
 
     public static FirebaseUser getCurrentUser()
     {

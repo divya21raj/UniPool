@@ -228,13 +228,13 @@ public class NewEntryActivity extends BaseActivity
     }
 
     @Override
-    int getContentViewId()
+    protected int getContentViewId()
     {
         return R.layout.activity_new_entry;
     }
 
     @Override
-    int getNavigationMenuItemId()
+    protected int getNavigationMenuItemId()
     {
         return R.id.navigation_newEntry;
     }

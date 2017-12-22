@@ -28,9 +28,19 @@ public class TripEntry
         this.name = name;
     }
 
-    public TripEntry()
+    public TripEntry(TripEntry tripEntry)   //copyConstructor
     {
+        this.entry_id = tripEntry.getEntry_id();
+        this.user_id = tripEntry.getUser_id();
+        this.time = tripEntry.getTime();
+        this.date = tripEntry.getDate();
+        this.source = tripEntry.getSource();
+        this.destination = tripEntry.getDestination();
+        this.name = tripEntry.getName();
     }
+
+    public TripEntry()
+    {}
 
     HashMap<String, Float> getLambdaMap()
     {
