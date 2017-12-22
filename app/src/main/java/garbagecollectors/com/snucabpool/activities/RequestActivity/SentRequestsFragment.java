@@ -49,9 +49,11 @@ public class SentRequestsFragment extends Fragment
         if(sentRequests.size() > 1)
         {
             SentRequestsTEA recyclerAdapter = new SentRequestsTEA(sentRequests,getContext());
+
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
             /// RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
             // recycle.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+
             recycle.setLayoutManager(layoutManager);
             recycle.setItemAnimator( new DefaultItemAnimator());
             recycle.setAdapter(recyclerAdapter);

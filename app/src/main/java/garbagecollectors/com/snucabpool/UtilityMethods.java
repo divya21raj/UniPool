@@ -126,10 +126,48 @@ public class UtilityMethods
 
     public static ArrayList<TripEntry> populateRecievedRequestsList(HashMap<String, ArrayList<String>> recievedRequestsMap, ArrayList<TripEntry> tripEntries)
     {
+        TripEntry temp;
+
         ArrayList<TripEntry> recievedRequestsList = new ArrayList<>();
 
-                
+        for (Map.Entry<String, ArrayList<String>> entry : recievedRequestsMap.entrySet())
+        {
+            if(!entry.getKey().equals("dummy"))
+            {
+                TripEntry tripEntry = getTripEntryFromList(entry.getKey(), tripEntries);
+
+                if(tripEntry != null)
+                {
+                    for(String userId : entry.getValue())
+                    {
+                        User user = getUserFromDatabase(userId);
+
+                        temp = new TripEntry(tripEntry);
+                        temp.setName(user.getName());
+                        temp.setUser_id(user.getUserId());
+
+                        recievedRequestsList.add(temp);
+                    }
+                }
+            }
+        }
 
         return recievedRequestsList;
+    }
+
+    private static TripEntry getTripEntryFromList(String key, ArrayList<TripEntry> tripEntries)
+    {
+        TripEntry tripEntry = null;
+
+        for(TripEntry entry : tripEntries)
+        {
+            if(entry.getEntry_id().equals(key))
+            {
+                tripEntry = entry;
+                break;
+            }
+        }
+
+        return tripEntry;
     }
 }

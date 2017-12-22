@@ -12,22 +12,19 @@ import java.util.List;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 
-public class SentRequestsTEA extends TripEntryAdapter
+public class RecievedRequestsTEA extends TripEntryAdapter
 {
     //private String[] mDataset;
     private LayoutInflater inflater;
     private List<TripEntry> list;
     private Context context;
 
-    private boolean isRequestAlreadyInMap;
-    private Boolean isAlreadyRequested;
-
-    public SentRequestsTEA(Context context)
+    public RecievedRequestsTEA(Context context)
     {
         super(context);
     }
 
-    public SentRequestsTEA(List<TripEntry> list, Context context)
+    public RecievedRequestsTEA(List<TripEntry> list, Context context)
     {
         this.list = list;
         this.context = context;
@@ -61,13 +58,9 @@ public class SentRequestsTEA extends TripEntryAdapter
 
 
         TripEntry myList = list.get(position);
-
-        if(!(myList.getName().equals("dummy") || myList.getName().equals("name")))   //checking for first dummy entry
-        {
-            holder.date.setText(myList.getDate());
-            holder.name_user.setText(myList.getName());
-            holder.travel_time.setText(myList.getTime());
-        }
+        holder.date.setText(myList.getDate());
+        holder.name_user.setText(myList.getName());
+        holder.travel_time.setText(myList.getTime());
 
         //System.out.println("Time is "+holder.travel_time);
         //Object temp_Source=(Place)myList.getSource();

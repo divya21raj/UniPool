@@ -17,6 +17,7 @@ import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.HomeActivity;
+import garbagecollectors.com.snucabpool.adapters.RecievedRequestsTEA;
 import garbagecollectors.com.snucabpool.adapters.SentRequestsTEA;
 
 public class RecievedRequestsFragment extends Fragment
@@ -56,10 +57,12 @@ public class RecievedRequestsFragment extends Fragment
 
         if(recievedRequestsList.size() > 1)
         {
-            SentRequestsTEA recyclerAdapter = new SentRequestsTEA(recievedRequestsList,getContext());
+            RecievedRequestsTEA recyclerAdapter = new RecievedRequestsTEA(recievedRequestsList,getContext());
+
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
             /// RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
             // recycle.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+
             recycle.setLayoutManager(layoutManager);
             recycle.setItemAnimator( new DefaultItemAnimator());
             recycle.setAdapter(recyclerAdapter);
