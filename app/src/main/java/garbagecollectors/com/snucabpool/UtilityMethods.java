@@ -26,7 +26,7 @@ public class UtilityMethods
         return userToBeFound;
     }
 
-    static boolean addRequestInList(ArrayList<TripEntry> requestSent, TripEntry tripEntry)
+    public static boolean addRequestInList(ArrayList<TripEntry> requestSent, TripEntry tripEntry)
     {
         boolean flag = false;
 
@@ -48,7 +48,7 @@ public class UtilityMethods
         return flag;
     }
 
-    static boolean addRequestInMap(HashMap<String, ArrayList<String>> requestsRecieved, String key, String entryUserId)
+    public static boolean addRequestInMap(HashMap<String, ArrayList<String>> requestsRecieved, String key, String entryUserId)
     {
         boolean flag = false, flag2 = false;
 
