@@ -13,23 +13,18 @@ import garbagecollectors.com.snucabpool.TripEntry;
 
 public abstract class TripEntryAdapter extends RecyclerView.Adapter<TripEntryAdapter.MyHolder>
 {
-    //private String[] mDataset;
     private LayoutInflater inflater;
     private List<TripEntry> list;
     private Context context;
 
-    private boolean isRequestAlreadyInMap;
-    private Boolean isAlreadyRequested;
-
-    public TripEntryAdapter(Context context)
+    TripEntryAdapter(Context context)
     {
         this.context = context;
         inflater = LayoutInflater.from(context);
     }
 
-    protected TripEntryAdapter()
-    {
-    }
+    TripEntryAdapter()
+    {  }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -55,13 +50,6 @@ public abstract class TripEntryAdapter extends RecyclerView.Adapter<TripEntryAda
             name_user = (TextView) v.findViewById(R.id.vname);
             travel_time = (TextView) v.findViewById(R.id.vtime);
         }
-    }
-
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public TripEntryAdapter(List<TripEntry> list, Context context)
-    {
-        this.context = context;
-        this.list = list;
     }
 }
 

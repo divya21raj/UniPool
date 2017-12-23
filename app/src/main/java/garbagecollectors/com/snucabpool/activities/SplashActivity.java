@@ -1,6 +1,5 @@
 package garbagecollectors.com.snucabpool.activities;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;

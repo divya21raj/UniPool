@@ -15,12 +15,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 
-import garbagecollectors.com.snucabpool.adapters.HomeActivityTEA;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.Sorting_Filtering;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
+import garbagecollectors.com.snucabpool.adapters.HomeActivityTEA;
 
 public class HomeActivity extends BaseActivity
 {
@@ -46,8 +46,7 @@ public class HomeActivity extends BaseActivity
         {
             HomeActivityTEA recyclerAdapter = new HomeActivityTEA(tripEntryList,HomeActivity.this);
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(HomeActivity.this,1);
-            /// RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-            // recycle.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+
             recycle.setLayoutManager(layoutManager);
             recycle.setItemAnimator( new DefaultItemAnimator());
             recycle.setAdapter(recyclerAdapter);

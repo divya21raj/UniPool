@@ -15,13 +15,8 @@ import garbagecollectors.com.snucabpool.UtilityMethods;
 
 public class SentRequestsTEA extends TripEntryAdapter
 {
-    //private String[] mDataset;
-    private LayoutInflater inflater;
     private List<TripEntry> list;
     private Context context;
-
-    private boolean isRequestAlreadyInMap;
-    private Boolean isAlreadyRequested;
 
     public SentRequestsTEA(Context context)
     {
@@ -40,11 +35,9 @@ public class SentRequestsTEA extends TripEntryAdapter
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MyHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType)
+    public MyHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         // create a new view
-
         View v = LayoutInflater.from(context).inflate(R.layout.card, parent, false);
         // set the view's size, margins, padding and layout parameters...
 
@@ -55,20 +48,9 @@ public class SentRequestsTEA extends TripEntryAdapter
     @Override
     public void onBindViewHolder(MyHolder holder, int position)
     {
-
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        // holder.mTextView.setText(mDataset[position]);
-
         TripEntry tripEntry = list.get(position);
 
         UtilityMethods.fillHolder(holder, tripEntry);
-        
-        //System.out.println("Time is "+holder.travel_time);
-        //Object temp_Source=(Place)tripEntry.getSource();
-        // Place temp_Destination=(Place)tripEntry.getDestination();
-        // holder.source.setText(temp_Source.getName());
-        //holder.destination.setText(temp_Destination.getName());
     }
 
     // Return the size of your dataset (invoked by the layout manager)

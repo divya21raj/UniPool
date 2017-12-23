@@ -93,10 +93,12 @@ public class LoginActivity extends Activity implements View.OnClickListener
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task ->
                 {
-                    if (task.isSuccessful()) {
+                    if (task.isSuccessful())
+                    {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
 
@@ -110,7 +112,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
                             e.printStackTrace();
                         }
                         updateUI(user);
-                    } else {
+                    }
+                    else
+                    {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
@@ -147,7 +151,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN)
+        {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -157,13 +162,15 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask)
     {
-        try {
+        try
+        {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             firebaseAuthWithGoogle(account);
             // Signed in successfully, show authenticated UI.
 
-        } catch (ApiException e) {
+        } catch (ApiException e)
+        {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());

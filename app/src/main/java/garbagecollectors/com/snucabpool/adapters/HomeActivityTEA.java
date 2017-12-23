@@ -25,8 +25,6 @@ import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabas
 
 public class HomeActivityTEA extends TripEntryAdapter
 {
-    //private String[] mDataset;
-    private LayoutInflater inflater;
     private List<TripEntry> list;
     private Context context;
 
@@ -44,19 +42,12 @@ public class HomeActivityTEA extends TripEntryAdapter
         this.context = context;
     }
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-
     // Create new views (invoked by the layout manager)
     @Override
-    public MyHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType)
+    public MyHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         // create a new view
-
         View v = LayoutInflater.from(context).inflate(R.layout.card, parent, false);
-        // set the view's size, margins, padding and layout parameters...
 
         return new MyHolder(v);
     }
@@ -107,26 +98,13 @@ public class HomeActivityTEA extends TripEntryAdapter
             else
                 Toast.makeText(view.getContext(), "Request already sent", Toast.LENGTH_LONG).show();
 
-               //Intent intent = new Intent(view.getContext(), HomeActivity.class);
-               //view.getContext().startActivity(intent);
-
         });
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        // holder.mTextView.setText(mDataset[position]);
 
         TripEntry tripEntry = list.get(position);
         holder.date.setText(tripEntry.getDate());
-//      holder.user_id.setText(tripEntry.getUser_id());
         holder.name_user.setText(tripEntry.getName());
         holder.travel_time.setText(tripEntry.getTime());
 
-
-        //System.out.println("Time is "+holder.travel_time);
-        //Object temp_Source=(Place)tripEntry.getSource();
-       // Place temp_Destination=(Place)tripEntry.getDestination();
-       // holder.source.setText(temp_Source.getName());
-        //holder.destination.setText(temp_Destination.getName());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
