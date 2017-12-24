@@ -17,10 +17,11 @@ import java.util.List;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
+import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
 
 import static garbagecollectors.com.snucabpool.UtilityMethods.addRequestInList;
-import static garbagecollectors.com.snucabpool.UtilityMethods.addRequestInMap;
+import static garbagecollectors.com.snucabpool.UtilityMethods.putInMap;
 import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabase;
 
 public class HomeActivityTEA extends TripEntryAdapter
@@ -78,7 +79,7 @@ public class HomeActivityTEA extends TripEntryAdapter
             isAlreadyRequested = addRequestInList(requestSent, tripEntry);
 
             if(!isAlreadyRequested)
-                isRequestAlreadyInMap = addRequestInMap(requestsRecieved, tripEntry.getEntry_id(), user.getUserId());
+                isRequestAlreadyInMap = putInMap(requestsRecieved, tripEntry.getEntry_id(), user.getUserId());
 
             user.setRequestSent(requestSent);
             tripEntryUser.setRequestsRecieved(requestsRecieved);
@@ -101,10 +102,8 @@ public class HomeActivityTEA extends TripEntryAdapter
         });
 
         TripEntry tripEntry = list.get(position);
-        holder.date.setText(tripEntry.getDate());
-        holder.name_user.setText(tripEntry.getName());
-        holder.travel_time.setText(tripEntry.getTime());
 
+        UtilityMethods.fillHolder(holder, tripEntry);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -46,7 +46,7 @@ public class SentRequestsFragment extends Fragment
 
         recycle = (RecyclerView) view.findViewById(R.id.recycle_requests);
 
-        if(sentRequests.size() > 1)
+        if(sentRequests.size() >= 1)
         {
             sentRequests = UtilityMethods.removeNullEntry(sentRequests);
 

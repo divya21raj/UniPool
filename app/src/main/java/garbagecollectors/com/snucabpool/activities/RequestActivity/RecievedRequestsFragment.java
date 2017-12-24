@@ -30,7 +30,7 @@ public class RecievedRequestsFragment extends Fragment
 
     ArrayList<TripEntry> tripEntries;
 
-    public AlertDialog.Builder builder;
+    public static AlertDialog.Builder alertDialogBuilder;
 
     public RecievedRequestsFragment()
     {  }
@@ -48,9 +48,9 @@ public class RecievedRequestsFragment extends Fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recieved_requests, container, false);
 
-        builder = new AlertDialog.Builder(view.getContext());
-        builder.setTitle("Confirm");
-        builder.setMessage("Are you sure you want to accept?");
+        alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setTitle("Confirm");
+        alertDialogBuilder.setMessage("Are you sure you want to accept?");
 
         user = HomeActivity.getFinalCurrentUser();
         recievedRequestsMap = user.getRequestsRecieved();
@@ -61,7 +61,7 @@ public class RecievedRequestsFragment extends Fragment
 
         recycle = (RecyclerView) view.findViewById(R.id.recycle_requests);
 
-        if(recievedRequestsList.size() > 1)
+        if(recievedRequestsList.size() >= 1)
         {
             RecievedRequestsTEA recyclerAdapter = new RecievedRequestsTEA(recievedRequestsList,getContext());
 
