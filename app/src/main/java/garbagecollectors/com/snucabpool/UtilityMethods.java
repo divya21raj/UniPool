@@ -193,6 +193,8 @@ public class UtilityMethods
         holder.date.setText(tripEntry.getDate());
         holder.name_user.setText(tripEntry.getName());
         holder.travel_time.setText(tripEntry.getTime());
+        holder.source.setText("From " + tripEntry.getSource().getName());
+        holder.destination.setText("to " + tripEntry.getDestination().getName());
     }
 
 

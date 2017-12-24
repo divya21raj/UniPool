@@ -13,11 +13,11 @@ public class TripEntry
 
     private String time, date;
 
-    private Object source, destination;
+    private GenLocation source, destination;
 
     public HashMap<String, Float> lambdaMap = new HashMap<>(); //HashMap contains entry_id(String value) as key and lambda(Float value) as value
 
-    public TripEntry(String name, String entry_id, String user_id, String time, String date, Object source, Object destination, HashMap<String, Float> lambdaMap) throws ParseException
+    public TripEntry(String name, String entry_id, String user_id, String time, String date, GenLocation source, GenLocation destination, HashMap<String, Float> lambdaMap) throws ParseException
     {
         this.entry_id = entry_id;
         this.user_id = user_id;
@@ -97,22 +97,22 @@ public class TripEntry
         this.date = date;
     }
 
-    public Object getSource()
+    public GenLocation getSource()
     {
         return source;
     }
 
-    public void setSource(Object source)
+    public void setSource(GenLocation source)
     {
         this.source = source;
     }
 
-    public Object getDestination()
+    public GenLocation getDestination()
     {
         return destination;
     }
 
-    public void setDestination(Object destination)
+    public void setDestination(GenLocation destination)
     {
         this.destination = destination;
     }

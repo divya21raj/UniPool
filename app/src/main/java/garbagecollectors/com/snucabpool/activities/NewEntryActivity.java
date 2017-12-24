@@ -18,12 +18,14 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashMap;
 
 import garbagecollectors.com.snucabpool.DatePickerFragment;
+import garbagecollectors.com.snucabpool.GenLocation;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 
@@ -31,7 +33,7 @@ public class NewEntryActivity extends BaseActivity
 {
     int count=0;
 
-    Place source, destination;
+    GenLocation source, destination;
     String time, sourceSet, destinationSet;
     String AM_PM ;
     Button buttonstartSetDialog,buttonChangeDate, buttonFinalSave;
@@ -39,7 +41,7 @@ public class NewEntryActivity extends BaseActivity
 
     public static String date;
 
-    private HashMap<Long, Float> map = new HashMap<>();    //HashMap contains entry_id(Long value) and lambda(Float value)
+    private HashMap<Long, Float> map = new HashMap<>();                   //HashMap contains entry_id(Long value) and lambda(Float value)
 
     TimePickerDialog timePickerDialog;
 
@@ -158,7 +160,9 @@ public class NewEntryActivity extends BaseActivity
                 Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber());
                 if(count==0)
                 {
-                    source = place;//check
+                    LatLng latLng = place.getLatLng();
+                    source = new GenLocation(place.getName().toString(), place.getAddress().toString(),latLng.latitude, latLng.longitude);//check
+
                     sourceSet=(place.getName()+",\n"+
                             place.getAddress() +"\n" + place.getPhoneNumber());//check
                     text_source.setText(sourceSet);
@@ -166,7 +170,9 @@ public class NewEntryActivity extends BaseActivity
                 }
                 else
                 {
-                    destination = place;
+                    LatLng latLng = place.getLatLng();
+                    destination = new GenLocation(place.getName().toString(), place.getAddress().toString(),latLng.latitude, latLng.longitude);//check
+
                     destinationSet=(place.getName()+",\n"+
                             place.getAddress() +"\n" + place.getPhoneNumber());//check
                     text_destination.setText(destinationSet);

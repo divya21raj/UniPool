@@ -29,6 +29,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import garbagecollectors.com.snucabpool.GenLocation;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
@@ -212,7 +213,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
         HashMap<String, Float> dummyLambdaMap = new HashMap<>();
         dummyLambdaMap.put("123", 0f);
 
-        TripEntry dummyTripEntry = new TripEntry("dummy", "0", "DummyUser", "12:00", "1/11/12", "", "", dummyLambdaMap);
+        GenLocation dummyGenLocation = new GenLocation("dummy", "dummy", 0d, 0d);
+
+        TripEntry dummyTripEntry = new TripEntry("dummy", "0", "DummyUser", "12:00", "1/11/12", dummyGenLocation, dummyGenLocation, dummyLambdaMap);
 
         ArrayList<TripEntry> dummyUserEntries = new ArrayList<>();
         dummyUserEntries.add(dummyTripEntry);
