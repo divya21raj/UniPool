@@ -86,7 +86,7 @@ public class RecievedRequestsTEA extends TripEntryAdapter
                 {
                     progressDialog.show();
 
-                    UtilityMethods.putInMap(tripEntryUserPairUps, tripEntryUser.getUserId(), tripEntry.getEntry_id());
+                    UtilityMethods.putInMap(tripEntryUserPairUps, finalCurrentUser.getUserId(), tripEntry.getEntry_id());
 
                     UtilityMethods.removeFromMap(recievedRequests, tripEntry.getEntry_id(), tripEntryUser.getUserId());
                     UtilityMethods.removeFromList(sentRequests, tripEntry.getEntry_id());
