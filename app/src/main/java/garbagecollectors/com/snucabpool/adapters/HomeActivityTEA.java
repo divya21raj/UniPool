@@ -2,12 +2,15 @@
 
 package garbagecollectors.com.snucabpool.adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -21,8 +24,8 @@ import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
 
 import static garbagecollectors.com.snucabpool.UtilityMethods.addRequestInList;
-import static garbagecollectors.com.snucabpool.UtilityMethods.putInMap;
 import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabase;
+import static garbagecollectors.com.snucabpool.UtilityMethods.putInMap;
 
 public class HomeActivityTEA extends TripEntryAdapter
 {
@@ -31,6 +34,8 @@ public class HomeActivityTEA extends TripEntryAdapter
 
     private boolean isRequestAlreadyInMap;
     private Boolean isAlreadyRequested;
+
+    ProgressDialog progressDialog;
 
     public HomeActivityTEA(Context context)
     {
@@ -59,6 +64,9 @@ public class HomeActivityTEA extends TripEntryAdapter
     {
         holder.itemView.setOnClickListener(view ->
         {
+            progressDialog = new ProgressDialog(view.getContext());
+            progressDialog.setMessage("Please wait...");
+
             User user = BaseActivity.getFinalCurrentUser();
 
             TripEntry tripEntry = list.get(position);
@@ -68,6 +76,8 @@ public class HomeActivityTEA extends TripEntryAdapter
                 Toast.makeText(view.getContext(), "Can't pool with yourself, that feature isn't ready yet...", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            progressDialog.show();
 
             User tripEntryUser = getUserFromDatabase(tripEntry.getUser_id());    //the user that created the clicked tripEntry
 
@@ -87,15 +97,29 @@ public class HomeActivityTEA extends TripEntryAdapter
             if(!isAlreadyRequested && !isRequestAlreadyInMap)
             {
                 //update firebase database to include arrayList that contains name of the card clicked in requests sent...
-                userDatabaseReference.child(user.getUserId()).child("requestSent").setValue(requestSent);
+                Task<Void> task1 = userDatabaseReference.child(user.getUserId()).child("requestSent").setValue(requestSent);
+                Task<Void> task2 = userDatabaseReference.child(tripEntryUser.getUserId()).child("requestsRecieved").setValue(requestsRecieved);
 
-                userDatabaseReference.child(tripEntryUser.getUserId()).child("requestsRecieved").setValue(requestsRecieved);
+                Task<Void> allTask = Tasks.whenAll(task1, task2);
+                allTask.addOnSuccessListener(aVoid ->
+                {
+                    progressDialog.dismiss();
+                    Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG).show();
+                });
 
-                Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG).show();
+                allTask.addOnFailureListener(e ->
+                {
+                    progressDialog.dismiss();
+                    // apologize profusely to the user!
+                    Toast.makeText(view.getContext(), "FAIL", Toast.LENGTH_LONG).show();
+                });
             }
 
             else
+            {
+                progressDialog.dismiss();
                 Toast.makeText(view.getContext(), "Request already sent", Toast.LENGTH_LONG).show();
+            }
 
         });
 

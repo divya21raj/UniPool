@@ -39,8 +39,6 @@ public class SplashActivity extends AppCompatActivity
     private TaskCompletionSource<Void> delaySource = new TaskCompletionSource<>();
     private Task<Void> delayTask = delaySource.getTask();
 
-    private Task<Void> allTask;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -77,7 +75,7 @@ public class SplashActivity extends AppCompatActivity
 
         new Handler().postDelayed(() -> delaySource.setResult(null), 2000);
 
-        allTask = Tasks.whenAll(UserDBTask, EntryDBTask, delayTask);
+        Task<Void> allTask = Tasks.whenAll(UserDBTask, EntryDBTask, delayTask);
         allTask.addOnSuccessListener(aVoid ->
         {
             DataSnapshot userData = (DataSnapshot) UserDBTask.getResult();

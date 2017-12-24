@@ -172,20 +172,20 @@ public class UtilityMethods
         return tripEntry;
     }
 
-    public static ArrayList<TripEntry> removeFromList(ArrayList<TripEntry> sentRequests, String id)
+    public static ArrayList<TripEntry> removeFromList(ArrayList<TripEntry> list, String id)
     {
-        Iterator<TripEntry> iterator = sentRequests.iterator();
+        Iterator<TripEntry> iterator = list.iterator();
 
         while (iterator.hasNext())
         {
-            if (iterator.next().getName().equals(id))
+            if (iterator.next().getEntry_id().equals(id))
             {
                 iterator.remove();
                 break;
             }
         }
 
-        return sentRequests;
+        return list;
     }
 
     public static void fillHolder(TripEntryAdapter.MyHolder holder, TripEntry tripEntry)
@@ -198,6 +198,9 @@ public class UtilityMethods
 
     public static void removeFromMap(HashMap<String, ArrayList<String>> map, String keyId, String valueId)
     {
+        boolean flag = false;
+        String keyToBeRemoved = "";
+
         for (Map.Entry<String, ArrayList<String>> entry : map.entrySet())
         {
             if(entry.getKey().equals(keyId))
@@ -212,8 +215,17 @@ public class UtilityMethods
                         break;
                     }
                 }
+
+                if(entry.getValue().size() == 0)
+                {
+                    flag = true;
+                    keyToBeRemoved = entry.getKey();
+                }
             }
         }
+
+        if(flag)
+            map.remove(keyToBeRemoved);
     }
 
 }

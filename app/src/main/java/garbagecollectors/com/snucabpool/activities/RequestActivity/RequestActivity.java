@@ -1,5 +1,6 @@
 package garbagecollectors.com.snucabpool.activities.RequestActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
@@ -18,6 +19,8 @@ public class RequestActivity extends BaseActivity
 {
     private TabLayout tabLayout;
     private ViewPager viewPager;
+
+    private static boolean refresh = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -77,6 +80,20 @@ public class RequestActivity extends BaseActivity
         {
             return mFragmentTitleList.get(position);
         }
+    }
+
+    public boolean isRefresh()
+    {
+        return refresh;
+    }
+
+    public void setRefresh(boolean refresh)
+    {
+        RequestActivity.refresh = refresh;
+
+        finish();
+        Intent intent = new Intent(RequestActivity.this, RequestActivity.class);
+        startActivity(intent);
     }
 
     @Override

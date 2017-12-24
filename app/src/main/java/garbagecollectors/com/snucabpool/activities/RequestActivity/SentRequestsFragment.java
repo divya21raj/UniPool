@@ -48,7 +48,7 @@ public class SentRequestsFragment extends Fragment
 
         if(sentRequests.size() >= 1)
         {
-            sentRequests = UtilityMethods.removeFromList(sentRequests, "dummy");
+            sentRequests = UtilityMethods.removeFromList(sentRequests, "0");
 
             SentRequestsTEA recyclerAdapter = new SentRequestsTEA(sentRequests,getContext());
 

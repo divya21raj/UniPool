@@ -39,7 +39,7 @@ public class NewEntryActivity extends BaseActivity
 
     public static String date;
 
-    private HashMap<Long, Float> map = new HashMap<>();                   //HashMap contains entry_id(Long value) and lambda(Float value)
+    private HashMap<Long, Float> map = new HashMap<>();    //HashMap contains entry_id(Long value) and lambda(Float value)
 
     TimePickerDialog timePickerDialog;
 
@@ -216,6 +216,8 @@ public class NewEntryActivity extends BaseActivity
             finalCurrentUser.getUserTripEntries().add(tripEntry);
 
             entryDatabaseReference.child(entryId).setValue(tripEntry);
+
+            userDatabaseReference.child(finalCurrentUser.getUserId()).child("userTripEntries").setValue(finalCurrentUser.getUserTripEntries());
 
             Toast.makeText(this, "TripEntry created!", Toast.LENGTH_SHORT).show();
 
