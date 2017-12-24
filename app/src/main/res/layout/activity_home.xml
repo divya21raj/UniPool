@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:id="@+id/viewButton"
+        android:id="@+id/viewButtonHome"
         android:textColor="#3E2723"
         android:background="@drawable/mybutton"
         android:layout_alignParentLeft="true"
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recycle"
-        android:layout_below="@+id/viewButton"
+        android:layout_below="@+id/viewButtonHome"
         android:layout_above="@+id/sign_out_button">
 
     </android.support.v7.widget.RecyclerView>

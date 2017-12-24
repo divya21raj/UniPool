@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.ArrayList;
 
@@ -16,11 +17,13 @@ import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.HomeActivity;
+import garbagecollectors.com.snucabpool.adapters.HomeActivityTEA;
 import garbagecollectors.com.snucabpool.adapters.SentRequestsTEA;
 
 public class SentRequestsFragment extends Fragment
 {
     RecyclerView recycle;
+    Button viewSentRequestsButton;
 
     User user;
     ArrayList<TripEntry> sentRequests;
@@ -45,19 +48,23 @@ public class SentRequestsFragment extends Fragment
         sentRequests = user.getRequestSent();
 
         recycle = (RecyclerView) view.findViewById(R.id.recycle_requests);
+        viewSentRequestsButton = (Button) view.findViewById(R.id.viewButtonSentRequests);
 
-        if(sentRequests.size() >= 1)
+        viewSentRequestsButton.setOnClickListener(v ->
         {
-            sentRequests = UtilityMethods.removeFromList(sentRequests, "0");
+            if(sentRequests.size() >= 1)
+            {
+                sentRequests = UtilityMethods.removeFromList(sentRequests, "0");
 
-            SentRequestsTEA recyclerAdapter = new SentRequestsTEA(sentRequests,getContext());
+                SentRequestsTEA recyclerAdapter = new SentRequestsTEA(sentRequests,getContext());
 
-            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
+                RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
 
-            recycle.setLayoutManager(layoutManager);
-            recycle.setItemAnimator( new DefaultItemAnimator());
-            recycle.setAdapter(recyclerAdapter);
-        }
+                recycle.setLayoutManager(layoutManager);
+                recycle.setItemAnimator( new DefaultItemAnimator());
+                recycle.setAdapter(recyclerAdapter);
+            }
+        });
 
         return view;
     }

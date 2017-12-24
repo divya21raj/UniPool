@@ -38,7 +38,7 @@ public class HomeActivity extends BaseActivity
         navigationView = (BottomNavigationView) findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
 
-        viewButton = (Button) findViewById(R.id.viewButton);
+        viewButton = (Button) findViewById(R.id.viewButtonHome);
         signOutButton = (Button) findViewById(R.id.sign_out_button);
         recycle = (RecyclerView) findViewById(R.id.recycle);
 
