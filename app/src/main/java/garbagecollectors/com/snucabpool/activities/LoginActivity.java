@@ -214,6 +214,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         TripEntry dummyTripEntry = new TripEntry("dummy", "0", "DummyUser", "12:00", "1/11/12", "", "", dummyLambdaMap);
 
+        ArrayList<TripEntry> dummyUserEntries = new ArrayList<>();
+        dummyUserEntries.add(dummyTripEntry);
+
         ArrayList<TripEntry> dummyRequestSent = new ArrayList<>();
         dummyRequestSent.add(dummyTripEntry);
 
@@ -226,7 +229,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
         HashMap<String, ArrayList<String>> dummyPairUps = new HashMap<>();
         dummyPairUps.put("dummy", dummyUserIdList);
 
-        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), dummyRequestSent, dummyRequestRecieved, dummyPairUps);
+        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), dummyUserEntries, dummyRequestSent, dummyRequestRecieved, dummyPairUps);
     }
 
     private void updateUI(FirebaseUser currentUser)

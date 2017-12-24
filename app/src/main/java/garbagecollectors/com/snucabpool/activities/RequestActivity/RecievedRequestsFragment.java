@@ -63,7 +63,7 @@ public class RecievedRequestsFragment extends Fragment
 
         if(recievedRequestsList.size() >= 1)
         {
-            RecievedRequestsTEA recyclerAdapter = new RecievedRequestsTEA(recievedRequestsList,getContext());
+            RecievedRequestsTEA recyclerAdapter = new RecievedRequestsTEA(recievedRequestsList, getContext());
 
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
 

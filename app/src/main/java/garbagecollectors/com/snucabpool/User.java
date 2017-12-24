@@ -11,7 +11,7 @@ public class User
 {
     private String userId;
     private String name;
-    private ArrayList<TripEntry> user_entries =new ArrayList<>();
+    private ArrayList<TripEntry> userTripEntries =new ArrayList<>();
 
     private ArrayList<TripEntry> requestSent;
     private HashMap<String, ArrayList<String>> requestsRecieved;
@@ -21,10 +21,12 @@ public class User
     private HashMap<String, ArrayList<String>> pairUps;
     //Key is userId paired up with, value is list of tripEntries paired up over.
 
-    public User(String userId, String name, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsRecieved, HashMap<String, ArrayList<String>> pairUps)
+
+    public User(String userId, String name, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsRecieved, HashMap<String, ArrayList<String>> pairUps)
     {
         this.userId = userId;
         this.name = name;
+        this.userTripEntries = userTripEntries;
         this.requestSent = requestSent;
         this.requestsRecieved = requestsRecieved;
         this.pairUps = pairUps;
@@ -74,9 +76,9 @@ public class User
     {
     }
 
-    public ArrayList<TripEntry> getUser_entries()
+    public ArrayList<TripEntry> getUserTripEntries()
     {
-        return user_entries;
+        return userTripEntries;
     }
 
     public HashMap<String, ArrayList<String>> getPairUps()

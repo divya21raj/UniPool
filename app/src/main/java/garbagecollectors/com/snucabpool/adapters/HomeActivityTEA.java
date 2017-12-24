@@ -87,11 +87,9 @@ public class HomeActivityTEA extends TripEntryAdapter
             if(!isAlreadyRequested && !isRequestAlreadyInMap)
             {
                 //update firebase database to include arrayList that contains name of the card clicked in requests sent...
-                userDatabaseReference.child(tripEntryUser.getUserId()).removeValue();
-                userDatabaseReference.child(tripEntryUser.getUserId()).setValue(tripEntryUser);
+                userDatabaseReference.child(user.getUserId()).child("requestSent").setValue(requestSent);
 
-                userDatabaseReference.child(user.getUserId()).removeValue();
-                userDatabaseReference.child(user.getUserId()).setValue(user);
+                userDatabaseReference.child(tripEntryUser.getUserId()).child("requestsRecieved").setValue(requestsRecieved);
 
                 Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG).show();
             }

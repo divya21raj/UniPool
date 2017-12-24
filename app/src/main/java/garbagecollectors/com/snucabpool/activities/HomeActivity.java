@@ -119,7 +119,7 @@ public class HomeActivity extends BaseActivity
     {
         try
         {
-            for(TripEntry e_user: finalCurrentUser.getUser_entries())
+            for(TripEntry e_user: finalCurrentUser.getUserTripEntries())
             {
                 for(TripEntry e : tripEntryList)
                 {

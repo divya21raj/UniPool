@@ -7,6 +7,9 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +26,7 @@ public class RecievedRequestsTEA extends TripEntryAdapter
 {
     private List<TripEntry> list;
     private Context context;
+    private boolean isAlreadyInMap = false;
 
     public RecievedRequestsTEA(Context context)
     {
@@ -51,16 +55,41 @@ public class RecievedRequestsTEA extends TripEntryAdapter
     {
         holder.itemView.setOnClickListener(view ->
         {
+            DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
+
             TripEntry tripEntry = list.get(position);
 
             User tripEntryUser = UtilityMethods.getUserFromDatabase(tripEntry.getUser_id());
             User finalCurrentUser = BaseActivity.getFinalCurrentUser();
 
-            HashMap<String, ArrayList<String>> pairUps = finalCurrentUser.getPairUps();
+            HashMap<String, ArrayList<String>> currentUserPairUps = finalCurrentUser.getPairUps();
+            HashMap<String, ArrayList<String>> tripEntryUserPairUps = finalCurrentUser.getPairUps();
+
+            HashMap<String, ArrayList<String>> recievedRequests = finalCurrentUser.getRequestsRecieved();
+            ArrayList<TripEntry> sentRequests = tripEntryUser.getRequestSent();
 
             RecievedRequestsFragment.alertDialogBuilder.setPositiveButton("YES", (dialog, which) ->
             {
-                UtilityMethods.putInMap(pairUps, tripEntryUser.getUserId(), tripEntry.getEntry_id());
+                isAlreadyInMap = UtilityMethods.putInMap(currentUserPairUps, tripEntryUser.getUserId(), tripEntry.getEntry_id());
+
+                if(!isAlreadyInMap)
+                {
+                    UtilityMethods.putInMap(tripEntryUserPairUps, tripEntryUser.getUserId(), tripEntry.getEntry_id());
+
+                    UtilityMethods.removeFromMap(recievedRequests, tripEntry.getEntry_id(), tripEntryUser.getUserId());
+                    UtilityMethods.removeFromList(sentRequests, tripEntry.getEntry_id());
+
+                    userDatabaseReference.child(finalCurrentUser.getUserId()).child("pairUps").setValue(currentUserPairUps);
+                    userDatabaseReference.child(tripEntryUser.getUserId()).child("pairUps").setValue(tripEntryUserPairUps);
+
+                    userDatabaseReference.child(finalCurrentUser.getUserId()).child("requestsRecieved").setValue(recievedRequests);
+                    userDatabaseReference.child(tripEntryUser.getUserId()).child("requestSent").setValue(sentRequests);
+
+                    Toast.makeText(context, "Request accepted!", Toast.LENGTH_SHORT).show();
+                }
+
+                else
+                    Toast.makeText(context, "Already requested!", Toast.LENGTH_SHORT).show();
 
                 dialog.dismiss();
             });
