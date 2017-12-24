@@ -43,6 +43,13 @@ public class RecievedRequestsTEA extends TripEntryAdapter
     @Override
     public void onBindViewHolder(MyHolder holder, int position)
     {
+        holder.itemView.setOnClickListener(view ->
+        {
+            TripEntry tripEntry = list.get(position);
+
+
+        });
+
         TripEntry tripEntry = list.get(position);
 
         UtilityMethods.fillHolder(holder, tripEntry);

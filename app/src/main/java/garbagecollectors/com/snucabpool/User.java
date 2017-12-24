@@ -18,15 +18,16 @@ public class User
     //Key is the entryId of entry requested, Value is list of userIDs who've requested that entry
     //We have Map because we're taking TripEntry object of the entry that we have made (that the other person has clicked on)
 
-    private ArrayList<TripEntry> friends;
+    private HashMap<String, ArrayList<String>> pairUps;
+    //Key is userId paired up with, value is list of tripEntries paired up over.
 
-    public User(String userId, String name, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsRecieved, ArrayList<TripEntry> friends)
+    public User(String userId, String name, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsRecieved, HashMap<String, ArrayList<String>> pairUps)
     {
         this.userId = userId;
         this.name = name;
         this.requestSent = requestSent;
         this.requestsRecieved = requestsRecieved;
-        this.friends = friends;
+        this.pairUps = pairUps;
     }
 
     public String getUserId()
@@ -78,9 +79,8 @@ public class User
         return user_entries;
     }
 
-    public ArrayList<TripEntry> getFriends()
+    public HashMap<String, ArrayList<String>> getPairUps()
     {
-        return friends;
+        return pairUps;
     }
-
 }

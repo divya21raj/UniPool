@@ -2,6 +2,7 @@ package garbagecollectors.com.snucabpool.activities.RequestActivity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,8 @@ public class RecievedRequestsFragment extends Fragment
 
     ArrayList<TripEntry> tripEntries;
 
+    public AlertDialog.Builder builder;
+
     public RecievedRequestsFragment()
     {  }
 
@@ -44,6 +47,10 @@ public class RecievedRequestsFragment extends Fragment
     {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recieved_requests, container, false);
+
+        builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Confirm");
+        builder.setMessage("Are you sure you want to accept?");
 
         user = HomeActivity.getFinalCurrentUser();
         recievedRequestsMap = user.getRequestsRecieved();
