@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import garbagecollectors.com.snucabpool.Message;
+import garbagecollectors.com.snucabpool.PairUps;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
@@ -30,7 +32,7 @@ public class RecievedRequestsTEA extends TripEntryAdapter
 {
     private List<TripEntry> list;
     private Context context;
-    private boolean isAlreadyInMap = false;
+    private boolean isAlreadyInList = false;
     private boolean requestSent = false;
 
     private ProgressDialog progressDialog;
@@ -72,21 +74,23 @@ public class RecievedRequestsTEA extends TripEntryAdapter
             User tripEntryUser = UtilityMethods.getUserFromDatabase(tripEntry.getUser_id());
             User finalCurrentUser = BaseActivity.getFinalCurrentUser();
 
-            HashMap<String, ArrayList<String>> currentUserPairUps = finalCurrentUser.getPairUps();
-            HashMap<String, ArrayList<String>> tripEntryUserPairUps = finalCurrentUser.getPairUps();
+            ArrayList<PairUps> currentUserPairUps = finalCurrentUser.getPairUps();
+            ArrayList<PairUps> tripEntryUserPairUps = finalCurrentUser.getPairUps();
 
             HashMap<String, ArrayList<String>> recievedRequests = finalCurrentUser.getRequestsRecieved();
             ArrayList<TripEntry> sentRequests = tripEntryUser.getRequestSent();
 
+            PairUps pairUp = new PairUps(finalCurrentUser.getUserId(), tripEntryUser.getUserId(), new ArrayList<Message>());
+            pairUp.getMessages().add(new Message("Your request was accepted :)", pairUp.getCreatorId(), UtilityMethods.getCurrentTime()));
+
             RecievedRequestsFragment.alertDialogBuilder.setPositiveButton("YES", (dialog, which) ->
             {
-                isAlreadyInMap = UtilityMethods.putInMap(currentUserPairUps, tripEntryUser.getUserId(), tripEntry.getEntry_id());
-
-                if(!isAlreadyInMap)
+                isAlreadyInList = UtilityMethods.addPairUpInList(currentUserPairUps, pairUp);
+                if(!isAlreadyInList)
                 {
                     progressDialog.show();
 
-                    UtilityMethods.putInMap(tripEntryUserPairUps, finalCurrentUser.getUserId(), tripEntry.getEntry_id());
+                    tripEntryUserPairUps.add(pairUp);
 
                     UtilityMethods.removeFromMap(recievedRequests, tripEntry.getEntry_id(), tripEntryUser.getUserId());
                     UtilityMethods.removeFromList(sentRequests, tripEntry.getEntry_id());

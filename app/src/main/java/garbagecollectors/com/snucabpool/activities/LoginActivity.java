@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import garbagecollectors.com.snucabpool.GenLocation;
+import garbagecollectors.com.snucabpool.Message;
+import garbagecollectors.com.snucabpool.PairUps;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
@@ -229,8 +231,13 @@ public class LoginActivity extends Activity implements View.OnClickListener
         HashMap<String, ArrayList<String>> dummyRequestRecieved = new HashMap<>();
         dummyRequestRecieved.put("dummy", dummyUserIdList);
 
-        HashMap<String, ArrayList<String>> dummyPairUps = new HashMap<>();
-        dummyPairUps.put("dummy", dummyUserIdList);
+        Message dummyMessage = new Message("", "dummy", 1L);
+        ArrayList<Message> dummyMessages = new ArrayList<>();
+        dummyMessages.add(dummyMessage);
+
+        PairUps dummyPairUp = new PairUps("dummy", "dummy", dummyMessages);
+        ArrayList<PairUps> dummyPairUps = new ArrayList<>();
+        dummyPairUps.add(dummyPairUp);
 
         finalCurrentUser = new User(user.getUid(), user.getDisplayName(), dummyUserEntries, dummyRequestSent, dummyRequestRecieved, dummyPairUps);
     }

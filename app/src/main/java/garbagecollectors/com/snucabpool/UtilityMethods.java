@@ -1,6 +1,8 @@
 package garbagecollectors.com.snucabpool;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -230,4 +232,35 @@ public class UtilityMethods
             map.remove(keyToBeRemoved);
     }
 
+    public static boolean addPairUpInList(ArrayList<PairUps> pairUps, PairUps pairUp)
+    {
+        boolean flag = false;
+
+        for (PairUps pu: pairUps)
+        {
+            if (pu.getRequesterId().equals(pairUp.requesterId))
+            {
+                flag = true;
+                break;
+            }
+        }
+
+        if(!flag)
+        {
+            pairUps.add(pairUp);
+        }
+
+        return flag;
+    }
+
+    public static Long getCurrentTime()
+    {
+        Long time = null;
+
+        Date currentTime = Calendar.getInstance().getTime();
+
+        time = currentTime.getTime();
+
+        return time;
+    }
 }
