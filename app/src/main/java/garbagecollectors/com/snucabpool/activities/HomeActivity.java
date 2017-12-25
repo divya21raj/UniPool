@@ -60,59 +60,6 @@ public class HomeActivity extends BaseActivity
             startActivity(new Intent(this, LoginActivity.class));
         });
 
-        entryDatabaseReference.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
-                {
-                    TripEntry tripEntry = dataSnapshot1.getValue(TripEntry.class);
-                    UtilityMethods.updateTripList(tripEntryList, tripEntry);
-                    /*
-                    try
-                    {
-                        setLambdaMapForAllEntries();
-                    } catch (ParseException e)
-                    {
-                        e.printStackTrace();
-                    }*/
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error)
-            {
-                // Failed to read value
-                Log.w("Hello", "Failed to read value.", error.toException());
-            }
-        });
-
-        userDatabaseReference.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-
-                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
-                {
-                    User user = dataSnapshot1.getValue(User.class);
-                    UtilityMethods.updateUserList(userList, user);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error)
-            {
-                // Failed to read value
-                Log.w("Hello", "Failed to read value.", error.toException());
-            }
-        });
     }
 
     void setLambdaMapForAllEntries() throws ParseException
