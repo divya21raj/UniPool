@@ -6,20 +6,13 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.Button;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.Sorting_Filtering;
 import garbagecollectors.com.snucabpool.TripEntry;
-import garbagecollectors.com.snucabpool.User;
-import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.adapters.HomeActivityTEA;
 
 public class HomeActivity extends BaseActivity

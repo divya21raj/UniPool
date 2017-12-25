@@ -47,7 +47,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
     private GoogleSignInClient mGoogleSignInClient;
 
     private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
+    private static FirebaseUser currentUser;
 
     protected static DatabaseReference userDatabaseReference;
 
@@ -235,7 +235,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
         ArrayList<Message> dummyMessages = new ArrayList<>();
         dummyMessages.add(dummyMessage);
 
-        PairUps dummyPairUp = new PairUps("dummy", "dummy", dummyMessages);
+        PairUps dummyPairUp = new PairUps("dummy", "dummy", dummyMessages, dummyUserIdList);
         ArrayList<PairUps> dummyPairUps = new ArrayList<>();
         dummyPairUps.add(dummyPairUp);
 

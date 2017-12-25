@@ -25,8 +25,6 @@ import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.RequestActivity.RequestActivity;
 
-import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabase;
-
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
     protected BottomNavigationView navigationView;
@@ -40,7 +38,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     static User finalCurrentUser;
 
     static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
-    static ArrayList<User> userList = SplashActivity.getUserList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,11 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        if(finalCurrentUser == null)
-        {
-            assert currentUser != null;
-            finalCurrentUser = getUserFromDatabase(currentUser.getUid());
-        }
+        finalCurrentUser = SplashActivity.getFinalCurrentUser();
 
         entryDatabaseReference.addValueEventListener(new ValueEventListener()
         {
@@ -94,13 +87,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-
-                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
-                {
-                    User user = dataSnapshot1.getValue(User.class);
-                    UtilityMethods.updateUserList(userList, user);
-                }
-
+                finalCurrentUser = dataSnapshot.child(currentUser.getUid()).getValue(User.class);
             }
 
             @Override
@@ -222,15 +209,5 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public static void setTripEntryList(ArrayList<TripEntry> tripEntryList)
     {
         BaseActivity.tripEntryList = tripEntryList;
-    }
-
-    public static ArrayList<User> getUserList()
-    {
-        return userList;
-    }
-
-    public static void setUserList(ArrayList<User> userList)
-    {
-        BaseActivity.userList = userList;
     }
 }

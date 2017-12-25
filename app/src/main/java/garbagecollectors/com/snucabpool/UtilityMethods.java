@@ -1,5 +1,13 @@
 package garbagecollectors.com.snucabpool;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,19 +22,36 @@ public class UtilityMethods
 {
     public static User getUserFromDatabase(String uid)
     {
-        User userToBeFound = null;
-        ArrayList<User> userList = BaseActivity.getUserList();
+        final User[] userToBeFound = {null};
 
-        for(User user: userList)
+        TaskCompletionSource<DataSnapshot> userSource = new TaskCompletionSource<>();
+        Task userTask = userSource.getTask();
+
+        DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
+
+        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
-            if(user.getUserId().equals(uid))
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
             {
-                userToBeFound = user;
-                break;
+                userSource.setResult(dataSnapshot);
             }
-        }
 
-        return userToBeFound;
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                //whoopsie!
+            }
+        });
+
+        userTask.addOnSuccessListener(aVoid ->
+        {
+            DataSnapshot snapshot = (DataSnapshot) userTask.getResult();
+
+            userToBeFound[0] = snapshot.child(uid).getValue(User.class);
+        });
+
+        return userToBeFound[0];
     }
 
     public static boolean addRequestInList(ArrayList<TripEntry> requestSent, TripEntry tripEntry)
@@ -232,15 +257,17 @@ public class UtilityMethods
             map.remove(keyToBeRemoved);
     }
 
-    public static boolean addPairUpInList(ArrayList<PairUps> pairUps, PairUps pairUp)
+    public static boolean addPairUpInList(ArrayList<PairUps> pairUps, PairUps pairUp, String tripEntryId)
     {
-        boolean flag = false;
+        boolean flag = false, flag1 = false;
+        PairUps temp = new PairUps();
 
         for (PairUps pu: pairUps)
         {
             if (pu.getRequesterId().equals(pairUp.requesterId))
             {
                 flag = true;
+                temp = pu;
                 break;
             }
         }
@@ -248,6 +275,25 @@ public class UtilityMethods
         if(!flag)
         {
             pairUps.add(pairUp);
+        }
+
+        else
+        {
+            ArrayList<String> tripEntriesPairedOver = temp.getTripEntriesPairedUpOver();
+            for(String entryId: tripEntriesPairedOver)
+            {
+                if(entryId.equals(tripEntryId))
+                {
+                    flag1 = true;
+                    break;
+                }
+            }
+
+            if(!flag1)
+            {
+                tripEntriesPairedOver.add(tripEntryId);
+                flag = false;
+            }
         }
 
         return flag;
@@ -262,5 +308,21 @@ public class UtilityMethods
         time = currentTime.getTime();
 
         return time;
+    }
+
+    public static ArrayList<String> getTripEntriesPairedOver(ArrayList<PairUps> pairUps, String userId)
+    {
+        ArrayList<String> tripEntriesPairedOver = new ArrayList<>();
+
+        for(PairUps pairUp: pairUps)
+        {
+            if(pairUp.getCreatorId().equals(userId))
+            {
+                tripEntriesPairedOver = pairUp.getTripEntriesPairedUpOver();
+                break;
+            }
+        }
+
+        return tripEntriesPairedOver;
     }
 }

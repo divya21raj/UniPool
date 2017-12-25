@@ -71,25 +71,31 @@ public class RecievedRequestsTEA extends TripEntryAdapter
 
             TripEntry tripEntry = list.get(position);
 
-            User tripEntryUser = UtilityMethods.getUserFromDatabase(tripEntry.getUser_id());
             User finalCurrentUser = BaseActivity.getFinalCurrentUser();
 
             ArrayList<PairUps> currentUserPairUps = finalCurrentUser.getPairUps();
-            ArrayList<PairUps> tripEntryUserPairUps = finalCurrentUser.getPairUps();
 
             HashMap<String, ArrayList<String>> recievedRequests = finalCurrentUser.getRequestsRecieved();
-            ArrayList<TripEntry> sentRequests = tripEntryUser.getRequestSent();
-
-            PairUps pairUp = new PairUps(finalCurrentUser.getUserId(), tripEntryUser.getUserId(), new ArrayList<Message>());
-            pairUp.getMessages().add(new Message("Your request was accepted :)", pairUp.getCreatorId(), UtilityMethods.getCurrentTime()));
 
             RecievedRequestsFragment.alertDialogBuilder.setPositiveButton("YES", (dialog, which) ->
             {
-                isAlreadyInList = UtilityMethods.addPairUpInList(currentUserPairUps, pairUp);
+                progressDialog.show();
+
+                User tripEntryUser = UtilityMethods.getUserFromDatabase(tripEntry.getUser_id());
+
+                ArrayList<PairUps> tripEntryUserPairUps = tripEntryUser.getPairUps();
+                ArrayList<TripEntry> sentRequests = tripEntryUser.getRequestSent();
+
+                ArrayList<String> tripEntriesPairedOver = UtilityMethods.getTripEntriesPairedOver(tripEntryUserPairUps, finalCurrentUser.getUserId());
+                tripEntriesPairedOver.add(tripEntry.getEntry_id());
+
+                PairUps pairUp = new PairUps(finalCurrentUser.getUserId(), tripEntryUser.getUserId(), new ArrayList<>(), tripEntriesPairedOver);
+                pairUp.getMessages().add(new Message("Your request was accepted :)", pairUp.getCreatorId(), UtilityMethods.getCurrentTime()));
+
+                isAlreadyInList = UtilityMethods.addPairUpInList(currentUserPairUps, pairUp, tripEntry.getEntry_id());
+
                 if(!isAlreadyInList)
                 {
-                    progressDialog.show();
-
                     tripEntryUserPairUps.add(pairUp);
 
                     UtilityMethods.removeFromMap(recievedRequests, tripEntry.getEntry_id(), tripEntryUser.getUserId());

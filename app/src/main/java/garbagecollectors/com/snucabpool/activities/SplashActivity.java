@@ -9,6 +9,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,10 +27,14 @@ import garbagecollectors.com.snucabpool.UtilityMethods;
 public class SplashActivity extends AppCompatActivity
 {
     private static ArrayList<TripEntry> tripEntryList = new ArrayList<>();
-    private static ArrayList<User> userList = new ArrayList<>();
 
     private static DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
     private static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
+
+    FirebaseAuth mAuth;
+    static FirebaseUser currentUser;
+
+    static User finalCurrentUser;
 
     private TaskCompletionSource<DataSnapshot> UserDBSource = new TaskCompletionSource<>();
     private Task UserDBTask = UserDBSource.getTask();
@@ -44,6 +50,9 @@ public class SplashActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
         
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
@@ -87,11 +96,7 @@ public class SplashActivity extends AppCompatActivity
                 UtilityMethods.updateTripList(tripEntryList, tripEntry);
             }
 
-            for(DataSnapshot dataSnapshot1 : userData.getChildren())
-            {
-                User user = dataSnapshot1.getValue(User.class);
-                UtilityMethods.updateUserList(userList, user);
-            }
+            finalCurrentUser = userData.child(currentUser.getUid()).getValue(User.class);
 
             finish();
             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
@@ -110,8 +115,8 @@ public class SplashActivity extends AppCompatActivity
         return tripEntryList;
     }
 
-    public static ArrayList<User> getUserList()
+    public static User getFinalCurrentUser()
     {
-        return userList;
+        return finalCurrentUser;
     }
 }

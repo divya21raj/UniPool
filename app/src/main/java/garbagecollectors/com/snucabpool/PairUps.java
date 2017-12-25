@@ -11,11 +11,12 @@ public class PairUps
 
     ArrayList<String> tripEntriesPairedUpOver;
 
-    public PairUps(String creatorId, String requesterId, ArrayList<Message> messages)
+    public PairUps(String creatorId, String requesterId, ArrayList<Message> messages, ArrayList<String> tripEntriesPairedUpOver)
     {
         this.creatorId = creatorId;
         this.requesterId = requesterId;
         this.messages = messages;
+        this.tripEntriesPairedUpOver = tripEntriesPairedUpOver;
     }
 
     public PairUps()
@@ -50,5 +51,15 @@ public class PairUps
     public void setMessages(ArrayList<Message> messages)
     {
         this.messages = messages;
+    }
+
+    public ArrayList<String> getTripEntriesPairedUpOver()
+    {
+        return tripEntriesPairedUpOver;
+    }
+
+    public void setTripEntriesPairedUpOver(ArrayList<String> tripEntriesPairedUpOver)
+    {
+        this.tripEntriesPairedUpOver = tripEntriesPairedUpOver;
     }
 }
