@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -19,22 +18,22 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashMap;
 
 import garbagecollectors.com.snucabpool.DatePickerFragment;
-
-import garbagecollectors.com.snucabpool.Entry;
-
+import garbagecollectors.com.snucabpool.GenLocation;
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.TripEntry;
 
-public class NewEntryActivity extends BaseActivity  {
-
+public class NewEntryActivity extends BaseActivity
+{
     int count=0;
 
-    Place source, destination;
+    GenLocation source, destination;
     String time, sourceSet, destinationSet;
     String AM_PM ;
     Button buttonstartSetDialog,buttonChangeDate, buttonFinalSave;
@@ -68,39 +67,24 @@ public class NewEntryActivity extends BaseActivity  {
 
         buttonChangeDate = (Button)findViewById(R.id.SetTime);
 
-        buttonChangeDate.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v)
-            {
-                openTimePickerDialog(false);
-            }
-        });
+        buttonChangeDate.setOnClickListener(v -> openTimePickerDialog(false));
 
         buttonstartSetDialog = (Button)findViewById(R.id.btnChangeDate);
-        buttonstartSetDialog.setOnClickListener(new OnClickListener(){
-
-            @Override
-            public void onClick(View v)
-            {
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getFragmentManager(),"Date Picker");
-            }
+        buttonstartSetDialog.setOnClickListener(v ->
+        {
+            DialogFragment newFragment = new DatePickerFragment();
+            newFragment.show(getFragmentManager(),"Date Picker");
         });
 
         buttonFinalSave = (Button)findViewById(R.id.finalSave);
-        buttonFinalSave.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v)
+        buttonFinalSave.setOnClickListener(v ->
+        {
+            try
             {
-                try
-                {
-                    finalSave(v);
-                } catch (ParseException e)
-                {
-                    e.printStackTrace();
-                }
+                finalSave(v);
+            } catch (ParseException e)
+            {
+                e.printStackTrace();
             }
         });
 
@@ -176,7 +160,9 @@ public class NewEntryActivity extends BaseActivity  {
                 Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber());
                 if(count==0)
                 {
-                    source = place;//check
+                    LatLng latLng = place.getLatLng();
+                    source = new GenLocation(place.getName().toString(), place.getAddress().toString(),latLng.latitude, latLng.longitude);//check
+
                     sourceSet=(place.getName()+",\n"+
                             place.getAddress() +"\n" + place.getPhoneNumber());//check
                     text_source.setText(sourceSet);
@@ -184,7 +170,9 @@ public class NewEntryActivity extends BaseActivity  {
                 }
                 else
                 {
-                    destination = place;
+                    LatLng latLng = place.getLatLng();
+                    destination = new GenLocation(place.getName().toString(), place.getAddress().toString(),latLng.latitude, latLng.longitude);//check
+
                     destinationSet=(place.getName()+",\n"+
                             place.getAddress() +"\n" + place.getPhoneNumber());//check
                     text_destination.setText(destinationSet);
@@ -228,32 +216,33 @@ public class NewEntryActivity extends BaseActivity  {
             String entryId = entryDatabaseReference.push().getKey();
             String name= currentUser.getDisplayName();
 
-            //initialise lambda map for this entry here!!!
-            Entry entry = new Entry(name,entryId, currentUser.getUid(), time, date, source, destination, null);
+            //initialise lambda map for this tripEntry here!!!
+            TripEntry tripEntry = new TripEntry(name,entryId, currentUser.getUid(), time, date, source, destination, null);
 
-            finalCurrentUser.user_entries.add(entry);
-            entryDatabaseReference.child(entryId).setValue(entry);
+            finalCurrentUser.getUserTripEntries().add(tripEntry);
 
-            Toast.makeText(this, "Entry created!", Toast.LENGTH_SHORT).show();
+            entryDatabaseReference.child(entryId).setValue(tripEntry);
+
+            userDatabaseReference.child(finalCurrentUser.getUserId()).child("userTripEntries").setValue(finalCurrentUser.getUserTripEntries());
+
+            Toast.makeText(this, "TripEntry created!", Toast.LENGTH_SHORT).show();
 
             finish();
             startActivity(new Intent(this, HomeActivity.class));
         }
 
         else
-        {
             Toast.makeText(this, "Fill in all the details!", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
-    int getContentViewId()
+    protected int getContentViewId()
     {
         return R.layout.activity_new_entry;
     }
 
     @Override
-    int getNavigationMenuItemId()
+    protected int getNavigationMenuItemId()
     {
         return R.id.navigation_newEntry;
     }

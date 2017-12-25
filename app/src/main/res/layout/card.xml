@@ -42,7 +42,7 @@
                 android:paddingRight="@dimen/album_title_padding"
                 android:text="date"
                 android:textColor="#3E2723"
-                android:textSize="@dimen/songs_count" />
+                android:textSize="@dimen/card_text_size" />
 
             <TextView
                 android:id="@+id/vuser_id"
@@ -70,7 +70,7 @@
                 android:paddingRight="@dimen/album_title_padding"
                 android:textColor="#3E2723"
                 android:text="time"
-                android:textSize="@dimen/songs_count" />
+                android:textSize="@dimen/card_text_size" />
 
             <TextView
                 android:id="@+id/vsource"
@@ -83,7 +83,7 @@
                 android:paddingRight="@dimen/album_title_padding"
                 android:text="source"
                 android:textColor="#3E2723"
-                android:textSize="@dimen/songs_count" />
+                android:textSize="@dimen/card_text_size" />
 
             <TextView
                 android:id="@+id/vdestination"
@@ -96,7 +96,7 @@
                 android:paddingRight="@dimen/album_title_padding"
                 android:text="destination"
                 android:textColor="#3E2723"
-                android:textSize="@dimen/songs_count" />
+                android:textSize="@dimen/card_text_size" />
 
 
         </RelativeLayout>

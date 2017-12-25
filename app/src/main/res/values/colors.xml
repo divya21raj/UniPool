@@ -7,9 +7,9 @@
     <color name="colorOrange">#F68159</color>
     <color name="colorLightGray">#a6abae</color>
 
-    <color name="colorBackroundWhite">#f0f2ea</color>
+    <color name="colorBackgroundWhite">#f0f2ea</color>
 
 
     <color name="viewBg">#f1f5f8</color>
-    <color name="album_title">#4c4c4c</color>
+    <color name="card_title">#4c4c4c</color>
 </resources>

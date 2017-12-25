@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -15,10 +14,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -28,7 +25,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import garbagecollectors.com.snucabpool.GenLocation;
+import garbagecollectors.com.snucabpool.Message;
+import garbagecollectors.com.snucabpool.PairUps;
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 
 import static garbagecollectors.com.snucabpool.activities.BaseActivity.finalCurrentUser;
@@ -42,7 +47,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
     private GoogleSignInClient mGoogleSignInClient;
 
     private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
+    private static FirebaseUser currentUser;
 
     protected static DatabaseReference userDatabaseReference;
 
@@ -91,28 +96,36 @@ public class LoginActivity extends Activity implements View.OnClickListener
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
+                .addOnCompleteListener(this, task ->
+                {
+                    if (task.isSuccessful())
+                    {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithCredential:success");
 
-                            FirebaseUser user = mAuth.getCurrentUser();
+                        FirebaseUser user = mAuth.getCurrentUser();
 
+                        try
+                        {
                             createUserOnDatabase(user);
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                        } catch (ParseException e)
+                        {
+                            e.printStackTrace();
                         }
-
-                        // ...
+                        updateUI(user);
                     }
+                    else
+                    {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                        updateUI(null);
+                    }
+
+                    // ...
                 });
     }
 
@@ -141,7 +154,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN)
+        {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -151,13 +165,15 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask)
     {
-        try {
+        try
+        {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             firebaseAuthWithGoogle(account);
             // Signed in successfully, show authenticated UI.
 
-        } catch (ApiException e) {
+        } catch (ApiException e)
+        {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
@@ -165,9 +181,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
         }
     }
 
-    private void createUserOnDatabase(FirebaseUser user)
+    private void createUserOnDatabase(FirebaseUser user) throws ParseException
     {
-        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), null, null, null);
+        dummyInitFinalCurrentUser(user);
 
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
@@ -194,13 +210,46 @@ public class LoginActivity extends Activity implements View.OnClickListener
         });
     }
 
+    private void dummyInitFinalCurrentUser(FirebaseUser user) throws ParseException
+    {
+        HashMap<String, Float> dummyLambdaMap = new HashMap<>();
+        dummyLambdaMap.put("123", 0f);
+
+        GenLocation dummyGenLocation = new GenLocation("dummy", "dummy", 0d, 0d);
+
+        TripEntry dummyTripEntry = new TripEntry("dummy", "0", "DummyUser", "12:00", "1/11/12", dummyGenLocation, dummyGenLocation, dummyLambdaMap);
+
+        ArrayList<TripEntry> dummyUserEntries = new ArrayList<>();
+        dummyUserEntries.add(dummyTripEntry);
+
+        ArrayList<TripEntry> dummyRequestSent = new ArrayList<>();
+        dummyRequestSent.add(dummyTripEntry);
+
+        ArrayList<String> dummyUserIdList = new ArrayList<>();
+        dummyUserIdList.add("dummy");
+
+        HashMap<String, ArrayList<String>> dummyRequestRecieved = new HashMap<>();
+        dummyRequestRecieved.put("dummy", dummyUserIdList);
+
+        Message dummyMessage = new Message("", "dummy", 1L);
+        ArrayList<Message> dummyMessages = new ArrayList<>();
+        dummyMessages.add(dummyMessage);
+
+        PairUps dummyPairUp = new PairUps("dummy", "dummy", dummyMessages, dummyUserIdList);
+        ArrayList<PairUps> dummyPairUps = new ArrayList<>();
+        dummyPairUps.add(dummyPairUp);
+
+        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), dummyUserEntries, dummyRequestSent, dummyRequestRecieved, dummyPairUps);
+    }
+
     private void updateUI(FirebaseUser currentUser)
     {
+        progressDialog.dismiss();
+
         if(currentUser != null)
         {
-            progressDialog.dismiss();
             finish();
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            startActivity(new Intent(getApplicationContext(), SplashActivity.class));
         }
     }
 }

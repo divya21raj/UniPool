@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="garbagecollectors.com.snucabpool.activities.LoginActivity">
+    tools:context="garbagecollectors.com.snucabpool.activities.LoginActivity"
+    android:background="@color/colorPrimary">
 
 
     <TextView
@@ -14,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="150dp"
+        android:textColor="@color/colorBackgroundWhite"
         />
 
     <com.google.android.gms.common.SignInButton

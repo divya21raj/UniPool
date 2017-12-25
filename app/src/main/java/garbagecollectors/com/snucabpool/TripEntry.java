@@ -1,25 +1,23 @@
 package garbagecollectors.com.snucabpool;
 
-import com.google.android.gms.location.places.Place;
-
 import java.text.ParseException;
 import java.util.HashMap;
 
-public class Entry
+public class TripEntry
 {
     private String entry_id;
 
     private String user_id;     //Data type could be changed to long
 
-    String name;
+    private String name;
 
-    String time, date;
+    private String time, date;
 
-    Object source, destination;
+    private GenLocation source, destination;
 
     public HashMap<String, Float> lambdaMap = new HashMap<>(); //HashMap contains entry_id(String value) as key and lambda(Float value) as value
 
-    public Entry(String name, String entry_id, String user_id, String time, String date, Object source, Object destination, HashMap<String, Float> lambdaMap) throws ParseException
+    public TripEntry(String name, String entry_id, String user_id, String time, String date, GenLocation source, GenLocation destination, HashMap<String, Float> lambdaMap) throws ParseException
     {
         this.entry_id = entry_id;
         this.user_id = user_id;
@@ -30,11 +28,21 @@ public class Entry
         this.name = name;
     }
 
-    public Entry()
+    public TripEntry(TripEntry tripEntry)   //copyConstructor
     {
+        this.entry_id = tripEntry.getEntry_id();
+        this.user_id = tripEntry.getUser_id();
+        this.time = tripEntry.getTime();
+        this.date = tripEntry.getDate();
+        this.source = tripEntry.getSource();
+        this.destination = tripEntry.getDestination();
+        this.name = tripEntry.getName();
     }
 
-    public HashMap<String, Float> getLambdaMap()
+    public TripEntry()
+    {}
+
+    HashMap<String, Float> getLambdaMap()
     {
         return lambdaMap;
     }
@@ -89,22 +97,22 @@ public class Entry
         this.date = date;
     }
 
-    public Object getSource()
+    public GenLocation getSource()
     {
         return source;
     }
 
-    public void setSource(Object source)
+    public void setSource(GenLocation source)
     {
         this.source = source;
     }
 
-    public Object getDestination()
+    public GenLocation getDestination()
     {
         return destination;
     }
 
-    public void setDestination(Object destination)
+    public void setDestination(GenLocation destination)
     {
         this.destination = destination;
     }

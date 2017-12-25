@@ -1,7 +1,7 @@
 package garbagecollectors.com.snucabpool;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Created by D2R on 29/11/2017.
@@ -11,19 +11,25 @@ public class User
 {
     private String userId;
     private String name;
-    public ArrayList<Entry> user_entries =new ArrayList<>();
+    private ArrayList<TripEntry> userTripEntries =new ArrayList<>();
 
-    private ArrayList<Entry> requestSent;//String is the userId of requester, Entry is the entry that he requested
-    private Map<String, String> requestsRecieved;//We have Map because we're taking Entry object of the entry that we have made (that the other person has clicked on)
-    private ArrayList<Entry> friends;
+    private ArrayList<TripEntry> requestSent;
+    private HashMap<String, ArrayList<String>> requestsRecieved;
+    //Key is the entryId of entry requested, Value is list of userIDs who've requested that entry
+    //We have Map because we're taking TripEntry object of the entry that we have made (that the other person has clicked on)
 
-    public User(String userId, String name, ArrayList<Entry> requestSent, Map<String, String> requestsRecieved, ArrayList<Entry> friends)
+    ArrayList<PairUps> pairUps;
+    //Key is userId paired up with, value is list of tripEntries paired up over.
+
+
+    public User(String userId, String name, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsRecieved, ArrayList<PairUps> pairUps)
     {
         this.userId = userId;
         this.name = name;
+        this.userTripEntries = userTripEntries;
         this.requestSent = requestSent;
         this.requestsRecieved = requestsRecieved;
-        this.friends = friends;
+        this.pairUps = pairUps;
     }
 
     public String getUserId()
@@ -31,7 +37,7 @@ public class User
         return userId;
     }
 
-    public void setUserId(String userId)
+    void setUserId(String userId)
     {
         this.userId = userId;
     }
@@ -46,27 +52,37 @@ public class User
         this.name = name;
     }
 
-    public ArrayList<Entry> getRequestSent()
+    public ArrayList<TripEntry> getRequestSent()
     {
         return requestSent;
     }
 
-    public void setRequestSent(ArrayList<Entry> requestSent)
+    public void setRequestSent(ArrayList<TripEntry> requestSent)
     {
         this.requestSent = requestSent;
     }
 
-    public Map<String, String> getRequestsRecieved()
+    public HashMap<String, ArrayList<String>> getRequestsRecieved()
     {
         return requestsRecieved;
     }
 
-    public void setRequestsRecieved(Map<String, String> requestsRecieved)
+    public void setRequestsRecieved(HashMap<String, ArrayList<String>> requestsRecieved)
     {
         this.requestsRecieved = requestsRecieved;
     }
 
     public User()
     {
+    }
+
+    public ArrayList<TripEntry> getUserTripEntries()
+    {
+        return userTripEntries;
+    }
+
+    public ArrayList<PairUps> getPairUps()
+    {
+        return pairUps;
     }
 }

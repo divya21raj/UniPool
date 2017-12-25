@@ -5,16 +5,25 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
+import garbagecollectors.com.snucabpool.UtilityMethods;
+import garbagecollectors.com.snucabpool.activities.RequestActivity.RequestActivity;
 
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
@@ -25,13 +34,70 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     protected static DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
+
     static User finalCurrentUser;
+
+    static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        finalCurrentUser = SplashActivity.getFinalCurrentUser();
+
+        entryDatabaseReference.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
+                {
+                    TripEntry tripEntry = dataSnapshot1.getValue(TripEntry.class);
+                    UtilityMethods.updateTripList(tripEntryList, tripEntry);
+                    /*
+                    try
+                    {
+                        setLambdaMapForAllEntries();
+                    } catch (ParseException e)
+                    {
+                        e.printStackTrace();
+                    }*/
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error)
+            {
+                // Failed to read value
+                Log.w("Hello", "Failed to read value.", error.toException());
+            }
+        });
+
+        userDatabaseReference.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                finalCurrentUser = dataSnapshot.child(currentUser.getUid()).getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error)
+            {
+                // Failed to read value
+                Log.w("Hello", "Failed to read value.", error.toException());
+            }
+        });
+
 
         navigationView = (BottomNavigationView) findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
@@ -91,7 +157,57 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         }
     }
 
-    abstract int getContentViewId();
+    protected abstract int getContentViewId();
 
-    abstract int getNavigationMenuItemId();
+    protected abstract int getNavigationMenuItemId();
+
+    public static FirebaseUser getCurrentUser()
+    {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(FirebaseUser currentUser)
+    {
+        BaseActivity.currentUser = currentUser;
+    }
+
+    public static DatabaseReference getUserDatabaseReference()
+    {
+        return userDatabaseReference;
+    }
+
+    public static void setUserDatabaseReference(DatabaseReference userDatabaseReference)
+    {
+        BaseActivity.userDatabaseReference = userDatabaseReference;
+    }
+
+    public static DatabaseReference getEntryDatabaseReference()
+    {
+        return entryDatabaseReference;
+    }
+
+    public static void setEntryDatabaseReference(DatabaseReference entryDatabaseReference)
+    {
+        BaseActivity.entryDatabaseReference = entryDatabaseReference;
+    }
+
+    public static User getFinalCurrentUser()
+    {
+        return finalCurrentUser;
+    }
+
+    public static void setFinalCurrentUser(User finalCurrentUser)
+    {
+        BaseActivity.finalCurrentUser = finalCurrentUser;
+    }
+
+    public static ArrayList<TripEntry> getTripEntryList()
+    {
+        return tripEntryList;
+    }
+
+    public static void setTripEntryList(ArrayList<TripEntry> tripEntryList)
+    {
+        BaseActivity.tripEntryList = tripEntryList;
+    }
 }
