@@ -29,7 +29,7 @@ In such a scenario, there is a need for such an app which will be secure, and ea
  
 * **Simran Srivastava**   - [ss616](https://github.com/ss616)
  
-* **Rohan Datta**         - [Solstafir](https://github.com/Solstafir)
+* **Rohan Datta**         - [Rohan](https://github.com/Rohan-Datta)
 
 ## Contributing 
 To contribute, follow these guidelines,
