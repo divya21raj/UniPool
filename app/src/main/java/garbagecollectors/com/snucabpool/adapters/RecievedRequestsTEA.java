@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
 import garbagecollectors.com.snucabpool.activities.RequestActivity.RecievedRequestsFragment;
 import garbagecollectors.com.snucabpool.activities.RequestActivity.RequestActivity;
+
+import static garbagecollectors.com.snucabpool.UtilityMethods.accessUserDatabase;
 
 public class RecievedRequestsTEA extends TripEntryAdapter
 {
@@ -81,51 +84,58 @@ public class RecievedRequestsTEA extends TripEntryAdapter
             {
                 progressDialog.show();
 
-                User tripEntryUser = UtilityMethods.getUserFromDatabase(tripEntry.getUser_id());
-
-                ArrayList<PairUps> tripEntryUserPairUps = tripEntryUser.getPairUps();
-                ArrayList<TripEntry> sentRequests = tripEntryUser.getRequestSent();
-
-                ArrayList<String> tripEntriesPairedOver = UtilityMethods.getTripEntriesPairedOver(tripEntryUserPairUps, finalCurrentUser.getUserId());
-                tripEntriesPairedOver.add(tripEntry.getEntry_id());
-
-                PairUps pairUp = new PairUps(finalCurrentUser.getUserId(), tripEntryUser.getUserId(), new ArrayList<>(), tripEntriesPairedOver);
-                pairUp.getMessages().add(new Message("Your request was accepted :)", pairUp.getCreatorId(), UtilityMethods.getCurrentTime()));
-
-                isAlreadyInList = UtilityMethods.addPairUpInList(currentUserPairUps, pairUp, tripEntry.getEntry_id());
-
-                if(!isAlreadyInList)
+                final User[] tripEntryUser = new User[1];
+                Task userTask = accessUserDatabase();    //the user that created the clicked tripEntry
+                userTask.addOnSuccessListener(aVoid ->
                 {
-                    tripEntryUserPairUps.add(pairUp);
+                    DataSnapshot snapshot = (DataSnapshot) userTask.getResult();
 
-                    UtilityMethods.removeFromMap(recievedRequests, tripEntry.getEntry_id(), tripEntryUser.getUserId());
-                    UtilityMethods.removeFromList(sentRequests, tripEntry.getEntry_id());
+                    tripEntryUser[0] = snapshot.child(tripEntry.getUser_id()).getValue(User.class);
 
-                    Task<Void> task1 = userDatabaseReference.child(finalCurrentUser.getUserId()).child("pairUps").setValue(currentUserPairUps);
-                    Task<Void> task2 = userDatabaseReference.child(tripEntryUser.getUserId()).child("pairUps").setValue(tripEntryUserPairUps);
+                    ArrayList<PairUps> tripEntryUserPairUps = tripEntryUser[0].getPairUps();
+                    ArrayList<TripEntry> sentRequests = tripEntryUser[0].getRequestSent();
 
-                    Task<Void> task3 = userDatabaseReference.child(finalCurrentUser.getUserId()).child("requestsRecieved").setValue(recievedRequests);
-                    Task<Void> task4 = userDatabaseReference.child(tripEntryUser.getUserId()).child("requestSent").setValue(sentRequests);
+                    ArrayList<String> tripEntriesPairedOver = UtilityMethods.getTripEntriesPairedOver(tripEntryUserPairUps, finalCurrentUser.getUserId());
+                    tripEntriesPairedOver.add(tripEntry.getEntry_id());
 
-                    Task<Void> allTask = Tasks.whenAll(task1, task2, task3, task4);
-                    allTask.addOnSuccessListener(aVoid ->
+                    PairUps pairUp = new PairUps(finalCurrentUser.getUserId(), tripEntryUser[0].getUserId(), new ArrayList<>(), tripEntriesPairedOver);
+                    pairUp.getMessages().add(new Message("Your request was accepted :)", pairUp.getCreatorId(), UtilityMethods.getCurrentTime()));
+
+                    isAlreadyInList = UtilityMethods.addPairUpInList(currentUserPairUps, pairUp, tripEntry.getEntry_id());
+
+                    if(!isAlreadyInList)
                     {
-                        progressDialog.dismiss();
+                        tripEntryUserPairUps.add(pairUp);
 
-                        if(context instanceof RequestActivity)
-                            ((RequestActivity)context).setRefresh(true);
+                        UtilityMethods.removeFromMap(recievedRequests, tripEntry.getEntry_id(), tripEntryUser[0].getUserId());
+                        UtilityMethods.removeFromList(sentRequests, tripEntry.getEntry_id());
 
-                    });
+                        Task<Void> task1 = userDatabaseReference.child(finalCurrentUser.getUserId()).child("pairUps").setValue(currentUserPairUps);
+                        Task<Void> task2 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("pairUps").setValue(tripEntryUserPairUps);
 
-                    allTask.addOnFailureListener(e ->
-                    {
-                        progressDialog.dismiss();
-                        // apologize profusely to the user!
-                        Toast.makeText(view.getContext(), "FAIL", Toast.LENGTH_LONG).show();
-                    });
-                }
+                        Task<Void> task3 = userDatabaseReference.child(finalCurrentUser.getUserId()).child("requestsRecieved").setValue(recievedRequests);
+                        Task<Void> task4 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("requestSent").setValue(sentRequests);
 
-                dialog.dismiss();
+                        Task<Void> allTask = Tasks.whenAll(task1, task2, task3, task4);
+                        allTask.addOnSuccessListener(bVoid ->
+                        {
+                            progressDialog.dismiss();
+
+                            if(context instanceof RequestActivity)
+                                ((RequestActivity)context).setRefresh(true);
+
+                        });
+
+                        allTask.addOnFailureListener(e ->
+                        {
+                            progressDialog.dismiss();
+                            // apologize profusely to the user!
+                            Toast.makeText(view.getContext(), "FAIL", Toast.LENGTH_LONG).show();
+                        });
+                    }
+
+                    dialog.dismiss();
+                });
             });
 
             RecievedRequestsFragment.alertDialogBuilder.setNegativeButton("NO", (dialog, which) ->

@@ -2,7 +2,6 @@ package garbagecollectors.com.snucabpool;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,10 +19,8 @@ import garbagecollectors.com.snucabpool.adapters.TripEntryAdapter;
 
 public class UtilityMethods
 {
-    public static User getUserFromDatabase(String uid)
+    public static Task accessUserDatabase()
     {
-        final User[] userToBeFound = {null};
-
         TaskCompletionSource<DataSnapshot> userSource = new TaskCompletionSource<>();
         Task userTask = userSource.getTask();
 
@@ -44,14 +41,7 @@ public class UtilityMethods
             }
         });
 
-        userTask.addOnSuccessListener(aVoid ->
-        {
-            DataSnapshot snapshot = (DataSnapshot) userTask.getResult();
-
-            userToBeFound[0] = snapshot.child(uid).getValue(User.class);
-        });
-
-        return userToBeFound[0];
+        return userTask;
     }
 
     public static boolean addRequestInList(ArrayList<TripEntry> requestSent, TripEntry tripEntry)
@@ -154,7 +144,7 @@ public class UtilityMethods
 
     public static ArrayList<TripEntry> populateRecievedRequestsList(HashMap<String, ArrayList<String>> recievedRequestsMap, ArrayList<TripEntry> tripEntries)
     {
-        TripEntry temp;
+        final TripEntry[] temp = new TripEntry[1];
 
         ArrayList<TripEntry> recievedRequestsList = new ArrayList<>();
 
@@ -168,13 +158,20 @@ public class UtilityMethods
                 {
                     for(String userId : entry.getValue())
                     {
-                        User user = getUserFromDatabase(userId);
+                        final User[] user = new User[1];
+                        Task userTask = accessUserDatabase();    //the user that created the clicked tripEntry
+                        userTask.addOnSuccessListener(aVoid ->
+                        {
+                            DataSnapshot snapshot = (DataSnapshot) userTask.getResult();
 
-                        temp = new TripEntry(tripEntry);
-                        temp.setName(user.getName());
-                        temp.setUser_id(user.getUserId());
+                            user[0] = snapshot.child(userId).getValue(User.class);
 
-                        recievedRequestsList.add(temp);
+                            temp[0] = new TripEntry(tripEntry);
+                            temp[0].setName(user[0].getName());
+                            temp[0].setUser_id(user[0].getUserId());
+
+                            recievedRequestsList.add(temp[0]);
+                        });
                     }
                 }
             }

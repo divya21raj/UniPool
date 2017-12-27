@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
 
 import static garbagecollectors.com.snucabpool.UtilityMethods.addRequestInList;
-import static garbagecollectors.com.snucabpool.UtilityMethods.getUserFromDatabase;
+import static garbagecollectors.com.snucabpool.UtilityMethods.accessUserDatabase;
 import static garbagecollectors.com.snucabpool.UtilityMethods.putInMap;
 
 public class HomeActivityTEA extends TripEntryAdapter
@@ -79,48 +80,55 @@ public class HomeActivityTEA extends TripEntryAdapter
 
             progressDialog.show();
 
-            User tripEntryUser = getUserFromDatabase(tripEntry.getUser_id());    //the user that created the clicked tripEntry
-
-            DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
-
-            ArrayList<TripEntry> requestSent = user.getRequestSent();
-            HashMap<String, ArrayList<String>> requestsRecieved = tripEntryUser.getRequestsRecieved();
-
-            isAlreadyRequested = addRequestInList(requestSent, tripEntry);
-
-            if(!isAlreadyRequested)
-                isRequestAlreadyInMap = putInMap(requestsRecieved, tripEntry.getEntry_id(), user.getUserId());
-
-            user.setRequestSent(requestSent);
-            tripEntryUser.setRequestsRecieved(requestsRecieved);
-
-            if(!isAlreadyRequested && !isRequestAlreadyInMap)
+            final User[] tripEntryUser = new User[1];
+            Task userTask = accessUserDatabase();    //the user that created the clicked tripEntry
+            userTask.addOnSuccessListener(aVoid ->
             {
-                //update firebase database to include arrayList that contains name of the card clicked in requests sent...
-                Task<Void> task1 = userDatabaseReference.child(user.getUserId()).child("requestSent").setValue(requestSent);
-                Task<Void> task2 = userDatabaseReference.child(tripEntryUser.getUserId()).child("requestsRecieved").setValue(requestsRecieved);
+                DataSnapshot snapshot = (DataSnapshot) userTask.getResult();
 
-                Task<Void> allTask = Tasks.whenAll(task1, task2);
-                allTask.addOnSuccessListener(aVoid ->
+                tripEntryUser[0] = snapshot.child(tripEntry.getUser_id()).getValue(User.class);
+
+                DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
+
+                ArrayList<TripEntry> requestSent = user.getRequestSent();
+                HashMap<String, ArrayList<String>> requestsRecieved = tripEntryUser[0].getRequestsRecieved();
+
+                isAlreadyRequested = addRequestInList(requestSent, tripEntry);
+
+                if(!isAlreadyRequested)
+                    isRequestAlreadyInMap = putInMap(requestsRecieved, tripEntry.getEntry_id(), user.getUserId());
+
+                user.setRequestSent(requestSent);
+                tripEntryUser[0].setRequestsRecieved(requestsRecieved);
+
+                if(!isAlreadyRequested && !isRequestAlreadyInMap)
+                {
+                    //update firebase database to include arrayList that contains name of the card clicked in requests sent...
+                    Task<Void> task1 = userDatabaseReference.child(user.getUserId()).child("requestSent").setValue(requestSent);
+                    Task<Void> task2 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("requestsRecieved").setValue(requestsRecieved);
+
+                    Task<Void> allTask = Tasks.whenAll(task1, task2);
+                    allTask.addOnSuccessListener(bVoid ->
+                    {
+                        progressDialog.dismiss();
+                        Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG).show();
+                    });
+
+                    allTask.addOnFailureListener(e ->
+                    {
+                        progressDialog.dismiss();
+                        // apologize profusely to the user!
+                        Toast.makeText(view.getContext(), "FAIL", Toast.LENGTH_LONG).show();
+                    });
+                }
+
+                else
                 {
                     progressDialog.dismiss();
-                    Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG).show();
-                });
+                    Toast.makeText(view.getContext(), "Request already sent", Toast.LENGTH_LONG).show();
+                }
 
-                allTask.addOnFailureListener(e ->
-                {
-                    progressDialog.dismiss();
-                    // apologize profusely to the user!
-                    Toast.makeText(view.getContext(), "FAIL", Toast.LENGTH_LONG).show();
-                });
-            }
-
-            else
-            {
-                progressDialog.dismiss();
-                Toast.makeText(view.getContext(), "Request already sent", Toast.LENGTH_LONG).show();
-            }
-
+            });
         });
 
         TripEntry tripEntry = list.get(position);
