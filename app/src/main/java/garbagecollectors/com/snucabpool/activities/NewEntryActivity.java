@@ -65,6 +65,8 @@ public class NewEntryActivity extends BaseActivity
         text_destination.setText("Select Drop Location");
         text_time = (TextView)findViewById(R.id.searched_time);
 
+
+
         buttonChangeDate = (Button)findViewById(R.id.SetTime);
 
         buttonChangeDate.setOnClickListener(v -> openTimePickerDialog(false));
@@ -87,7 +89,6 @@ public class NewEntryActivity extends BaseActivity
                 e.printStackTrace();
             }
         });
-
     }
 
     private void openTimePickerDialog(boolean is24r)
@@ -108,7 +109,6 @@ public class NewEntryActivity extends BaseActivity
     OnTimeSetListener onTimeSetListener
             = new OnTimeSetListener()
     {
-
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute)
         {
@@ -142,8 +142,7 @@ public class NewEntryActivity extends BaseActivity
 
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e)
         {
-
-            // TODO: Handle the error.
+            Toast.makeText(this, "Google Play Service Error!", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -166,6 +165,7 @@ public class NewEntryActivity extends BaseActivity
                     sourceSet=(place.getName()+",\n"+
                             place.getAddress() +"\n" + place.getPhoneNumber());//check
                     text_source.setText(sourceSet);
+
                     //((TextView) findViewById(R.id.searched_address)).setText(source);
                 }
                 else
@@ -178,8 +178,6 @@ public class NewEntryActivity extends BaseActivity
                     text_destination.setText(destinationSet);
                     //((TextView) findViewById(R.id.searched_address)).setText(destination);
                 }
-
-
             } 
             else if (resultCode == PlaceAutocomplete.RESULT_ERROR)
             {
@@ -205,13 +203,16 @@ public class NewEntryActivity extends BaseActivity
             startActivityForResult(intent, 1);       
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e)
         {
-            // TODO: Handle the error.
+            Toast.makeText(this, "Google Play Service Error!", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void finalSave(View view) throws ParseException
     {
-        if(!(time.isEmpty()||source == null||destination == null))
+        if((source.getLatitude().compareTo(destination.getLatitude()) == 0) && (source.getLongitude().compareTo(destination.getLongitude()) == 0))
+            Toast.makeText(this, "The pickup point and drop location can't be the same, silly!", Toast.LENGTH_SHORT).show();
+
+        else if(!(time.isEmpty()||source == null||destination == null))
         {
             String entryId = entryDatabaseReference.push().getKey();
             String name= currentUser.getDisplayName();
