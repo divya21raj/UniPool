@@ -21,7 +21,9 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import garbagecollectors.com.snucabpool.DatePickerFragment;
@@ -41,7 +43,7 @@ public class NewEntryActivity extends BaseActivity
 
     public static String date;
 
-    private HashMap<Long, Float> map = new HashMap<>();                   //HashMap contains entry_id(Long value) and lambda(Float value)
+    private HashMap<Long, Float> map = new HashMap<>();          //HashMap contains entry_id(Long value) and lambda(Float value)
 
     TimePickerDialog timePickerDialog;
 
@@ -64,8 +66,6 @@ public class NewEntryActivity extends BaseActivity
         text_destination = (TextView)findViewById(R.id.searched_destination);
         text_destination.setText("Select Drop Location");
         text_time = (TextView)findViewById(R.id.searched_time);
-
-
 
         buttonChangeDate = (Button)findViewById(R.id.SetTime);
 
@@ -209,31 +209,66 @@ public class NewEntryActivity extends BaseActivity
 
     public void finalSave(View view) throws ParseException
     {
-        if((source.getLatitude().compareTo(destination.getLatitude()) == 0) && (source.getLongitude().compareTo(destination.getLongitude()) == 0))
-            Toast.makeText(this, "The pickup point and drop location can't be the same, silly!", Toast.LENGTH_SHORT).show();
-
-        else if(!(time.isEmpty()||source == null||destination == null))
+        switch (checkInvalidEntry())
         {
-            String entryId = entryDatabaseReference.push().getKey();
-            String name= currentUser.getDisplayName();
+            case 0:
+                String entryId = entryDatabaseReference.push().getKey();
+                String name= currentUser.getDisplayName();
 
-            //initialise lambda map for this tripEntry here!!!
-            TripEntry tripEntry = new TripEntry(name,entryId, currentUser.getUid(), time, date, source, destination, null);
+                //initialise lambda map for this tripEntry here!!!
+                TripEntry tripEntry = new TripEntry(name,entryId, currentUser.getUid(), time, date, source, destination, null);
 
-            finalCurrentUser.getUserTripEntries().add(tripEntry);
+                finalCurrentUser.getUserTripEntries().add(tripEntry);
 
-            entryDatabaseReference.child(entryId).setValue(tripEntry);
+                entryDatabaseReference.child(entryId).setValue(tripEntry);
 
-            userDatabaseReference.child(finalCurrentUser.getUserId()).child("userTripEntries").setValue(finalCurrentUser.getUserTripEntries());
+                userDatabaseReference.child(finalCurrentUser.getUserId()).child("userTripEntries").setValue(finalCurrentUser.getUserTripEntries());
 
-            Toast.makeText(this, "TripEntry created!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "TripEntry created!", Toast.LENGTH_SHORT).show();
 
-            finish();
-            startActivity(new Intent(this, HomeActivity.class));
+                finish();
+                startActivity(new Intent(this, HomeActivity.class));
+                break;
+
+            case 1:
+                Toast.makeText(this, "The pickup point and drop location can't be the same, silly!", Toast.LENGTH_SHORT).show();
+                break;
+
+            case 2:
+                Toast.makeText(this, "The devs are still working on time travel...", Toast.LENGTH_SHORT).show();
+                break;
+
+            case 3:
+                Toast.makeText(this, "Fill in all the details!", Toast.LENGTH_SHORT).show();
+                break;
+
         }
+    }
 
-        else
-            Toast.makeText(this, "Fill in all the details!", Toast.LENGTH_SHORT).show();
+    private int checkInvalidEntry() throws ParseException
+    {
+        int flag = 0;
+
+        SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy.HH:mm");
+        Date currentTime = new Date();
+        Date inputTime = null;
+
+        if(date!=null)
+            inputTime = parser.parse(date + "." + time);
+
+        if((time.isEmpty()||source == null||destination == null))
+            flag = 3;
+
+        else if((source.getLatitude().compareTo(destination.getLatitude()) == 0) && (source.getLongitude().compareTo(destination.getLongitude()) == 0))
+            flag = 1;
+
+        else if(date == null)
+            flag = 2;
+
+        else if(inputTime.before(currentTime))
+            flag = 2;
+
+        return flag;
     }
 
     @Override

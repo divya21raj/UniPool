@@ -57,7 +57,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         if((year==year_now && month==month_now && day>=day_now)|| (year==year_now && month>month_now) ||
                 (year>year_now))
         {
-            stringOfDate = day + "/" + month + "/" + year;
+            stringOfDate = day + "/" + (++month) + "/" + year;
 
             text_date.setText(stringOfDate);
             NewEntryActivity.date=stringOfDate;
