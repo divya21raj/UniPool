@@ -89,7 +89,6 @@ public class NewEntryActivity extends BaseActivity
                 e.printStackTrace();
             }
         });
-
     }
 
     private void openTimePickerDialog(boolean is24r)
@@ -110,7 +109,6 @@ public class NewEntryActivity extends BaseActivity
     OnTimeSetListener onTimeSetListener
             = new OnTimeSetListener()
     {
-
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute)
         {
@@ -168,10 +166,6 @@ public class NewEntryActivity extends BaseActivity
                             place.getAddress() +"\n" + place.getPhoneNumber());//check
                     text_source.setText(sourceSet);
 
-                    if(source.equals(destination))
-                    {
-                        Toast.makeText(this, "The pickup point and drop location can't be the same, silly!", Toast.LENGTH_SHORT).show();
-                    }
                     //((TextView) findViewById(R.id.searched_address)).setText(source);
                 }
                 else
@@ -184,8 +178,6 @@ public class NewEntryActivity extends BaseActivity
                     text_destination.setText(destinationSet);
                     //((TextView) findViewById(R.id.searched_address)).setText(destination);
                 }
-
-
             } 
             else if (resultCode == PlaceAutocomplete.RESULT_ERROR)
             {
@@ -217,7 +209,10 @@ public class NewEntryActivity extends BaseActivity
 
     public void finalSave(View view) throws ParseException
     {
-        if(!(time.isEmpty()||source == null||destination == null))
+        if((source.getLatitude().compareTo(destination.getLatitude()) == 0) && (source.getLongitude().compareTo(destination.getLongitude()) == 0))
+            Toast.makeText(this, "The pickup point and drop location can't be the same, silly!", Toast.LENGTH_SHORT).show();
+
+        else if(!(time.isEmpty()||source == null||destination == null))
         {
             String entryId = entryDatabaseReference.push().getKey();
             String name= currentUser.getDisplayName();
