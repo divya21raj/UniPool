@@ -33,7 +33,6 @@ import garbagecollectors.com.snucabpool.TripEntry;
 
 public class NewEntryActivity extends BaseActivity
 {
-    int count=0;
 
     GenLocation source, destination;
     String time, sourceSet, destinationSet;
@@ -118,7 +117,10 @@ public class NewEntryActivity extends BaseActivity
             calSet.set(Calendar.HOUR_OF_DAY, hourOfDay);
             calSet.set(Calendar.MINUTE, minute);
             int HourOfDay=calSet.get(Calendar.HOUR_OF_DAY);
-            int minOfDay=calSet.get(Calendar.MINUTE);
+            String minOfDay= String.valueOf(calSet.get(Calendar.MINUTE));
+            if(minOfDay.length()==1){
+                minOfDay="0"+minOfDay;
+            }
 
             if(hourOfDay < 12)
                 AM_PM = "AM";
@@ -132,7 +134,6 @@ public class NewEntryActivity extends BaseActivity
 
     public void findSource(View view)
     {
-        count=0;
         try
         {
             Intent intent =
@@ -149,58 +150,47 @@ public class NewEntryActivity extends BaseActivity
 
     // A place has been received; use requestCode to track the request.
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (requestCode == 1)
-        {
-            if (resultCode == RESULT_OK)
-            {
-                Place place = PlaceAutocomplete.getPlace(this, data);
-                Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber());
-                if(count==0)
-                {
-                    LatLng latLng = place.getLatLng();
-                    source = new GenLocation(place.getName().toString(), place.getAddress().toString(),latLng.latitude, latLng.longitude);//check
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            Place place = PlaceAutocomplete.getPlace(this, data);
+            Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber());
+            LatLng latLng;
+            switch (requestCode) {
 
-                    sourceSet=(place.getName()+",\n"+
-                            place.getAddress() +"\n" + place.getPhoneNumber());//check
+                case 1:
+                    latLng = place.getLatLng();
+                    source = new GenLocation(place.getName().toString(), place.getAddress().toString(), latLng.latitude, latLng.longitude);//check
+
+                    sourceSet = (place.getName() + ",\n" +
+                            place.getAddress() + "\n" + place.getPhoneNumber());//check
                     text_source.setText(sourceSet);
+                    break;
+                case 2:
+                    latLng = place.getLatLng();
+                    destination = new GenLocation(place.getName().toString(), place.getAddress().toString(), latLng.latitude, latLng.longitude);//check
 
-                    //((TextView) findViewById(R.id.searched_address)).setText(source);
-                }
-                else
-                {
-                    LatLng latLng = place.getLatLng();
-                    destination = new GenLocation(place.getName().toString(), place.getAddress().toString(),latLng.latitude, latLng.longitude);//check
-
-                    destinationSet=(place.getName()+",\n"+
-                            place.getAddress() +"\n" + place.getPhoneNumber());//check
+                    destinationSet = (place.getName() + ",\n" +
+                            place.getAddress() + "\n" + place.getPhoneNumber());//check
                     text_destination.setText(destinationSet);
-                    //((TextView) findViewById(R.id.searched_address)).setText(destination);
-                }
-            } 
-            else if (resultCode == PlaceAutocomplete.RESULT_ERROR)
-            {
-                Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
-                Log.e("Tag", status.getStatusMessage());
-
-            } 
-            else if (resultCode == RESULT_CANCELED)
-            {
-                // The user canceled the operation.
+                    break;
             }
+        } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+            Status status = PlaceAutocomplete.getStatus(this, data);
+            // TODO: Handle the error.
+            Log.e("Tag", status.getStatusMessage());
+
+        } else if (resultCode == RESULT_CANCELED) {
+            // The user canceled the operation.
         }
     }
 
     public void findDestination(View view)
     {
-        count=1;
         try
         {
             Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                             .build(this);
-            startActivityForResult(intent, 1);       
+            startActivityForResult(intent, 2);
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e)
         {
             Toast.makeText(this, "Google Play Service Error!", Toast.LENGTH_SHORT).show();
