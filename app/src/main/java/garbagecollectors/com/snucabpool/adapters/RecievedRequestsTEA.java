@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import garbagecollectors.com.snucabpool.Message;
-import garbagecollectors.com.snucabpool.PairUps;
+import garbagecollectors.com.snucabpool.PairUp;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
@@ -76,7 +76,7 @@ public class RecievedRequestsTEA extends TripEntryAdapter
 
             User finalCurrentUser = BaseActivity.getFinalCurrentUser();
 
-            ArrayList<PairUps> currentUserPairUps = finalCurrentUser.getPairUps();
+            ArrayList<PairUp> currentUserPairUps = finalCurrentUser.getPairUps();
 
             HashMap<String, ArrayList<String>> recievedRequests = finalCurrentUser.getRequestsRecieved();
 
@@ -92,13 +92,13 @@ public class RecievedRequestsTEA extends TripEntryAdapter
 
                     tripEntryUser[0] = snapshot.child(tripEntry.getUser_id()).getValue(User.class);
 
-                    ArrayList<PairUps> tripEntryUserPairUps = tripEntryUser[0].getPairUps();
+                    ArrayList<PairUp> tripEntryUserPairUps = tripEntryUser[0].getPairUps();
                     ArrayList<TripEntry> sentRequests = tripEntryUser[0].getRequestSent();
 
                     ArrayList<String> tripEntriesPairedOver = UtilityMethods.getTripEntriesPairedOver(tripEntryUserPairUps, finalCurrentUser.getUserId());
                     tripEntriesPairedOver.add(tripEntry.getEntry_id());
 
-                    PairUps pairUp = new PairUps(finalCurrentUser.getUserId(), tripEntryUser[0].getUserId(), new ArrayList<>(), tripEntriesPairedOver);
+                    PairUp pairUp = new PairUp(finalCurrentUser.getUserId(), tripEntryUser[0].getUserId(), new ArrayList<>(), tripEntriesPairedOver);
                     pairUp.getMessages().add(new Message("Your request was accepted :)", pairUp.getCreatorId(), UtilityMethods.getCurrentTime()));
 
                     isAlreadyInList = UtilityMethods.addPairUpInList(currentUserPairUps, pairUp, tripEntry.getEntry_id());

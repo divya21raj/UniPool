@@ -2,7 +2,7 @@ package garbagecollectors.com.snucabpool;
 
 import java.util.ArrayList;
 
-public class PairUps
+public class PairUp
 {
     String creatorId;   //person who created the tripEntry
     String requesterId;
@@ -11,7 +11,7 @@ public class PairUps
 
     ArrayList<String> tripEntriesPairedUpOver;
 
-    public PairUps(String creatorId, String requesterId, ArrayList<Message> messages, ArrayList<String> tripEntriesPairedUpOver)
+    public PairUp(String creatorId, String requesterId, ArrayList<Message> messages, ArrayList<String> tripEntriesPairedUpOver)
     {
         this.creatorId = creatorId;
         this.requesterId = requesterId;
@@ -19,7 +19,7 @@ public class PairUps
         this.tripEntriesPairedUpOver = tripEntriesPairedUpOver;
     }
 
-    public PairUps()
+    public PairUp()
     {
     }
 
