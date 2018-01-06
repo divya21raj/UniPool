@@ -150,12 +150,15 @@ public class NewEntryActivity extends BaseActivity
 
     // A place has been received; use requestCode to track the request.
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == RESULT_OK)
+        {
             Place place = PlaceAutocomplete.getPlace(this, data);
             Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber());
             LatLng latLng;
-            switch (requestCode) {
+            switch (requestCode)
+            {
 
                 case 1:
                     latLng = place.getLatLng();
@@ -174,12 +177,14 @@ public class NewEntryActivity extends BaseActivity
                     text_destination.setText(destinationSet);
                     break;
             }
-        } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+        } else if (resultCode == PlaceAutocomplete.RESULT_ERROR)
+        {
             Status status = PlaceAutocomplete.getStatus(this, data);
             // TODO: Handle the error.
             Log.e("Tag", status.getStatusMessage());
 
-        } else if (resultCode == RESULT_CANCELED) {
+        } else if (resultCode == RESULT_CANCELED)
+        {
             // The user canceled the operation.
         }
     }
@@ -272,6 +277,5 @@ public class NewEntryActivity extends BaseActivity
     {
         return R.id.navigation_newEntry;
     }
-
 
 }
