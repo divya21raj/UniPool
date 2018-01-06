@@ -254,12 +254,12 @@ public class UtilityMethods
             map.remove(keyToBeRemoved);
     }
 
-    public static boolean addPairUpInList(ArrayList<PairUps> pairUps, PairUps pairUp, String tripEntryId)
+    public static boolean addPairUpInList(ArrayList<PairUp> pairUps, PairUp pairUp, String tripEntryId)
     {
         boolean flag = false, flag1 = false;
-        PairUps temp = new PairUps();
+        PairUp temp = new PairUp();
 
-        for (PairUps pu: pairUps)
+        for (PairUp pu: pairUps)
         {
             if (pu.getRequesterId().equals(pairUp.requesterId))
             {
@@ -307,11 +307,11 @@ public class UtilityMethods
         return time;
     }
 
-    public static ArrayList<String> getTripEntriesPairedOver(ArrayList<PairUps> pairUps, String userId)
+    public static ArrayList<String> getTripEntriesPairedOver(ArrayList<PairUp> pairUps, String userId)
     {
         ArrayList<String> tripEntriesPairedOver = new ArrayList<>();
 
-        for(PairUps pairUp: pairUps)
+        for(PairUp pairUp: pairUps)
         {
             if(pairUp.getCreatorId().equals(userId))
             {
