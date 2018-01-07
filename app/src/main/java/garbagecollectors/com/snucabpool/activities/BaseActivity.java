@@ -34,6 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     protected static DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
+    protected static DatabaseReference pairUpDatabaseReference = FirebaseDatabase.getInstance().getReference("pairUps");
 
     static User finalCurrentUser;
 
@@ -209,5 +210,15 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public static void setTripEntryList(ArrayList<TripEntry> tripEntryList)
     {
         BaseActivity.tripEntryList = tripEntryList;
+    }
+
+    public static DatabaseReference getPairUpDatabaseReference()
+    {
+        return pairUpDatabaseReference;
+    }
+
+    public static void setPairUpDatabaseReference(DatabaseReference pairUpDatabaseReference)
+    {
+        BaseActivity.pairUpDatabaseReference = pairUpDatabaseReference;
     }
 }

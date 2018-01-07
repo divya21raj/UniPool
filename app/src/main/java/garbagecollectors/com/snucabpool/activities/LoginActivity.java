@@ -235,7 +235,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
         ArrayList<Message> dummyMessages = new ArrayList<>();
         dummyMessages.add(dummyMessage);
 
-        PairUp dummyPairUp = new PairUp("dummy", "dummy", dummyMessages, dummyUserIdList);
+        PairUp dummyPairUp = new PairUp("dummydummy", "dummy", "dummy", dummyMessages);
         ArrayList<PairUp> dummyPairUps = new ArrayList<>();
         dummyPairUps.add(dummyPairUp);
 

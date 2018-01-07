@@ -71,6 +71,7 @@ public class RecievedRequestsTEA extends TripEntryAdapter
             progressDialog.setMessage("Please wait...");
 
             DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
+            DatabaseReference pairUpDatabaseReference = BaseActivity.getPairUpDatabaseReference();
 
             TripEntry tripEntry = list.get(position);
 
@@ -95,17 +96,16 @@ public class RecievedRequestsTEA extends TripEntryAdapter
                     ArrayList<PairUp> tripEntryUserPairUps = tripEntryUser[0].getPairUps();
                     ArrayList<TripEntry> sentRequests = tripEntryUser[0].getRequestSent();
 
-                    ArrayList<String> tripEntriesPairedOver = UtilityMethods.getTripEntriesPairedOver(tripEntryUserPairUps, finalCurrentUser.getUserId());
-                    tripEntriesPairedOver.add(tripEntry.getEntry_id());
+                    String pairUpId = finalCurrentUser.getUserId() + tripEntryUser[0].getUserId();
 
-                    PairUp pairUp = new PairUp(finalCurrentUser.getUserId(), tripEntryUser[0].getUserId(), new ArrayList<>(), tripEntriesPairedOver);
+                    PairUp pairUp = new PairUp(pairUpId, finalCurrentUser.getUserId(), tripEntryUser[0].getUserId(), new ArrayList<>());
                     pairUp.getMessages().add(new Message("Your request was accepted :)", pairUp.getCreatorId(), UtilityMethods.getCurrentTime()));
 
                     isAlreadyInList = UtilityMethods.addPairUpInList(currentUserPairUps, pairUp, tripEntry.getEntry_id());
 
                     if(!isAlreadyInList)
                     {
-                        tripEntryUserPairUps.add(pairUp);
+                        UtilityMethods.addPairUpInList(tripEntryUserPairUps, pairUp, tripEntry.getEntry_id());
 
                         UtilityMethods.removeFromMap(recievedRequests, tripEntry.getEntry_id(), tripEntryUser[0].getUserId());
                         UtilityMethods.removeFromList(sentRequests, tripEntry.getEntry_id());
@@ -116,7 +116,9 @@ public class RecievedRequestsTEA extends TripEntryAdapter
                         Task<Void> task3 = userDatabaseReference.child(finalCurrentUser.getUserId()).child("requestsRecieved").setValue(recievedRequests);
                         Task<Void> task4 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("requestSent").setValue(sentRequests);
 
-                        Task<Void> allTask = Tasks.whenAll(task1, task2, task3, task4);
+                        Task<Void> task5 = pairUpDatabaseReference.child(pairUpId).setValue(pairUp);
+
+                        Task<Void> allTask = Tasks.whenAll(task1, task2, task3, task4, task5);
                         allTask.addOnSuccessListener(bVoid ->
                         {
                             progressDialog.dismiss();
