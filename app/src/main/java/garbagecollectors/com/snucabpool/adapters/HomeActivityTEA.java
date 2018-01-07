@@ -93,7 +93,7 @@ public class HomeActivityTEA extends TripEntryAdapter
                 ArrayList<TripEntry> requestSent = user.getRequestSent();
                 HashMap<String, ArrayList<String>> requestsRecieved = tripEntryUser[0].getRequestsRecieved();
 
-                isAlreadyRequested = addRequestInList(requestSent, tripEntry);
+                isAlreadyRequested = addRequestInList(requestSent, user.getPairUps(), tripEntry);
 
                 if(!isAlreadyRequested)
                     isRequestAlreadyInMap = putInMap(requestsRecieved, tripEntry.getEntry_id(), user.getUserId());
@@ -125,7 +125,7 @@ public class HomeActivityTEA extends TripEntryAdapter
                 else
                 {
                     progressDialog.dismiss();
-                    Toast.makeText(view.getContext(), "Request already sent", Toast.LENGTH_LONG).show();
+                    Toast.makeText(view.getContext(), "You two are already paired up!", Toast.LENGTH_LONG).show();
                 }
 
             });

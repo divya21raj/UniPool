@@ -44,7 +44,7 @@ public class UtilityMethods
         return userTask;
     }
 
-    public static boolean addRequestInList(ArrayList<TripEntry> requestSent, TripEntry tripEntry)
+    public static boolean addRequestInList(ArrayList<TripEntry> requestSent, ArrayList<PairUp> pairUps, TripEntry tripEntry)
     {
         boolean flag = false;
 
@@ -57,6 +57,19 @@ public class UtilityMethods
             {
                 flag = true;
                 break;
+            }
+        }
+
+        if(!flag)
+        {
+            for(PairUp pairUp: pairUps)
+            {
+                if(pairUp.getPairUpId().contains(tripEntry.getUser_id()))
+                {
+                    flag = true;
+                    break;
+                }
+
             }
         }
 
@@ -261,10 +274,9 @@ public class UtilityMethods
 
         for (PairUp pu: pairUps)
         {
-            if (pu.getRequesterId().equals(pairUp.requesterId))
+            if (pu.getPairUpId().contains(pairUp.getRequesterId()) && pu.getPairUpId().contains((pairUp.getCreatorId())))
             {
                 flag = true;
-                temp = pu;
                 break;
             }
         }
@@ -274,31 +286,12 @@ public class UtilityMethods
             pairUps.add(pairUp);
         }
 
-        else
-        {
-            ArrayList<String> tripEntriesPairedOver = temp.getTripEntriesPairedUpOver();
-            for(String entryId: tripEntriesPairedOver)
-            {
-                if(entryId.equals(tripEntryId))
-                {
-                    flag1 = true;
-                    break;
-                }
-            }
-
-            if(!flag1)
-            {
-                tripEntriesPairedOver.add(tripEntryId);
-                flag = false;
-            }
-        }
-
         return flag;
     }
 
     public static Long getCurrentTime()
     {
-        Long time = null;
+        Long time;
 
         Date currentTime = Calendar.getInstance().getTime();
 
@@ -307,19 +300,4 @@ public class UtilityMethods
         return time;
     }
 
-    public static ArrayList<String> getTripEntriesPairedOver(ArrayList<PairUp> pairUps, String userId)
-    {
-        ArrayList<String> tripEntriesPairedOver = new ArrayList<>();
-
-        for(PairUp pairUp: pairUps)
-        {
-            if(pairUp.getCreatorId().equals(userId))
-            {
-                tripEntriesPairedOver = pairUp.getTripEntriesPairedUpOver();
-                break;
-            }
-        }
-
-        return tripEntriesPairedOver;
-    }
 }
