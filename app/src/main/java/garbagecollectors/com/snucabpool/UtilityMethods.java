@@ -134,7 +134,7 @@ public class UtilityMethods
             }
         }
 
-        tripEntryList.add(tripEntry);
+        tripEntryList.add(0, tripEntry);
     }
 
     public static void updateUserList(ArrayList<User> userList, User user)

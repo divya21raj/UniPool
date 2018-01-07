@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,33 +52,46 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
         finalCurrentUser = SplashActivity.getFinalCurrentUser();
 
-        entryDatabaseReference.addValueEventListener(new ValueEventListener()
+        entryDatabaseReference.addChildEventListener(new ChildEventListener()
         {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
+            public void onChildAdded(DataSnapshot dataSnapshot, String s)
             {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren())
-                {
-                    TripEntry tripEntry = dataSnapshot1.getValue(TripEntry.class);
-                    UtilityMethods.updateTripList(tripEntryList, tripEntry);
-                    /*
-                    try
-                    {
-                        setLambdaMapForAllEntries();
-                    } catch (ParseException e)
-                    {
-                        e.printStackTrace();
-                    }*/
-                }
+                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                UtilityMethods.updateTripList(tripEntryList, tripEntry);
+
+                HomeActivity.updateRecycleAdapter();
             }
 
             @Override
-            public void onCancelled(DatabaseError error)
+            public void onChildChanged(DataSnapshot dataSnapshot, String s)
+            {
+                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                UtilityMethods.updateTripList(tripEntryList, tripEntry);
+
+                HomeActivity.updateRecycleAdapter();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot)
+            {
+                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
+
+                HomeActivity.updateRecycleAdapter();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s)
+            {
+                //IDK
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
             {
                 // Failed to read value
-                Log.w("Hello", "Failed to read value.", error.toException());
+                Log.w("Hello", "Failed to read value.", databaseError.toException());
             }
         });
 

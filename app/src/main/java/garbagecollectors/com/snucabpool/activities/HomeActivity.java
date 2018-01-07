@@ -18,7 +18,8 @@ import garbagecollectors.com.snucabpool.adapters.HomeActivityTEA;
 public class HomeActivity extends BaseActivity
 {
     RecyclerView recycle;
-    Button viewButton, signOutButton;
+    Button signOutButton;
+    static HomeActivityTEA recyclerAdapter;
 
     Sorting_Filtering sf = new Sorting_Filtering();
 
@@ -31,20 +32,15 @@ public class HomeActivity extends BaseActivity
         navigationView = (BottomNavigationView) findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
 
-        viewButton = (Button) findViewById(R.id.viewButtonHome);
         signOutButton = (Button) findViewById(R.id.sign_out_button);
         recycle = (RecyclerView) findViewById(R.id.recycle);
 
-        viewButton.setOnClickListener(v ->
-        {
-            HomeActivityTEA recyclerAdapter = new HomeActivityTEA(tripEntryList,HomeActivity.this);
-            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(HomeActivity.this,1);
+        recyclerAdapter = new HomeActivityTEA(tripEntryList,HomeActivity.this);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(HomeActivity.this,1);
 
-            recycle.setLayoutManager(layoutManager);
-            recycle.setItemAnimator( new DefaultItemAnimator());
-            recycle.setAdapter(recyclerAdapter);
-
-        });
+        recycle.setLayoutManager(layoutManager);
+        recycle.setItemAnimator( new DefaultItemAnimator());
+        recycle.setAdapter(recyclerAdapter);
 
         signOutButton.setOnClickListener(v ->
         {
@@ -83,4 +79,8 @@ public class HomeActivity extends BaseActivity
         return R.layout.activity_home;
     }
 
+    public static void updateRecycleAdapter()
+    {
+        recyclerAdapter.notifyDataSetChanged();
+    }
 }
