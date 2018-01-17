@@ -15,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,6 +56,11 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     SignInButton signInButton;
 
+    public static boolean userNewOnDatabase = false;
+
+    TaskCompletionSource<DataSnapshot> userDBSource = new TaskCompletionSource();
+    Task userDBTask = userDBSource.getTask();
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -89,44 +95,6 @@ public class LoginActivity extends Activity implements View.OnClickListener
         // Check if user is signed in (non-null) and update UI accordingly.
         currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-    }
-
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct)
-    {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, task ->
-                {
-                    if (task.isSuccessful())
-                    {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithCredential:success");
-
-                        FirebaseUser user = mAuth.getCurrentUser();
-
-                        try
-                        {
-                            createUserOnDatabase(user);
-                        } catch (ParseException e)
-                        {
-                            e.printStackTrace();
-                        }
-                        updateUI(user);
-                    }
-                    else
-                    {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithCredential:failure", task.getException());
-                        Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-                        updateUI(null);
-                    }
-
-                    // ...
-                });
     }
 
     public void onClick(View view)
@@ -181,6 +149,43 @@ public class LoginActivity extends Activity implements View.OnClickListener
         }
     }
 
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct)
+    {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task ->
+                {
+                    if (task.isSuccessful())
+                    {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithCredential:success");
+
+                        FirebaseUser user = mAuth.getCurrentUser();
+
+                        try
+                        {
+                            createUserOnDatabase(user);
+                        } catch (ParseException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    else
+                    {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                        updateUI(null);
+                    }
+
+                    // ...
+                });
+    }
+
     private void createUserOnDatabase(FirebaseUser user) throws ParseException
     {
         dummyInitFinalCurrentUser(user);
@@ -190,22 +195,40 @@ public class LoginActivity extends Activity implements View.OnClickListener
             @Override
             public void onDataChange(DataSnapshot snapshot)
             {
-                if (!snapshot.child(finalCurrentUser.getUserId()).exists())
-                {
-                    userDatabaseReference.child(finalCurrentUser.getUserId()).setValue(finalCurrentUser);
-
-                    Toast.makeText(getApplicationContext(), "User added to database!", Toast.LENGTH_SHORT).show();
-                }
-
-                else
-                    Toast.makeText(getApplicationContext(), "User already there, no need to add!", Toast.LENGTH_SHORT).show();
+                userDBSource.setResult(snapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError)
             {
+                userDBSource.setException(databaseError.toException());
                 Toast.makeText(getApplicationContext(), "Couldn't make it!", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        userDBTask.addOnSuccessListener(o ->
+        {
+           DataSnapshot userDataSnapshot = (DataSnapshot) userDBTask.getResult();
+
+            if (!userDataSnapshot.child(finalCurrentUser.getUserId()).exists())
+            {
+                userNewOnDatabase = true;
+
+                userDatabaseReference.child(finalCurrentUser.getUserId()).setValue(finalCurrentUser);
+
+                Toast.makeText(getApplicationContext(), "User added to database!", Toast.LENGTH_SHORT).show();
+
+                updateUI(user);
+            }
+
+            else
+            {
+                Toast.makeText(getApplicationContext(), "User already there, no need to add!", Toast.LENGTH_SHORT).show();
+                userNewOnDatabase = false;
+
+                updateUI(user);
+            }
+
         });
     }
 
@@ -251,4 +274,6 @@ public class LoginActivity extends Activity implements View.OnClickListener
             startActivity(new Intent(getApplicationContext(), SplashActivity.class));
         }
     }
+
+
 }
