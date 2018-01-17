@@ -2,7 +2,6 @@ package garbagecollectors.com.snucabpool.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -42,9 +41,6 @@ public class SplashActivity extends AppCompatActivity
     private TaskCompletionSource<DataSnapshot> EntryDBSource = new TaskCompletionSource<>();
     private Task EntryDBTask = EntryDBSource.getTask();
 
-    private TaskCompletionSource<Void> delaySource = new TaskCompletionSource<>();
-    private Task<Void> delayTask = delaySource.getTask();
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -82,9 +78,7 @@ public class SplashActivity extends AppCompatActivity
             }
         });
 
-        new Handler().postDelayed(() -> delaySource.setResult(null), 2000);
-
-        Task<Void> allTask = Tasks.whenAll(UserDBTask, EntryDBTask, delayTask);
+        Task<Void> allTask = Tasks.whenAll(UserDBTask, EntryDBTask);
         allTask.addOnSuccessListener(aVoid ->
         {
             DataSnapshot userData = (DataSnapshot) UserDBTask.getResult();

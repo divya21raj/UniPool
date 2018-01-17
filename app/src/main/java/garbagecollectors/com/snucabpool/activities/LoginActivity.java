@@ -206,7 +206,6 @@ public class LoginActivity extends Activity implements View.OnClickListener
             {
                 Toast.makeText(getApplicationContext(), "Couldn't make it!", Toast.LENGTH_SHORT).show();
             }
-
         });
     }
 

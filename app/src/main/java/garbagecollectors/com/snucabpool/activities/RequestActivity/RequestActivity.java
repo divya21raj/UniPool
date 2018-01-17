@@ -1,6 +1,5 @@
 package garbagecollectors.com.snucabpool.activities.RequestActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
@@ -8,11 +7,28 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.TripEntry;
+import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
 
 public class RequestActivity extends BaseActivity
@@ -20,7 +36,16 @@ public class RequestActivity extends BaseActivity
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
-    private static boolean refresh = false;
+    static ProgressBar progressBar;
+
+    static DatabaseReference sentRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId() + "/requestSent");
+    static DatabaseReference recievedRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId() + "/requestsRecieved");
+
+    static TaskCompletionSource sentRequestsSource;
+    static TaskCompletionSource recievedRequestsSource;
+
+    static Task sentRequestsDBTask;
+    static Task recievedRequestsDBTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -36,6 +61,111 @@ public class RequestActivity extends BaseActivity
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        progressBar = (ProgressBar) findViewById(R.id.requests_progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_requests, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            // action with ID action_refresh was selected
+            case R.id.action_refresh:
+                refreshRequests();
+                break;
+
+            default:
+                break;
+        }
+
+        return true;
+    }
+
+    public static void refreshRequests()
+    {
+        progressBar.setVisibility(View.VISIBLE);
+
+        sentRequestsSource = new TaskCompletionSource();
+        recievedRequestsSource = new TaskCompletionSource();
+
+        sentRequestsDBTask = sentRequestsSource.getTask();
+        recievedRequestsDBTask = recievedRequestsSource.getTask();
+
+        sentRequestsDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                sentRequestsSource.setResult(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                sentRequestsSource.setException(databaseError.toException());
+            }
+        });
+
+        recievedRequestsDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                recievedRequestsSource.setResult(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                recievedRequestsSource.setException(databaseError.toException());
+            }
+        });
+
+        Task<Void> allTask = Tasks.whenAll(sentRequestsDBTask, recievedRequestsDBTask);
+        allTask.addOnSuccessListener((Void aVoid) ->
+        {
+            finalCurrentUser.getRequestSent().clear();
+            finalCurrentUser.getRequestsRecieved().clear();
+
+            RecievedRequestsFragment.getRecievedRequestsList().clear();
+
+            DataSnapshot sentRequestsData = (DataSnapshot) sentRequestsDBTask.getResult();
+            DataSnapshot recievedRequestsData = (DataSnapshot) recievedRequestsDBTask.getResult();
+
+            for(DataSnapshot ds: sentRequestsData.getChildren())
+                finalCurrentUser.getRequestSent().add(ds.getValue(TripEntry.class));
+
+            HashMap<String, ArrayList<String >> map = new HashMap<>();
+            ArrayList<String> userIdList = new ArrayList<>();
+
+            for(DataSnapshot dataSnapshot: recievedRequestsData.getChildren())
+            {
+                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren())
+                    userIdList.add(dataSnapshot1.getValue(String.class));
+
+                map.put(dataSnapshot.getKey(), userIdList);
+            }
+
+            Task task = UtilityMethods.populateRecievedRequestsList(RecievedRequestsFragment.getRecievedRequestsList(), map, tripEntryList);
+
+            task.addOnSuccessListener(o ->
+            {
+               RecievedRequestsFragment.refreshRecycler();
+               progressBar.setVisibility(View.INVISIBLE);
+            });
+
+            SentRequestsFragment.refreshRecycler();
+        });
     }
 
     private void setupViewPager(ViewPager viewPager)
@@ -80,20 +210,6 @@ public class RequestActivity extends BaseActivity
         {
             return mFragmentTitleList.get(position);
         }
-    }
-
-    public boolean isRefresh()
-    {
-        return refresh;
-    }
-
-    public void setRefresh(boolean refresh)
-    {
-        RequestActivity.refresh = refresh;
-
-        finish();
-        Intent intent = new Intent(RequestActivity.this, RequestActivity.class);
-        startActivity(intent);
     }
 
     @Override

@@ -122,10 +122,7 @@ public class RecievedRequestsTEA extends TripEntryAdapter
                         allTask.addOnSuccessListener(bVoid ->
                         {
                             progressDialog.dismiss();
-
-                            if(context instanceof RequestActivity)
-                                ((RequestActivity)context).setRefresh(true);
-
+                            RequestActivity.refreshRequests();
                         });
 
                         allTask.addOnFailureListener(e ->

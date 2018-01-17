@@ -37,9 +37,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     protected static DatabaseReference pairUpDatabaseReference = FirebaseDatabase.getInstance().getReference("pairUps");
 
-    static User finalCurrentUser;
+    protected static User finalCurrentUser;
 
-    static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
+    protected static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
