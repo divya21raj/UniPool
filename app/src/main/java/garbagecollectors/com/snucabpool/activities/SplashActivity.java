@@ -34,8 +34,6 @@ public class SplashActivity extends AppCompatActivity
     FirebaseAuth mAuth;
     static FirebaseUser currentUser;
 
-    static User finalCurrentUser;
-
     private TaskCompletionSource<DataSnapshot> UserDBSource = new TaskCompletionSource<>();
     private Task UserDBTask = UserDBSource.getTask();
 
@@ -96,7 +94,8 @@ public class SplashActivity extends AppCompatActivity
                 UtilityMethods.updateTripList(tripEntryList, tripEntry);
             }
 
-            finalCurrentUser = userData.child(currentUser.getUid()).getValue(User.class);
+            if(!(LoginActivity.userNewOnDatabase))
+                BaseActivity.setFinalCurrentUser(userData.child(currentUser.getUid()).getValue(User.class));
 
             finish();
             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
@@ -115,8 +114,4 @@ public class SplashActivity extends AppCompatActivity
         return tripEntryList;
     }
 
-    public static User getFinalCurrentUser()
-    {
-        return finalCurrentUser;
-    }
 }

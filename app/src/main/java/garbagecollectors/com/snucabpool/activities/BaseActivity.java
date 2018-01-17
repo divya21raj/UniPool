@@ -49,8 +49,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        finalCurrentUser = SplashActivity.getFinalCurrentUser();
-
         entryDatabaseReference.addValueEventListener(new ValueEventListener()
         {
             @Override
@@ -221,4 +219,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     {
         BaseActivity.pairUpDatabaseReference = pairUpDatabaseReference;
     }
+
+
 }
