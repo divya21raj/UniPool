@@ -60,14 +60,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 {
                     TripEntry tripEntry = dataSnapshot1.getValue(TripEntry.class);
                     UtilityMethods.updateTripList(tripEntryList, tripEntry);
-                    /*
-                    try
-                    {
-                        setLambdaMapForAllEntries();
-                    } catch (ParseException e)
-                    {
-                        e.printStackTrace();
-                    }*/
                 }
             }
 

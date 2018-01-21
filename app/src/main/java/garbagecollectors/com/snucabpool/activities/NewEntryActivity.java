@@ -210,7 +210,6 @@ public class NewEntryActivity extends BaseActivity
                 String entryId = entryDatabaseReference.push().getKey();
                 String name= currentUser.getDisplayName();
 
-                //initialise lambda map for this tripEntry here!!!
                 TripEntry tripEntry = new TripEntry(name,entryId, currentUser.getUid(), time, date, source, destination, null);
 
                 finalCurrentUser.getUserTripEntries().add(tripEntry);
