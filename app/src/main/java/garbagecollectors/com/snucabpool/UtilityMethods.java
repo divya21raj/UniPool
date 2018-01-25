@@ -268,10 +268,9 @@ public class UtilityMethods
             map.remove(keyToBeRemoved);
     }
 
-    public static boolean addPairUpInList(ArrayList<PairUp> pairUps, PairUp pairUp, String tripEntryId)
+    public static boolean addPairUpInList(ArrayList<PairUp> pairUps, PairUp pairUp)
     {
-        boolean flag = false, flag1 = false;
-        PairUp temp = new PairUp();
+        boolean flag = false;
 
         for (PairUp pu: pairUps)
         {

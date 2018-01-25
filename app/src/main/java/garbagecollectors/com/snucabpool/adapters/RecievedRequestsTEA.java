@@ -79,7 +79,7 @@ public class RecievedRequestsTEA extends TripEntryAdapter
 
             ArrayList<PairUp> currentUserPairUps = finalCurrentUser.getPairUps();
 
-            HashMap<String, ArrayList<String>> recievedRequests = finalCurrentUser.getRequestsRecieved();
+            HashMap<String, ArrayList<String>> finalCurrentUserRecievedRequests = finalCurrentUser.getRequestsRecieved();
 
             RecievedRequestsFragment.alertDialogBuilder.setPositiveButton("YES", (dialog, which) ->
             {
@@ -94,27 +94,29 @@ public class RecievedRequestsTEA extends TripEntryAdapter
                     tripEntryUser[0] = snapshot.child(tripEntry.getUser_id()).getValue(User.class);
 
                     ArrayList<PairUp> tripEntryUserPairUps = tripEntryUser[0].getPairUps();
-                    ArrayList<TripEntry> sentRequests = tripEntryUser[0].getRequestSent();
+                    ArrayList<TripEntry> tripEntryUserSentRequests = tripEntryUser[0].getRequestSent();
 
                     String pairUpId = finalCurrentUser.getUserId() + tripEntryUser[0].getUserId();
 
                     PairUp pairUp = new PairUp(pairUpId, finalCurrentUser.getUserId(), tripEntryUser[0].getUserId(), new ArrayList<>());
                     pairUp.getMessages().add(new Message("Your request was accepted :)", pairUp.getCreatorId(), UtilityMethods.getCurrentTime()));
 
-                    isAlreadyInList = UtilityMethods.addPairUpInList(currentUserPairUps, pairUp, tripEntry.getEntry_id());
+                    isAlreadyInList = UtilityMethods.addPairUpInList(currentUserPairUps, pairUp);
 
                     if(!isAlreadyInList)
                     {
-                        UtilityMethods.addPairUpInList(tripEntryUserPairUps, pairUp, tripEntry.getEntry_id());
+                        UtilityMethods.addPairUpInList(tripEntryUserPairUps, pairUp);
 
-                        UtilityMethods.removeFromMap(recievedRequests, tripEntry.getEntry_id(), tripEntryUser[0].getUserId());
-                        UtilityMethods.removeFromList(sentRequests, tripEntry.getEntry_id());
+                        UtilityMethods.removeFromMap(finalCurrentUserRecievedRequests, tripEntry.getEntry_id(), tripEntryUser[0].getUserId());
+                        UtilityMethods.removeFromList(tripEntryUserSentRequests, tripEntry.getEntry_id());
+
+                        finalCurrentUser.setRequestsRecieved(finalCurrentUserRecievedRequests);
 
                         Task<Void> task1 = userDatabaseReference.child(finalCurrentUser.getUserId()).child("pairUps").setValue(currentUserPairUps);
                         Task<Void> task2 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("pairUps").setValue(tripEntryUserPairUps);
 
-                        Task<Void> task3 = userDatabaseReference.child(finalCurrentUser.getUserId()).child("requestsRecieved").setValue(recievedRequests);
-                        Task<Void> task4 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("requestSent").setValue(sentRequests);
+                        Task<Void> task3 = userDatabaseReference.child(finalCurrentUser.getUserId()).child("requestsRecieved").setValue(finalCurrentUserRecievedRequests);
+                        Task<Void> task4 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("requestSent").setValue(tripEntryUserSentRequests);
 
                         Task<Void> task5 = pairUpDatabaseReference.child(pairUpId).setValue(pairUp);
 
