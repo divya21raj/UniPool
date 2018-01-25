@@ -134,7 +134,7 @@ public class UtilityMethods
             }
         }
 
-        tripEntryList.add(tripEntry);
+        tripEntryList.add(0, tripEntry);
     }
 
     public static void updateUserList(ArrayList<User> userList, User user)
@@ -155,42 +155,43 @@ public class UtilityMethods
         userList.add(user);
     }
 
-    public static ArrayList<TripEntry> populateRecievedRequestsList(HashMap<String, ArrayList<String>> recievedRequestsMap, ArrayList<TripEntry> tripEntries)
+    public static Task populateRecievedRequestsList(ArrayList<TripEntry> recievedRequestsList, HashMap<String, ArrayList<String>> recievedRequestsMap, ArrayList<TripEntry> tripEntries)
     {
         final TripEntry[] temp = new TripEntry[1];
 
-        ArrayList<TripEntry> recievedRequestsList = new ArrayList<>();
-
-        for (Map.Entry<String, ArrayList<String>> entry : recievedRequestsMap.entrySet())
+        Task userTask = accessUserDatabase();    //the user that created the clicked tripEntry
+        userTask.addOnSuccessListener(aVoid ->
         {
-            if(!entry.getKey().equals("dummy"))
+            DataSnapshot snapshot = (DataSnapshot) userTask.getResult();
+
+            for (Map.Entry<String, ArrayList<String>> entry : recievedRequestsMap.entrySet())
             {
-                TripEntry tripEntry = getTripEntryFromList(entry.getKey(), tripEntries);
-
-                if(tripEntry != null)
+                if (!(entry.getKey().equals("dummy")))
                 {
-                    for(String userId : entry.getValue())
-                    {
-                        final User[] user = new User[1];
-                        Task userTask = accessUserDatabase();    //the user that created the clicked tripEntry
-                        userTask.addOnSuccessListener(aVoid ->
-                        {
-                            DataSnapshot snapshot = (DataSnapshot) userTask.getResult();
+                    TripEntry tripEntry = getTripEntryFromList(entry.getKey(), tripEntries);
 
+                    if (tripEntry != null)
+                    {
+                        for (String userId : entry.getValue())
+                        {
+                            final User[] user = new User[1];
                             user[0] = snapshot.child(userId).getValue(User.class);
 
-                            temp[0] = new TripEntry(tripEntry);
-                            temp[0].setName(user[0].getName());
-                            temp[0].setUser_id(user[0].getUserId());
+                            if(user[0] != null)
+                            {
+                                temp[0] = new TripEntry(tripEntry);
+                                temp[0].setName(user[0].getName());
+                                temp[0].setUser_id(user[0].getUserId());
 
-                            recievedRequestsList.add(temp[0]);
-                        });
+                                recievedRequestsList.add(temp[0]);
+                            }
+                        }
                     }
                 }
             }
-        }
+        });
 
-        return recievedRequestsList;
+        return userTask;
     }
 
     private static TripEntry getTripEntryFromList(String key, ArrayList<TripEntry> tripEntries)
@@ -267,10 +268,9 @@ public class UtilityMethods
             map.remove(keyToBeRemoved);
     }
 
-    public static boolean addPairUpInList(ArrayList<PairUp> pairUps, PairUp pairUp, String tripEntryId)
+    public static boolean addPairUpInList(ArrayList<PairUp> pairUps, PairUp pairUp)
     {
-        boolean flag = false, flag1 = false;
-        PairUp temp = new PairUp();
+        boolean flag = false;
 
         for (PairUp pu: pairUps)
         {

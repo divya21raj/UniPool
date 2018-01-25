@@ -15,6 +15,8 @@ public class TripEntry
 
     private GenLocation source, destination;
 
+    public HashMap<String, Float> lambdaMap = new HashMap<>(); //HashMap contains entry_id(String value) as key and lambda(Float value) as value
+
     public TripEntry(String name, String entry_id, String user_id, String time, String date, GenLocation source, GenLocation destination, HashMap<String, Float> lambdaMap) throws ParseException
     {
         this.entry_id = entry_id;
@@ -39,6 +41,11 @@ public class TripEntry
 
     public TripEntry()
     {}
+
+    HashMap<String, Float> getLambdaMap()
+    {
+        return lambdaMap;
+    }
 
     public String getEntry_id()
     {

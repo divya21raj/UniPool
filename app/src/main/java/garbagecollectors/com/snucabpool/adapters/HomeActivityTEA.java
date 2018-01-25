@@ -31,7 +31,6 @@ import static garbagecollectors.com.snucabpool.UtilityMethods.putInMap;
 public class HomeActivityTEA extends TripEntryAdapter
 {
     private List<TripEntry> list;
-    private List<TripEntry> listCopy;
     private Context context;
 
     private boolean isRequestAlreadyInMap;
@@ -50,10 +49,6 @@ public class HomeActivityTEA extends TripEntryAdapter
         this.context = context;
     }
 
-    public HomeActivityTEA()
-    {
-        listCopy.addAll(list);
-    }
     // Create new views (invoked by the layout manager)
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType)
@@ -157,27 +152,6 @@ public class HomeActivityTEA extends TripEntryAdapter
         }catch (Exception ignored){}
 
         return arr;
-    }
-
-    public void filter(String text)
-    {
-        list.clear();
-        if(text.isEmpty())
-        {
-            list.addAll(listCopy);
-        }
-        else
-        {
-            text = text.toLowerCase();
-            for(TripEntry trip : listCopy)
-            {
-                if((trip.getSource().toString().toLowerCase().contains(text))||(trip.getDestination().toString().toLowerCase().contains(text)))
-                {
-                    list.add(trip);
-                }
-            }
-        }
-        notifyDataSetChanged();
     }
 }
 

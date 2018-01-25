@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import java.util.ArrayList;
 
@@ -16,17 +15,15 @@ import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
-import garbagecollectors.com.snucabpool.activities.HomeActivity;
-import garbagecollectors.com.snucabpool.adapters.HomeActivityTEA;
 import garbagecollectors.com.snucabpool.adapters.SentRequestsTEA;
 
 public class SentRequestsFragment extends Fragment
 {
     RecyclerView recycle;
-    Button viewSentRequestsButton;
+    static SentRequestsTEA recyclerAdapter;
 
-    User user;
-    ArrayList<TripEntry> sentRequests;
+    static User finalCurrentUser;
+    static ArrayList<TripEntry> sentRequests;
 
     public SentRequestsFragment()
     {  }
@@ -35,6 +32,7 @@ public class SentRequestsFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -44,29 +42,38 @@ public class SentRequestsFragment extends Fragment
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_sent_requests, container, false);
 
-        user = HomeActivity.getFinalCurrentUser();
-        sentRequests = user.getRequestSent();
+        finalCurrentUser = RequestActivity.getFinalCurrentUser();
+
+        sentRequests = finalCurrentUser.getRequestSent();
 
         recycle = (RecyclerView) view.findViewById(R.id.recycle_requests);
-        viewSentRequestsButton = (Button) view.findViewById(R.id.viewButtonSentRequests);
 
-        viewSentRequestsButton.setOnClickListener(v ->
+        if(sentRequests.size() >= 1)
         {
-            if(sentRequests.size() >= 1)
-            {
-                sentRequests = UtilityMethods.removeFromList(sentRequests, "0");
+            sentRequests = UtilityMethods.removeFromList(sentRequests, "0");
 
-                SentRequestsTEA recyclerAdapter = new SentRequestsTEA(sentRequests,getContext());
+            recyclerAdapter = new SentRequestsTEA(sentRequests,getContext());
 
-                RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
+            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
 
-                recycle.setLayoutManager(layoutManager);
-                recycle.setItemAnimator( new DefaultItemAnimator());
-                recycle.setAdapter(recyclerAdapter);
-            }
-        });
+            recycle.setLayoutManager(layoutManager);
+            recycle.setItemAnimator( new DefaultItemAnimator());
+            recycle.setAdapter(recyclerAdapter);
+        }
 
         return view;
     }
 
+
+    public static void refreshRecycler()
+    {
+        finalCurrentUser = RequestActivity.getFinalCurrentUser();
+
+        sentRequests = finalCurrentUser.getRequestSent();
+
+        sentRequests = UtilityMethods.removeFromList(sentRequests, "0");
+
+        if(recyclerAdapter != null)
+            recyclerAdapter.notifyDataSetChanged();
+    }
 }

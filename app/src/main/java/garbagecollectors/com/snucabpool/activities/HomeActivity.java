@@ -1,32 +1,28 @@
 package garbagecollectors.com.snucabpool.activities;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.view.Menu;
 import android.widget.Button;
 
 import java.text.ParseException;
 
 import garbagecollectors.com.snucabpool.R;
+import garbagecollectors.com.snucabpool.Sorting_Filtering;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.adapters.HomeActivityTEA;
 
 public class HomeActivity extends BaseActivity
 {
     RecyclerView recycle;
+    Button signOutButton;
+    static HomeActivityTEA recyclerAdapter;
 
-    Button viewButton, signOutButton;
+    Sorting_Filtering sf = new Sorting_Filtering();
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -36,20 +32,15 @@ public class HomeActivity extends BaseActivity
         navigationView = (BottomNavigationView) findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
 
-        viewButton = (Button) findViewById(R.id.viewButtonHome);
         signOutButton = (Button) findViewById(R.id.sign_out_button);
         recycle = (RecyclerView) findViewById(R.id.recycle);
 
-        viewButton.setOnClickListener(v ->
-        {
-            HomeActivityTEA recyclerAdapter = new HomeActivityTEA(tripEntryList,HomeActivity.this);
-            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(HomeActivity.this,1);
+        recyclerAdapter = new HomeActivityTEA(tripEntryList,HomeActivity.this);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(HomeActivity.this,1);
 
-            recycle.setLayoutManager(layoutManager);
-            recycle.setItemAnimator( new DefaultItemAnimator());
-            recycle.setAdapter(recyclerAdapter);
-
-        });
+        recycle.setLayoutManager(layoutManager);
+        recycle.setItemAnimator( new DefaultItemAnimator());
+        recycle.setAdapter(recyclerAdapter);
 
         signOutButton.setOnClickListener(v ->
         {
@@ -57,6 +48,23 @@ public class HomeActivity extends BaseActivity
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         });
+
+    }
+
+    void setLambdaMapForAllEntries() throws ParseException
+    {
+        try
+        {
+            for(TripEntry e_user: finalCurrentUser.getUserTripEntries())
+            {
+                for(TripEntry e : tripEntryList)
+                {
+                    e_user.lambdaMap.put(e.getEntry_id(), sf.calc_lambda(e_user, e));
+                }
+            }
+
+        }catch (NullPointerException ignored)
+        { }
 
     }
 
@@ -71,4 +79,8 @@ public class HomeActivity extends BaseActivity
         return R.layout.activity_home;
     }
 
+    public static void updateRecycleAdapter()
+    {
+        recyclerAdapter.notifyDataSetChanged();
+    }
 }
