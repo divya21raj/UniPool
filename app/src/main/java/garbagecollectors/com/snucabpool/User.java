@@ -14,7 +14,7 @@ public class User
     private ArrayList<TripEntry> userTripEntries =new ArrayList<>();
 
     private ArrayList<TripEntry> requestSent;
-    private HashMap<String, ArrayList<String>> requestsRecieved;
+    private HashMap<String, ArrayList<String>> requestsReceived;
     //Key is the entryId of entry requested, Value is list of userIDs who've requested that entry
     //We have Map because we're taking TripEntry object of the entry that we have made (that the other person has clicked on)
 
@@ -22,13 +22,13 @@ public class User
     //Key is userId paired up with, value is list of tripEntries paired up over.
 
 
-    public User(String userId, String name, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsRecieved, ArrayList<PairUp> pairUps)
+    public User(String userId, String name, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, ArrayList<PairUp> pairUps)
     {
         this.userId = userId;
         this.name = name;
         this.userTripEntries = userTripEntries;
         this.requestSent = requestSent;
-        this.requestsRecieved = requestsRecieved;
+        this.requestsReceived = requestsReceived;
         this.pairUps = pairUps;
     }
 
@@ -62,14 +62,14 @@ public class User
         this.requestSent = requestSent;
     }
 
-    public HashMap<String, ArrayList<String>> getRequestsRecieved()
+    public HashMap<String, ArrayList<String>> getRequestsReceived()
     {
-        return requestsRecieved;
+        return requestsReceived;
     }
 
-    public void setRequestsRecieved(HashMap<String, ArrayList<String>> requestsRecieved)
+    public void setRequestsReceived(HashMap<String, ArrayList<String>> requestsReceived)
     {
-        this.requestsRecieved = requestsRecieved;
+        this.requestsReceived = requestsReceived;
     }
 
     public User()

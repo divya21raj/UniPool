@@ -155,7 +155,7 @@ public class UtilityMethods
         userList.add(user);
     }
 
-    public static Task populateRecievedRequestsList(ArrayList<TripEntry> recievedRequestsList, HashMap<String, ArrayList<String>> recievedRequestsMap, ArrayList<TripEntry> tripEntries)
+    public static Task populateReceivedRequestsList(ArrayList<TripEntry> receivedRequestsList, HashMap<String, ArrayList<String>> receivedRequestsMap, ArrayList<TripEntry> tripEntries)
     {
         final TripEntry[] temp = new TripEntry[1];
 
@@ -164,7 +164,7 @@ public class UtilityMethods
         {
             DataSnapshot snapshot = (DataSnapshot) userTask.getResult();
 
-            for (Map.Entry<String, ArrayList<String>> entry : recievedRequestsMap.entrySet())
+            for (Map.Entry<String, ArrayList<String>> entry : receivedRequestsMap.entrySet())
             {
                 if (!(entry.getKey().equals("dummy")))
                 {
@@ -183,7 +183,7 @@ public class UtilityMethods
                                 temp[0].setName(user[0].getName());
                                 temp[0].setUser_id(user[0].getUserId());
 
-                                recievedRequestsList.add(temp[0]);
+                                receivedRequestsList.add(temp[0]);
                             }
                         }
                     }

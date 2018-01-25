@@ -38,13 +38,13 @@ public class RequestActivity extends BaseActivity
 	static ProgressBar progressBar;
 
 	static DatabaseReference sentRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId() + "/requestSent");
-	static DatabaseReference recievedRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId() + "/requestsRecieved");
+	static DatabaseReference receivedRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId() + "/requestsReceived");
 
 	static TaskCompletionSource<DataSnapshot> sentRequestsSource;
-	static TaskCompletionSource<DataSnapshot> recievedRequestsSource;
+	static TaskCompletionSource<DataSnapshot> receivedRequestsSource;
 
 	static Task<DataSnapshot> sentRequestsDBTask;
-	static Task<DataSnapshot> recievedRequestsDBTask;
+	static Task<DataSnapshot> receivedRequestsDBTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -95,10 +95,10 @@ public class RequestActivity extends BaseActivity
 		progressBar.setVisibility(View.VISIBLE);
 
 		sentRequestsSource = new TaskCompletionSource<>();
-		recievedRequestsSource = new TaskCompletionSource<>();
+		receivedRequestsSource = new TaskCompletionSource<>();
 
 		sentRequestsDBTask = sentRequestsSource.getTask();
-		recievedRequestsDBTask = recievedRequestsSource.getTask();
+		receivedRequestsDBTask = receivedRequestsSource.getTask();
 
 		sentRequestsDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
 		{
@@ -115,50 +115,50 @@ public class RequestActivity extends BaseActivity
 			}
 		});
 
-		recievedRequestsDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+		receivedRequestsDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
 		{
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot)
 			{
-				recievedRequestsSource.setResult(dataSnapshot);
+				receivedRequestsSource.setResult(dataSnapshot);
 			}
 
 			@Override
 			public void onCancelled(DatabaseError databaseError)
 			{
-				recievedRequestsSource.setException(databaseError.toException());
+				receivedRequestsSource.setException(databaseError.toException());
 			}
 		});
 
-		Task<Void> allTask = Tasks.whenAll(sentRequestsDBTask, recievedRequestsDBTask);
+		Task<Void> allTask = Tasks.whenAll(sentRequestsDBTask, receivedRequestsDBTask);
 		allTask.addOnSuccessListener((Void aVoid) ->
 		{
 			finalCurrentUser.getRequestSent().clear();
-			finalCurrentUser.getRequestsRecieved().clear();
+			finalCurrentUser.getRequestsReceived().clear();
 
-			RecievedRequestsFragment.getRecievedRequestsList().clear();
+			ReceivedRequestsFragment.getReceivedRequestsList().clear();
 
 			DataSnapshot sentRequestsData = sentRequestsDBTask.getResult();
-			DataSnapshot recievedRequestsData = recievedRequestsDBTask.getResult();
+			DataSnapshot receivedRequestsData = receivedRequestsDBTask.getResult();
 
 			for (DataSnapshot ds : sentRequestsData.getChildren())
 				finalCurrentUser.getRequestSent().add(ds.getValue(TripEntry.class));
 
 			ArrayList<String> userIdList = new ArrayList<>();
 
-			for (DataSnapshot dataSnapshot : recievedRequestsData.getChildren())
+			for (DataSnapshot dataSnapshot : receivedRequestsData.getChildren())
 			{
 				for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren())
 					userIdList.add(dataSnapshot1.getValue(String.class));
 
-				finalCurrentUser.getRequestsRecieved().put(dataSnapshot.getKey(), userIdList);
+				finalCurrentUser.getRequestsReceived().put(dataSnapshot.getKey(), userIdList);
 			}
 
-			Task task = UtilityMethods.populateRecievedRequestsList(RecievedRequestsFragment.getRecievedRequestsList(), finalCurrentUser.getRequestsRecieved(), tripEntryList);
+			Task task = UtilityMethods.populateReceivedRequestsList(ReceivedRequestsFragment.getReceivedRequestsList(), finalCurrentUser.getRequestsReceived(), tripEntryList);
 
 			task.addOnSuccessListener(o ->
 			{
-				RecievedRequestsFragment.refreshRecycler();
+				ReceivedRequestsFragment.refreshRecycler();
 				SentRequestsFragment.refreshRecycler();
 
 				progressBar.setVisibility(View.INVISIBLE);
@@ -170,7 +170,7 @@ public class RequestActivity extends BaseActivity
 	{
 		ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 		adapter.addFragment(new SentRequestsFragment(), "Sent");
-		adapter.addFragment(new RecievedRequestsFragment(), "Recieved");
+		adapter.addFragment(new ReceivedRequestsFragment(), "Received");
 		adapter.addFragment(new ChatFragment(), "Chat");
 		viewPager.setAdapter(adapter);
 	}

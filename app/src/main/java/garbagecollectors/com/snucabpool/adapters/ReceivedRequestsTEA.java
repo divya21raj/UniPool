@@ -26,12 +26,12 @@ import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
-import garbagecollectors.com.snucabpool.activities.RequestActivity.RecievedRequestsFragment;
+import garbagecollectors.com.snucabpool.activities.RequestActivity.ReceivedRequestsFragment;
 import garbagecollectors.com.snucabpool.activities.RequestActivity.RequestActivity;
 
 import static garbagecollectors.com.snucabpool.UtilityMethods.accessUserDatabase;
 
-public class RecievedRequestsTEA extends TripEntryAdapter
+public class ReceivedRequestsTEA extends TripEntryAdapter
 {
     private List<TripEntry> list;
     private Context context;
@@ -40,12 +40,12 @@ public class RecievedRequestsTEA extends TripEntryAdapter
 
     private ProgressDialog progressDialog;
 
-    public RecievedRequestsTEA(Context context)
+    public ReceivedRequestsTEA(Context context)
     {
         super(context);
     }
 
-    public RecievedRequestsTEA(List<TripEntry> list, Context context)
+    public ReceivedRequestsTEA(List<TripEntry> list, Context context)
     {
         this.list = list;
         this.context = context;
@@ -79,9 +79,9 @@ public class RecievedRequestsTEA extends TripEntryAdapter
 
             ArrayList<PairUp> currentUserPairUps = finalCurrentUser.getPairUps();
 
-            HashMap<String, ArrayList<String>> finalCurrentUserRecievedRequests = finalCurrentUser.getRequestsRecieved();
+            HashMap<String, ArrayList<String>> finalCurrentUserReceivedRequests = finalCurrentUser.getRequestsReceived();
 
-            RecievedRequestsFragment.alertDialogBuilder.setPositiveButton("YES", (dialog, which) ->
+            ReceivedRequestsFragment.alertDialogBuilder.setPositiveButton("YES", (dialog, which) ->
             {
                 progressDialog.show();
 
@@ -107,15 +107,15 @@ public class RecievedRequestsTEA extends TripEntryAdapter
                     {
                         UtilityMethods.addPairUpInList(tripEntryUserPairUps, pairUp);
 
-                        UtilityMethods.removeFromMap(finalCurrentUserRecievedRequests, tripEntry.getEntry_id(), tripEntryUser[0].getUserId());
+                        UtilityMethods.removeFromMap(finalCurrentUserReceivedRequests, tripEntry.getEntry_id(), tripEntryUser[0].getUserId());
                         UtilityMethods.removeFromList(tripEntryUserSentRequests, tripEntry.getEntry_id());
 
-                        finalCurrentUser.setRequestsRecieved(finalCurrentUserRecievedRequests);
+                        finalCurrentUser.setRequestsReceived(finalCurrentUserReceivedRequests);
 
                         Task<Void> task1 = userDatabaseReference.child(finalCurrentUser.getUserId()).child("pairUps").setValue(currentUserPairUps);
                         Task<Void> task2 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("pairUps").setValue(tripEntryUserPairUps);
 
-                        Task<Void> task3 = userDatabaseReference.child(finalCurrentUser.getUserId()).child("requestsRecieved").setValue(finalCurrentUserRecievedRequests);
+                        Task<Void> task3 = userDatabaseReference.child(finalCurrentUser.getUserId()).child("requestsReceived").setValue(finalCurrentUserReceivedRequests);
                         Task<Void> task4 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("requestSent").setValue(tripEntryUserSentRequests);
 
                         Task<Void> task5 = pairUpDatabaseReference.child(pairUpId).setValue(pairUp);
@@ -139,10 +139,10 @@ public class RecievedRequestsTEA extends TripEntryAdapter
                 });
             });
 
-            RecievedRequestsFragment.alertDialogBuilder.setNegativeButton("NO", (dialog, which) ->
+            ReceivedRequestsFragment.alertDialogBuilder.setNegativeButton("NO", (dialog, which) ->
                     dialog.dismiss());
 
-            AlertDialog alert = RecievedRequestsFragment.alertDialogBuilder.create();
+            AlertDialog alert = ReceivedRequestsFragment.alertDialogBuilder.create();
             alert.show();
 
         });

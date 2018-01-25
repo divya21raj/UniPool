@@ -24,8 +24,8 @@ import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
 
-import static garbagecollectors.com.snucabpool.UtilityMethods.addRequestInList;
 import static garbagecollectors.com.snucabpool.UtilityMethods.accessUserDatabase;
+import static garbagecollectors.com.snucabpool.UtilityMethods.addRequestInList;
 import static garbagecollectors.com.snucabpool.UtilityMethods.putInMap;
 
 public class HomeActivityTEA extends TripEntryAdapter
@@ -96,21 +96,21 @@ public class HomeActivityTEA extends TripEntryAdapter
                 DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
 
                 ArrayList<TripEntry> requestSent = user.getRequestSent();
-                HashMap<String, ArrayList<String>> requestsRecieved = tripEntryUser[0].getRequestsRecieved();
+                HashMap<String, ArrayList<String>> requestsReceived = tripEntryUser[0].getRequestsReceived();
 
                 isAlreadyRequested = addRequestInList(requestSent, user.getPairUps(), tripEntry);
 
                 if(!isAlreadyRequested)
-                    isRequestAlreadyInMap = putInMap(requestsRecieved, tripEntry.getEntry_id(), user.getUserId());
+                    isRequestAlreadyInMap = putInMap(requestsReceived, tripEntry.getEntry_id(), user.getUserId());
 
                 user.setRequestSent(requestSent);
-                tripEntryUser[0].setRequestsRecieved(requestsRecieved);
+                tripEntryUser[0].setRequestsReceived(requestsReceived);
 
                 if(!isAlreadyRequested && !isRequestAlreadyInMap)
                 {
                     //update firebase database to include arrayList that contains name of the card clicked in requests sent...
                     Task<Void> task1 = userDatabaseReference.child(user.getUserId()).child("requestSent").setValue(requestSent);
-                    Task<Void> task2 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("requestsRecieved").setValue(requestsRecieved);
+                    Task<Void> task2 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("requestsReceived").setValue(requestsReceived);
 
                     Task<Void> allTask = Tasks.whenAll(task1, task2);
                     allTask.addOnSuccessListener(bVoid ->

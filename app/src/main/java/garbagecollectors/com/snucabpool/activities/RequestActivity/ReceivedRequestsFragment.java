@@ -9,9 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
@@ -22,22 +20,22 @@ import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.HomeActivity;
-import garbagecollectors.com.snucabpool.adapters.RecievedRequestsTEA;
+import garbagecollectors.com.snucabpool.adapters.ReceivedRequestsTEA;
 
-public class RecievedRequestsFragment extends Fragment
+public class ReceivedRequestsFragment extends Fragment
 {
     RecyclerView recycle;
-    static RecievedRequestsTEA recyclerAdapter;
+    static ReceivedRequestsTEA recyclerAdapter;
 
     User user;
-    HashMap<String, ArrayList<String>> recievedRequestsMap;
-    static ArrayList<TripEntry> recievedRequestsList;
+    HashMap<String, ArrayList<String>> receivedRequestsMap;
+    static ArrayList<TripEntry> receivedRequestsList;
 
     ArrayList<TripEntry> tripEntries;
 
     public static AlertDialog.Builder alertDialogBuilder;
 
-    public RecievedRequestsFragment()
+    public ReceivedRequestsFragment()
     {  }
 
     @Override
@@ -52,7 +50,7 @@ public class RecievedRequestsFragment extends Fragment
                              Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_recieved_requests, container, false);
+        View view = inflater.inflate(R.layout.fragment_received_requests, container, false);
 
         alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setTitle("Confirm");
@@ -60,18 +58,18 @@ public class RecievedRequestsFragment extends Fragment
 
         user = RequestActivity.getFinalCurrentUser();
 
-        recievedRequestsMap = user.getRequestsRecieved();
+        receivedRequestsMap = user.getRequestsReceived();
 
         tripEntries = HomeActivity.getTripEntryList();
 
-        recievedRequestsList = new ArrayList<>();
-        Task task = UtilityMethods.populateRecievedRequestsList(recievedRequestsList, recievedRequestsMap, tripEntries);
+        receivedRequestsList = new ArrayList<>();
+        Task task = UtilityMethods.populateReceivedRequestsList(receivedRequestsList, receivedRequestsMap, tripEntries);
 
         recycle = (RecyclerView) view.findViewById(R.id.recycle_requests);
 
         task.addOnSuccessListener(o ->
         {
-            recyclerAdapter = new RecievedRequestsTEA(recievedRequestsList, getContext());
+            recyclerAdapter = new ReceivedRequestsTEA(receivedRequestsList, getContext());
 
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
 
@@ -83,9 +81,9 @@ public class RecievedRequestsFragment extends Fragment
         return view;
     }
 
-    public static ArrayList<TripEntry> getRecievedRequestsList()
+    public static ArrayList<TripEntry> getReceivedRequestsList()
     {
-        return recievedRequestsList;
+        return receivedRequestsList;
     }
 
     public static void refreshRecycler()
