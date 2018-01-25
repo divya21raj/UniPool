@@ -2,9 +2,9 @@ package garbagecollectors.com.snucabpool;
 
 public class Message
 {
-    String message;
-    String senderId;
-    Long createdAtTime;
+    private String message;
+    private String senderId;
+    private Long createdAtTime;
 
     public Message(String message, String senderId, Long createdAtTime)
     {

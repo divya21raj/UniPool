@@ -2,11 +2,11 @@ package garbagecollectors.com.snucabpool;
 
 public class GenLocation
 {
-    String name;
-    String address;
+    private String name;
+    private String address;
 
-    Double latitude;
-    Double longitude;
+    private Double latitude;
+    private Double longitude;
 
     public GenLocation(String name, String address, Double latitude, Double longitude)
     {

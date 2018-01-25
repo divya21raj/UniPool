@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,16 +23,15 @@ import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.HomeActivity;
 import garbagecollectors.com.snucabpool.adapters.RecievedRequestsTEA;
-import garbagecollectors.com.snucabpool.adapters.SentRequestsTEA;
 
 public class RecievedRequestsFragment extends Fragment
 {
     RecyclerView recycle;
-    Button viewRecievedRequestsButton;
+    static RecievedRequestsTEA recyclerAdapter;
 
     User user;
     HashMap<String, ArrayList<String>> recievedRequestsMap;
-    ArrayList<TripEntry> recievedRequestsList;
+    static ArrayList<TripEntry> recievedRequestsList;
 
     ArrayList<TripEntry> tripEntries;
 
@@ -42,6 +44,7 @@ public class RecievedRequestsFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -55,43 +58,39 @@ public class RecievedRequestsFragment extends Fragment
         alertDialogBuilder.setTitle("Confirm");
         alertDialogBuilder.setMessage("Are you sure you want to accept?");
 
-        user = HomeActivity.getFinalCurrentUser();
+        user = RequestActivity.getFinalCurrentUser();
+
         recievedRequestsMap = user.getRequestsRecieved();
 
         tripEntries = HomeActivity.getTripEntryList();
 
-        recievedRequestsList = UtilityMethods.populateRecievedRequestsList(recievedRequestsMap, tripEntries);
+        recievedRequestsList = new ArrayList<>();
+        Task task = UtilityMethods.populateRecievedRequestsList(recievedRequestsList, recievedRequestsMap, tripEntries);
 
         recycle = (RecyclerView) view.findViewById(R.id.recycle_requests);
 
-        viewRecievedRequestsButton = (Button) view.findViewById(R.id.viewButtonRecievedRequests);
-
-        viewRecievedRequestsButton.setOnClickListener(v ->
+        task.addOnSuccessListener(o ->
         {
-            if(recievedRequestsList.size() >= 1)
-            {
-                RecievedRequestsTEA recyclerAdapter = new RecievedRequestsTEA(recievedRequestsList, getContext());
-
-                RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
-
-                recycle.setLayoutManager(layoutManager);
-                recycle.setItemAnimator( new DefaultItemAnimator());
-                recycle.setAdapter(recyclerAdapter);
-            }
-        });
-
-        if(recievedRequestsList.size() >= 1)
-        {
-            RecievedRequestsTEA recyclerAdapter = new RecievedRequestsTEA(recievedRequestsList, getContext());
+            recyclerAdapter = new RecievedRequestsTEA(recievedRequestsList, getContext());
 
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
 
             recycle.setLayoutManager(layoutManager);
             recycle.setItemAnimator( new DefaultItemAnimator());
             recycle.setAdapter(recyclerAdapter);
-        }
+        });
 
         return view;
     }
 
+    public static ArrayList<TripEntry> getRecievedRequestsList()
+    {
+        return recievedRequestsList;
+    }
+
+    public static void refreshRecycler()
+    {
+        if(recyclerAdapter != null)
+            recyclerAdapter.notifyDataSetChanged();
+    }
 }

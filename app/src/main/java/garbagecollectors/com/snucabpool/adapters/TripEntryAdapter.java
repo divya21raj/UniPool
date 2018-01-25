@@ -51,7 +51,6 @@ public abstract class TripEntryAdapter extends RecyclerView.Adapter<TripEntryAda
             travel_time = (TextView) v.findViewById(R.id.vtime);
         }
     }
-
 }
 
 

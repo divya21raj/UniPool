@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class PairUp
 {
-    String pairUpId;
+    private String pairUpId;
 
-    String creatorId;   //person who created the tripEntry
-    String requesterId;
+    private String creatorId;   //person who created the tripEntry
+    private String requesterId;
 
-    ArrayList<Message> messages;
+    private ArrayList<Message> messages;
 
     public PairUp(String pairUpId, String creatorId, String requesterId, ArrayList<Message> messages)
     {

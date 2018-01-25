@@ -109,7 +109,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void signIn()
     {
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setMessage("Please Wait!");
         progressDialog.show();
 
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -228,6 +228,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
                 updateUI(user);
             }
+
         });
     }
 
