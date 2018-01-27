@@ -5,18 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="garbagecollectors.com.snucabpool.activities.LoginActivity"
-    android:background="@color/colorPrimary">
+    android:background="@color/viewBg">
 
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="SNU Cabpool Application"
-        android:textSize="25sp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="150dp"
-        android:textColor="@color/colorBackgroundWhite"
-        />
+        android:elevation="5dp"
+        android:text="SNU Cabpool Application"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25sp" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
