@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/new_entry_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="garbagecollectors.com.snucabpool.activities.NewEntryActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <Button
         android:id="@+id/findSource"
@@ -11,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:onClick="findSource"
-        android:background="@drawable/mybutton"
+        android:background="@drawable/my_button"
         android:text="Search Source" />
 
     <TextView
@@ -24,7 +29,7 @@
     <Button
         android:id="@+id/findDestination"
         android:layout_width="200dp"
-        android:background="@drawable/mybutton"
+        android:background="@drawable/my_button"
         android:layout_height="wrap_content"
         android:onClick="findDestination"
         android:text="Search Destination"
@@ -41,7 +46,7 @@
     <Button
         android:id="@+id/SetTime"
         android:layout_width="200dp"
-        android:background="@drawable/mybutton"
+        android:background="@drawable/my_button"
         android:layout_height="wrap_content"
         android:text="Set Target Time"
         android:layout_below="@+id/searched_destination"
@@ -60,7 +65,7 @@
         android:id="@+id/btnChangeDate"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/mybutton"
+        android:background="@drawable/my_button"
         android:layout_below="@+id/SetTime"
         android:text="Change Date"
         android:layout_marginTop="10dp"/>
@@ -79,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Save"
-        android:background="@drawable/mybutton"
+        android:background="@drawable/my_button"
         android:onClick="finalSave"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/btnChangeDate"
@@ -95,5 +100,13 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
-</RelativeLayout>
+    </RelativeLayout>
+
+    <include
+        layout="@layout/element_navigation_drawer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start" />
+
+</android.support.v4.widget.DrawerLayout>
 

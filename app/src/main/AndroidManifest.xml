@@ -33,6 +33,7 @@
 
         <activity
             android:name=".activities.HomeActivity"
+            android:theme="@style/AppTheme"
             android:label="Home">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

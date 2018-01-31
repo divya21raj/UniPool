@@ -6,6 +6,9 @@ import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -52,13 +55,31 @@ public class NewEntryActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
 
+        final ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null)
+        {
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.new_entry_layout);
+
+        navigationView = (NavigationView) findViewById(R.id.nav_drawer);
+        navigationView.setNavigationItemSelectedListener(menuItem ->
+        {
+            dealWithSelectedMenuItem(menuItem);
+            drawerLayout.closeDrawers();
+
+            return true;
+        });
+
         source = null;
         destination = null;
 
         time = "";
 
-        navigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        navigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         text_source = (TextView)findViewById(R.id.searched_source);//Check
         text_source.setText("Select Pickup Point");
