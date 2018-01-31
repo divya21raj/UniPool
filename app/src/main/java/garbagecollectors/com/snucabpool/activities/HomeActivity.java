@@ -55,13 +55,6 @@ public class HomeActivity extends BaseActivity
         recycle.setItemAnimator( new DefaultItemAnimator());
         recycle.setAdapter(recyclerAdapter);
 
-        /*signOutButton.setOnClickListener(v ->
-        {
-            mAuth.signOut();
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-        });*/
-
     }
 
 	@Override
