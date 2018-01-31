@@ -52,8 +52,8 @@ public class RequestActivity extends BaseActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_request);
 
-		navigationView = (BottomNavigationView) findViewById(R.id.navigation);
-		navigationView.setOnNavigationItemSelectedListener(this);
+		bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+		bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		setupViewPager(viewPager);

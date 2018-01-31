@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -28,7 +30,9 @@ import garbagecollectors.com.snucabpool.activities.RequestActivity.RequestActivi
 
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
-    protected BottomNavigationView navigationView;
+    protected BottomNavigationView bottomNavigationView;
+
+    protected DrawerLayout drawerLayout;
 
     protected FirebaseAuth mAuth;
     protected static FirebaseUser currentUser;
@@ -112,8 +116,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         });
 
 
-        navigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        navigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -133,7 +137,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
-        navigationView.postDelayed(() ->
+        bottomNavigationView.postDelayed(() ->
         {
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_home)
@@ -151,6 +155,18 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void updateNavigationBarState()
     {
         int actionId = getNavigationMenuItemId();
@@ -159,7 +175,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     void selectBottomNavigationBarItem(int itemId)
     {
-        Menu menu = navigationView.getMenu();
+        Menu menu = bottomNavigationView.getMenu();
         for (int i = 0, size = menu.size(); i < size; i++) {
             MenuItem item = menu.getItem(i);
             boolean shouldBeChecked = item.getItemId() == itemId;

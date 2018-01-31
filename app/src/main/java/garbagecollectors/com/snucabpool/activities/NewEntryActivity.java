@@ -57,8 +57,8 @@ public class NewEntryActivity extends BaseActivity
 
         time = "";
 
-        navigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        navigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         text_source = (TextView)findViewById(R.id.searched_source);//Check
         text_source.setText("Select Pickup Point");
