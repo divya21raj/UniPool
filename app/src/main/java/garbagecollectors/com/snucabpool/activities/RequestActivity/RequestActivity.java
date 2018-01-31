@@ -52,7 +52,7 @@ public class RequestActivity extends BaseActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_request);
 
-		bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+		bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 		bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
 		viewPager = (ViewPager) findViewById(R.id.viewpager);

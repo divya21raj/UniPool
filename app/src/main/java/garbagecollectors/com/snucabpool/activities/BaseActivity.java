@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,6 +34,7 @@ import garbagecollectors.com.snucabpool.activities.RequestActivity.RequestActivi
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
     protected BottomNavigationView bottomNavigationView;
+	protected NavigationView navigationView;
 
     protected DrawerLayout drawerLayout;
 
@@ -116,11 +120,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         });
 
 
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
     }
 
-    @Override
+	@Override
     protected void onStart() {
         super.onStart();
         updateNavigationBarState();
@@ -155,18 +159,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void updateNavigationBarState()
     {
         int actionId = getNavigationMenuItemId();
@@ -185,6 +177,44 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             }
         }
     }
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+			case android.R.id.home:
+				drawerLayout.openDrawer(GravityCompat.START);
+				setNavHeaderStuff();
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+
+	protected void dealWithSelectedMenuItem(MenuItem menuItem)
+	{
+		switch (menuItem.getItemId())
+		{
+			case R.id.nav_settings:
+				Toast.makeText(getApplicationContext(), "Coming soon!", Toast.LENGTH_LONG).show();
+				break;
+
+			case R.id.nav_logout:
+				mAuth.signOut();
+				finish();
+				startActivity(new Intent(this, LoginActivity.class));
+		}
+	}
+
+	protected void setNavHeaderStuff()
+	{
+		TextView userNameOnHeader = (TextView) findViewById(R.id.header_username);
+		userNameOnHeader.setText(finalCurrentUser.getName());
+
+		TextView emailOnHeader = (TextView) findViewById(R.id.header_email);
+		emailOnHeader.setText(currentUser.getEmail());
+	}
 
     protected abstract int getContentViewId();
 

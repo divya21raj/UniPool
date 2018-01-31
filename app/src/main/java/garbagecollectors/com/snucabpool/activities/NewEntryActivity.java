@@ -57,7 +57,7 @@ public class NewEntryActivity extends BaseActivity
 
         time = "";
 
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         text_source = (TextView)findViewById(R.id.searched_source);//Check
