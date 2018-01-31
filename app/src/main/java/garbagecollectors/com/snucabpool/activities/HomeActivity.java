@@ -1,12 +1,13 @@
 package garbagecollectors.com.snucabpool.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Button;
 
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.adapters.HomeActivityTEA;
@@ -14,7 +15,6 @@ import garbagecollectors.com.snucabpool.adapters.HomeActivityTEA;
 public class HomeActivity extends BaseActivity
 {
     RecyclerView recycle;
-    Button signOutButton;
     static HomeActivityTEA recyclerAdapter;
 
     @Override
@@ -23,10 +23,27 @@ public class HomeActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        navigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        navigationView.setOnNavigationItemSelectedListener(this);
+        final ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null)
+        {
+        	actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_24dp);
+        	actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
-        signOutButton = (Button) findViewById(R.id.sign_out_button);
+	    drawerLayout = (DrawerLayout) findViewById(R.id.home_layout);
+
+        navigationView = (NavigationView) findViewById(R.id.nav_drawer);
+	    navigationView.setNavigationItemSelectedListener(menuItem ->
+	    {
+		    dealWithSelectedMenuItem(menuItem);
+		    drawerLayout.closeDrawers();
+
+		    return true;
+	    });
+
+	    bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
         recycle = (RecyclerView) findViewById(R.id.recycle);
 
         recyclerAdapter = new HomeActivityTEA(tripEntryList,HomeActivity.this);
@@ -36,16 +53,9 @@ public class HomeActivity extends BaseActivity
         recycle.setItemAnimator( new DefaultItemAnimator());
         recycle.setAdapter(recyclerAdapter);
 
-        signOutButton.setOnClickListener(v ->
-        {
-            mAuth.signOut();
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-        });
-
     }
 
-    @Override
+	@Override
     protected int getNavigationMenuItemId()
     {
         return R.id.navigation_home;
