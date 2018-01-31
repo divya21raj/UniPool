@@ -8,7 +8,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Button;
 
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.adapters.HomeActivityTEA;
@@ -31,7 +30,7 @@ public class HomeActivity extends BaseActivity
         	actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-	    drawerLayout = (DrawerLayout) findViewById(R.id.home_drawer_layout);
+	    drawerLayout = (DrawerLayout) findViewById(R.id.home_layout);
 
         navigationView = (NavigationView) findViewById(R.id.nav_drawer);
 	    navigationView.setNavigationItemSelectedListener(menuItem ->
@@ -40,7 +39,6 @@ public class HomeActivity extends BaseActivity
 		    drawerLayout.closeDrawers();
 
 		    return true;
-
 	    });
 
 	    bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
