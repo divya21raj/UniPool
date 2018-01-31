@@ -187,6 +187,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 				drawerLayout.openDrawer(GravityCompat.START);
 				setNavHeaderStuff();
 				return true;
+
+			case R.id.action_refresh:
+				RequestActivity.refreshRequests();
+				break;
+
 		}
 		return super.onOptionsItemSelected(item);
 	}

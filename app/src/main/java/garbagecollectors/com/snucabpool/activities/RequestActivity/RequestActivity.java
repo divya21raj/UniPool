@@ -2,14 +2,16 @@ package garbagecollectors.com.snucabpool.activities.RequestActivity;
 
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -52,6 +54,24 @@ public class RequestActivity extends BaseActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_request);
 
+		final ActionBar actionBar = getSupportActionBar();
+		if(actionBar != null)
+		{
+			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_24dp);
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
+
+		drawerLayout = (DrawerLayout) findViewById(R.id.requests_layout);
+
+		navigationView = (NavigationView) findViewById(R.id.nav_drawer);
+		navigationView.setNavigationItemSelectedListener(menuItem ->
+		{
+			dealWithSelectedMenuItem(menuItem);
+			drawerLayout.closeDrawers();
+
+			return true;
+		});
+
 		bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 		bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
@@ -70,23 +90,6 @@ public class RequestActivity extends BaseActivity
 	{
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_requests, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		switch (item.getItemId())
-		{
-			// action with ID action_refresh was selected
-			case R.id.action_refresh:
-				refreshRequests();
-				break;
-
-			default:
-				break;
-		}
-
 		return true;
 	}
 
