@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:textColor="@color/viewBg"
         android:text="ENTER A GLORIOUS ANIMATION HERE!"
         android:textSize="20dp"/>
 

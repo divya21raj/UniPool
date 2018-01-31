@@ -9,9 +9,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
-        android:elevation="3dp"
-        card_view:cardBackgroundColor="#C8E6C9"
-        card_view:cardCornerRadius="10dp">
+        android:elevation="6dp"
+        card_view:cardBackgroundColor="@color/viewBg">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,10 +22,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="2dp"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
+                android:paddingLeft="@dimen/title_padding"
+                android:paddingRight="@dimen/title_padding"
                 android:text="name"
-                android:textColor="#3E2723"
+                android:textColor="@color/colorTextBlack"
                 android:textSize="20dp" />
 
 
@@ -38,10 +37,10 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/vname"
                 android:paddingBottom="2dp"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
+                android:paddingLeft="@dimen/title_padding"
+                android:paddingRight="@dimen/title_padding"
                 android:text="date"
-                android:textColor="#3E2723"
+                android:textColor="@color/colorTextBlack"
                 android:textSize="@dimen/card_text_size" />
 
             <TextView
@@ -52,9 +51,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/vdate"
                 android:paddingBottom="2dp"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
-                android:textColor="#3E2723"
+                android:paddingLeft="@dimen/title_padding"
+                android:paddingRight="@dimen/title_padding"
+                android:textColor="@color/colorTextBlack"
                 android:text="time"
                 android:textSize="@dimen/card_text_size" />
 
@@ -65,10 +64,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/vtime"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
+                android:paddingLeft="@dimen/title_padding"
+                android:paddingRight="@dimen/title_padding"
                 android:text="source"
-                android:textColor="#3E2723"
+                android:textColor="@color/colorTextBlack"
                 android:textSize="@dimen/card_text_size" />
 
             <TextView
@@ -78,10 +77,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/vsource"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
+                android:paddingLeft="@dimen/title_padding"
+                android:paddingRight="@dimen/title_padding"
                 android:text="destination"
-                android:textColor="#3E2723"
+                android:textColor="@color/colorTextBlack"
                 android:textSize="@dimen/card_text_size" />
 
 

@@ -33,7 +33,6 @@ public abstract class TripEntryAdapter extends RecyclerView.Adapter<TripEntryAda
     {
         // each data item is just a string in this case
         public TextView date;
-        public TextView user_id;
         public TextView source;
         public TextView destination;
         public TextView name_user;
@@ -44,7 +43,6 @@ public abstract class TripEntryAdapter extends RecyclerView.Adapter<TripEntryAda
         {
             super(v);
             date = (TextView) v.findViewById(R.id.vdate);
-            user_id = (TextView) v.findViewById(R.id.vuser_id);
             source = (TextView) v.findViewById(R.id.vsource);
             destination = (TextView) v.findViewById(R.id.vdestination);
             name_user = (TextView) v.findViewById(R.id.vname);
