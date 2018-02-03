@@ -253,11 +253,11 @@ public class LoginActivity extends Activity implements View.OnClickListener
         HashMap<String, ArrayList<String>> dummyRequestReceived = new HashMap<>();
         dummyRequestReceived.put("dummy", dummyUserIdList);
 
-        Message dummyMessage = new Message(messageId, "", "dummy", 1L);
+        Message dummyMessage = new Message("dummy", "", "dummy", "dummy", 1L);
         ArrayList<Message> dummyMessages = new ArrayList<>();
         dummyMessages.add(dummyMessage);
 
-        PairUp dummyPairUp = new PairUp("dummydummy", "dummy", "dummy", dummyMessages);
+        PairUp dummyPairUp = new PairUp("dummydummy", "dummy", "dummy", dummyUserIdList);
         ArrayList<PairUp> dummyPairUps = new ArrayList<>();
         dummyPairUps.add(dummyPairUp);
 

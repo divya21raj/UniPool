@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import garbagecollectors.com.snucabpool.Message;
 import garbagecollectors.com.snucabpool.PairUp;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
@@ -99,7 +98,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                     String pairUpId = finalCurrentUser.getUserId() + tripEntryUser[0].getUserId();
 
                     PairUp pairUp = new PairUp(pairUpId, finalCurrentUser.getUserId(), tripEntryUser[0].getUserId(), new ArrayList<>());
-                    pairUp.getMessages().add(new Message(messageId, "Your request was accepted :)", pairUp.getCreatorId(), UtilityMethods.getCurrentTime()));
+                    pairUp.getMessages().add("def@ult");
 
                     isAlreadyInList = UtilityMethods.addPairUpInList(currentUserPairUps, pairUp);
 

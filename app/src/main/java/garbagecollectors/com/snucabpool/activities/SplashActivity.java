@@ -27,7 +27,7 @@ public class SplashActivity extends AppCompatActivity
 {
     private static ArrayList<TripEntry> tripEntryList = new ArrayList<>();
 
-    private static DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
+    private static DatabaseReference userDatabaseReference;
     private static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
 
     FirebaseAuth mAuth;
@@ -47,7 +47,9 @@ public class SplashActivity extends AppCompatActivity
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        
+
+        userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
+
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
@@ -89,7 +91,7 @@ public class SplashActivity extends AppCompatActivity
             }
 
             if(!(LoginActivity.userNewOnDatabase))
-                BaseActivity.setFinalCurrentUser(userData.child(currentUser.getUid()).getValue(User.class));
+                BaseActivity.setFinalCurrentUser(userData.getValue(User.class));
 
             finish();
             startActivity(new Intent(getApplicationContext(), HomeActivity.class));

@@ -5,14 +5,16 @@ public class Message
     private String messageId;
     private String message;
     private String senderId;
+    private String receiverId;
     private Long createdAtTime;
 
-    public Message(String messageId, String message, String senderId, Long createdAtTime)
+    public Message(String messageId, String message, String senderId, String receiverId, Long createdAtTime)
     {
         this.messageId = messageId;
         this.message = message;
         this.senderId = senderId;
-        this.createdAtTime = createdAtTime;
+	    this.receiverId = receiverId;
+	    this.createdAtTime = createdAtTime;
     }
 
     public Message()
@@ -57,4 +59,14 @@ public class Message
     {
         this.messageId = messageId;
     }
+
+	public String getReceiverId()
+	{
+		return receiverId;
+	}
+
+	public void setReceiverId(String receiverId)
+	{
+		this.receiverId = receiverId;
+	}
 }
