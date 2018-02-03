@@ -6,4 +6,9 @@
     <color name="colorTextBlack">#282223</color>
 
     <color name="viewBg">#f1f5f8</color>
+
+    <!--text colors-->
+    <color name="colorTextPrimary">#D9FFFFFF</color>
+    <color name="colorTextPrimaryHighlighted">#F2FFFFFF</color>
+    <color name="colorTextSecondary">#8CFFFFFF</color>
 </resources>

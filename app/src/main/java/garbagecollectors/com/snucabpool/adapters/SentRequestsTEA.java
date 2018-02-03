@@ -50,7 +50,7 @@ public class SentRequestsTEA extends TripEntryAdapter
     {
         TripEntry tripEntry = list.get(position);
 
-        UtilityMethods.fillHolder(holder, tripEntry);
+        UtilityMethods.fillTripEntryHolder(holder, tripEntry);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

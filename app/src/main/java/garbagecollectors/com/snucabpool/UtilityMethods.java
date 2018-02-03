@@ -17,6 +17,7 @@ import java.util.Map;
 
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
 import garbagecollectors.com.snucabpool.adapters.TripEntryAdapter;
+import garbagecollectors.com.snucabpool.adapters.UserAdapter;
 
 public class UtilityMethods
 {
@@ -227,7 +228,7 @@ public class UtilityMethods
         return list;
     }
 
-    public static void fillHolder(TripEntryAdapter.MyHolder holder, TripEntry tripEntry)
+    public static void fillTripEntryHolder(TripEntryAdapter.MyHolder holder, TripEntry tripEntry)
     {
         holder.date.setText(tripEntry.getDate());
         holder.name_user.setText(tripEntry.getName());
@@ -236,6 +237,11 @@ public class UtilityMethods
         holder.destination.setText("to " + tripEntry.getDestination().getName());
     }
 
+    public static void fillUserHolder(UserAdapter.MyHolder holder, User user)
+    {
+        holder.name.setText(user.getName());
+        holder.email.setText("email");
+    }
 
     public static void removeFromMap(HashMap<String, ArrayList<String>> map, String keyId, String valueId)
     {
@@ -320,13 +326,16 @@ public class UtilityMethods
 
             for(PairUp pairUp: pairUps)
             {
-                if(pairUp.getCreatorId().equals(BaseActivity.getCurrentUser().getUid()))
-                    userId[0] = pairUp.getRequesterId();
+                if(!(pairUp.getCreatorId().equals("dummy")))
+                {
+                    if(pairUp.getCreatorId().equals(BaseActivity.getCurrentUser().getUid()))
+                        userId[0] = pairUp.getRequesterId();
 
-                else
-                    userId[0] = pairUp.getCreatorId();
+                    else
+                        userId[0] = pairUp.getCreatorId();
 
-                finalChatList.add(snapshot.child(userId[0]).getValue(User.class));
+                    finalChatList.add(snapshot.child(userId[0]).getValue(User.class));
+                }
             }
 
             BaseActivity.setChatList(finalChatList);
