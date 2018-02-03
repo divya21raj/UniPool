@@ -2,20 +2,21 @@ package garbagecollectors.com.snucabpool;
 
 public class Message
 {
+    private String messageId;
     private String message;
     private String senderId;
     private Long createdAtTime;
 
-    public Message(String message, String senderId, Long createdAtTime)
+    public Message(String messageId, String message, String senderId, Long createdAtTime)
     {
+        this.messageId = messageId;
         this.message = message;
         this.senderId = senderId;
         this.createdAtTime = createdAtTime;
     }
 
     public Message()
-    {
-    }
+    { }
 
     public String getMessage()
     {
@@ -45,5 +46,15 @@ public class Message
     public void setCreatedAtTime(Long createdAtTime)
     {
         this.createdAtTime = createdAtTime;
+    }
+
+    public String getMessageId()
+    {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId)
+    {
+        this.messageId = messageId;
     }
 }

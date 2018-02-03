@@ -3,10 +3,6 @@ package garbagecollectors.com.snucabpool;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by D2R on 29/11/2017.
- */
-
 public class User
 {
     private String userId;
