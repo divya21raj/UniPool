@@ -38,7 +38,7 @@ public class SentRequestsTEA extends TripEntryAdapter
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         // create a new view
-        View v = LayoutInflater.from(context).inflate(R.layout.card, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_trip_entry, parent, false);
         // set the view's size, margins, padding and layout parameters...
 
         return new MyHolder(v);

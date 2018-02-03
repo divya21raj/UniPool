@@ -48,6 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static User finalCurrentUser;
 
     protected static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
+    protected static ArrayList<User> chatList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -285,5 +286,13 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         BaseActivity.pairUpDatabaseReference = pairUpDatabaseReference;
     }
 
+    public static ArrayList<User> getChatList()
+    {
+        return chatList;
+    }
 
+    public static void setChatList(ArrayList<User> chatList)
+    {
+        BaseActivity.chatList = chatList;
+    }
 }

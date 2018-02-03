@@ -55,7 +55,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         // create a new view
-        View v = LayoutInflater.from(context).inflate(R.layout.card, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_trip_entry, parent, false);
 
         return new MyHolder(v);
     }

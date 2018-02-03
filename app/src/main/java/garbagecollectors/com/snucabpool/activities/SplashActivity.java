@@ -93,9 +93,13 @@ public class SplashActivity extends AppCompatActivity
             if(!(LoginActivity.userNewOnDatabase))
                 BaseActivity.setFinalCurrentUser(userData.getValue(User.class));
 
-            finish();
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+			Task task = UtilityMethods.populateChatList(userData);
 
+            task.addOnCompleteListener(task1 ->
+            {
+                finish();
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            });
         });
 
         allTask.addOnFailureListener(e ->

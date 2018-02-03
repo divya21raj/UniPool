@@ -59,7 +59,7 @@ public class HomeActivityTEA extends TripEntryAdapter
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         // create a new view
-        View v = LayoutInflater.from(context).inflate(R.layout.card, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_trip_entry, parent, false);
 
         return new MyHolder(v);
     }
@@ -108,7 +108,7 @@ public class HomeActivityTEA extends TripEntryAdapter
 
                 if(!isAlreadyRequested && !isRequestAlreadyInMap)
                 {
-                    //update firebase database to include arrayList that contains name of the card clicked in requests sent...
+                    //update firebase database to include arrayList that contains name of the item_trip_entry clicked in requests sent...
                     Task<Void> task1 = userDatabaseReference.child(user.getUserId()).child("requestSent").setValue(requestSent);
                     Task<Void> task2 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("requestsReceived").setValue(requestsReceived);
 

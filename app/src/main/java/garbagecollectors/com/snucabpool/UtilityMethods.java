@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import garbagecollectors.com.snucabpool.activities.BaseActivity;
 import garbagecollectors.com.snucabpool.adapters.TripEntryAdapter;
 
 public class UtilityMethods
@@ -300,4 +301,37 @@ public class UtilityMethods
         return time;
     }
 
+    public static Task populateChatList(DataSnapshot userData)
+    {
+        final String[] userId = new String[1];
+
+        ArrayList<PairUp> pairUps = new ArrayList<>();
+
+        for(DataSnapshot dataSnapshot: userData.child("pairUps").getChildren())
+            pairUps.add(dataSnapshot.getValue(PairUp.class));
+
+        Task task = accessUserDatabase("users");
+
+        ArrayList<User> finalChatList = new ArrayList<>();
+
+        task.addOnCompleteListener(aTask ->
+        {
+            DataSnapshot snapshot = (DataSnapshot) task.getResult();
+
+            for(PairUp pairUp: pairUps)
+            {
+                if(pairUp.getCreatorId().equals(BaseActivity.getCurrentUser().getUid()))
+                    userId[0] = pairUp.getRequesterId();
+
+                else
+                    userId[0] = pairUp.getCreatorId();
+
+                finalChatList.add(snapshot.child(userId[0]).getValue(User.class));
+            }
+
+            BaseActivity.setChatList(finalChatList);
+        });
+
+        return task;
+    }
 }
