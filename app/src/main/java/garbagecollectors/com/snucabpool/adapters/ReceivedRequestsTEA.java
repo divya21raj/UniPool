@@ -85,12 +85,12 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                 progressDialog.show();
 
                 final User[] tripEntryUser = new User[1];
-                Task userTask = accessUserDatabase();    //the user that created the clicked tripEntry
+                Task userTask = accessUserDatabase("users/" + tripEntry.getUser_id());    //the user that created the clicked tripEntry
                 userTask.addOnSuccessListener(aVoid ->
                 {
                     DataSnapshot snapshot = (DataSnapshot) userTask.getResult();
 
-                    tripEntryUser[0] = snapshot.child(tripEntry.getUser_id()).getValue(User.class);
+                    tripEntryUser[0] = snapshot.getValue(User.class);
 
                     ArrayList<PairUp> tripEntryUserPairUps = tripEntryUser[0].getPairUps();
                     ArrayList<TripEntry> tripEntryUserSentRequests = tripEntryUser[0].getRequestSent();

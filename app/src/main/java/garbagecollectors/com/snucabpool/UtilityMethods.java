@@ -5,6 +5,7 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -14,17 +15,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import garbagecollectors.com.snucabpool.activities.BaseActivity;
 import garbagecollectors.com.snucabpool.adapters.TripEntryAdapter;
 
 public class UtilityMethods
 {
-    public static Task accessUserDatabase()
+    public static Task accessUserDatabase(String userReference)
     {
         TaskCompletionSource<DataSnapshot> userSource = new TaskCompletionSource<>();
         Task userTask = userSource.getTask();
 
-        DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
+        DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference(userReference);
 
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
@@ -159,7 +159,7 @@ public class UtilityMethods
     {
         final TripEntry[] temp = new TripEntry[1];
 
-        Task userTask = accessUserDatabase();    //the user that created the clicked tripEntry
+        Task userTask = accessUserDatabase("users");    //all users
         userTask.addOnSuccessListener(aVoid ->
         {
             DataSnapshot snapshot = (DataSnapshot) userTask.getResult();
