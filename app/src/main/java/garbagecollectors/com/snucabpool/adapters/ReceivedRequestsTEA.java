@@ -25,6 +25,7 @@ import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
+import garbagecollectors.com.snucabpool.activities.RequestActivity.ChatFragment;
 import garbagecollectors.com.snucabpool.activities.RequestActivity.ReceivedRequestsFragment;
 import garbagecollectors.com.snucabpool.activities.RequestActivity.RequestActivity;
 
@@ -110,6 +111,9 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                         UtilityMethods.removeFromList(tripEntryUserSentRequests, tripEntry.getEntry_id());
 
                         finalCurrentUser.setRequestsReceived(finalCurrentUserReceivedRequests);
+
+                        BaseActivity.getChatList().add(tripEntryUser[0]);
+                        ChatFragment.recycleAdapter.notifyDataSetChanged();
 
                         Task<Void> task1 = userDatabaseReference.child(finalCurrentUser.getUserId()).child("pairUps").setValue(currentUserPairUps);
                         Task<Void> task2 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("pairUps").setValue(tripEntryUserPairUps);

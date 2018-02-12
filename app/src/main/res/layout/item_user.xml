@@ -4,9 +4,9 @@
     android:id="@+id/item_user_parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/simple_padding_small"
-    android:foreground="@color/viewBg"
-    android:padding="@dimen/simple_padding_large">
+    android:layout_margin="1dp"
+    android:background="@color/viewBg"
+    android:padding="4dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -39,8 +39,8 @@
                 android:lines="1"
                 android:text="@string/placeholder"
                 android:textColor="@color/colorTextBlack"
-                android:textSize="@dimen/text_size_primary"
-                android:textStyle="bold" />
+                android:textSize="18sp"
+                android:textStyle="normal"/>
 
             <TextView
                 android:id="@+id/item_friend_email_text_view"
@@ -50,7 +50,7 @@
                 android:gravity="start"
                 android:lines="1"
                 android:text="@string/placeholder"
-                android:textColor="@color/colorTextBlack"
+                android:textColor="@color/grey"
                 android:textSize="@dimen/text_size_secondary" />
 
         </LinearLayout>

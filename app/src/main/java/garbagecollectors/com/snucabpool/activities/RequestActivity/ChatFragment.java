@@ -21,7 +21,7 @@ public class ChatFragment extends Fragment
     RecyclerView recycle;
     List<User> userList;
 
-    UserAdapter recycleAdapter;
+    public static UserAdapter recycleAdapter;
 
     public ChatFragment()
     {

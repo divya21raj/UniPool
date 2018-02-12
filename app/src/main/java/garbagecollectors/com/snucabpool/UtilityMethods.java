@@ -8,11 +8,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
@@ -137,24 +139,6 @@ public class UtilityMethods
         }
 
         tripEntryList.add(0, tripEntry);
-    }
-
-    public static void updateUserList(ArrayList<User> userList, User user)
-    {
-        Iterator<User> iterator = userList.iterator();
-
-        while (iterator.hasNext())
-        {
-            User userFromList = iterator.next();
-
-            if(userFromList.getUserId().equals(user.getUserId()))
-            {
-                iterator.remove();
-                break;
-            }
-        }
-
-        userList.add(user);
     }
 
     public static Task populateReceivedRequestsList(ArrayList<TripEntry> receivedRequestsList, HashMap<String, ArrayList<String>> receivedRequestsMap, ArrayList<TripEntry> tripEntries)
@@ -342,5 +326,17 @@ public class UtilityMethods
         });
 
         return task;
+    }
+
+    public static String formatDateTime(Long createdAtTime)
+    {
+        String formattedTime;
+
+        Date date = new Date(createdAtTime);
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
+
+        formattedTime = sdf.format(date);
+
+        return formattedTime;
     }
 }
