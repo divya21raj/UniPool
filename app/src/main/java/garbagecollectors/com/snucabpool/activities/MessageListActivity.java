@@ -28,6 +28,7 @@ public class MessageListActivity extends AppCompatActivity
 		mMessageRecycler = (RecyclerView) findViewById(R.id.recyclerView_message_list);
 		mMessageAdapter = new MessageListAdapter(this, personalMessageList);
 		mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
+
 	}
 
 	public static void setPersonalMessageList(List<Message> personalMessageList)

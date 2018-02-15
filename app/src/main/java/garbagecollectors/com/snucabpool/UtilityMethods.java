@@ -339,4 +339,43 @@ public class UtilityMethods
 
         return formattedTime;
     }
+
+    public static void putMessageInMap(HashMap<String, ArrayList<Message>> messages, Message targetMessage)
+    {
+        boolean flag1 = false, flag2 = false;
+
+        if(messages == null)
+            messages = new HashMap<>();
+
+        for (Map.Entry<String, ArrayList<Message>> entry : messages.entrySet())
+        {
+            if (entry.getKey().equals(targetMessage.getPairUpId()))
+            {
+                for (Message message: entry.getValue())
+                {
+                    if (message.getMessageId().equals(targetMessage.getMessageId()))
+                    {
+                        flag1 = true;
+                        break;
+                    }
+                }
+
+                if(!flag1)
+                {
+                    entry.getValue().add(targetMessage);
+                    flag2 = true;
+                    break;
+                }
+            }
+        }
+
+        if(!flag1 && !flag2)
+        {
+            ArrayList<Message> messageList = new ArrayList<>();
+            messageList.add(targetMessage);
+
+            messages.put(targetMessage.getPairUpId(), messageList);
+        }
+
+    }
 }

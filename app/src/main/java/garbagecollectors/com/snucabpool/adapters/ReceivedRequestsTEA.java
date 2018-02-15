@@ -30,6 +30,7 @@ import garbagecollectors.com.snucabpool.activities.RequestActivity.ReceivedReque
 import garbagecollectors.com.snucabpool.activities.RequestActivity.RequestActivity;
 
 import static garbagecollectors.com.snucabpool.UtilityMethods.accessUserDatabase;
+import static garbagecollectors.com.snucabpool.activities.SplashActivity.MessageDBTask;
 
 public class ReceivedRequestsTEA extends TripEntryAdapter
 {
@@ -38,7 +39,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
     private boolean isAlreadyInList = false;
     private boolean requestSent = false;
 
-    private ProgressDialog progressDialog;
+    private ProgressDialog requestsProgressDialog;
 
     public ReceivedRequestsTEA(Context context)
     {
@@ -65,11 +66,14 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
     @Override
     public void onBindViewHolder(MyHolder holder, int position)
     {
+        requestsProgressDialog = new ProgressDialog(context);
+        requestsProgressDialog.setMessage("Please wait...");
+        requestsProgressDialog.show();
+
+        MessageDBTask.addOnSuccessListener(o -> requestsProgressDialog.dismiss());
+
         holder.itemView.setOnClickListener(view ->
         {
-            progressDialog = new ProgressDialog(view.getContext());
-            progressDialog.setMessage("Please wait...");
-
             DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
             DatabaseReference pairUpDatabaseReference = BaseActivity.getPairUpDatabaseReference();
 
@@ -83,7 +87,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
             ReceivedRequestsFragment.alertDialogBuilder.setPositiveButton("YES", (dialog, which) ->
             {
-                progressDialog.show();
+                requestsProgressDialog.show();
 
                 final User[] tripEntryUser = new User[1];
                 Task userTask = accessUserDatabase("users/" + tripEntry.getUser_id());    //the user that created the clicked tripEntry
@@ -126,13 +130,13 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                         Task<Void> allTask = Tasks.whenAll(task1, task2, task3, task4, task5);
                         allTask.addOnSuccessListener(bVoid ->
                         {
-                            progressDialog.dismiss();
+                            requestsProgressDialog.dismiss();
                             RequestActivity.refreshRequests();
                         });
 
                         allTask.addOnFailureListener(e ->
                         {
-                            progressDialog.dismiss();
+                            requestsProgressDialog.dismiss();
                             // apologize profusely to the user!
                             Toast.makeText(view.getContext(), "FAIL", Toast.LENGTH_LONG).show();
                         });

@@ -3,14 +3,16 @@ package garbagecollectors.com.snucabpool;
 public class Message
 {
     private String messageId;
+    private String pairUpId;
     private String message;
     private String senderId;
     private String receiverId;
     private Long createdAtTime;
 
-    public Message(String messageId, String message, String senderId, String receiverId, Long createdAtTime)
+    public Message(String messageId, String pairUpId, String message, String senderId, String receiverId, Long createdAtTime)
     {
         this.messageId = messageId;
+        this.pairUpId = pairUpId;
         this.message = message;
         this.senderId = senderId;
 	    this.receiverId = receiverId;
@@ -69,4 +71,14 @@ public class Message
 	{
 		this.receiverId = receiverId;
 	}
+
+    public String getPairUpId()
+    {
+        return pairUpId;
+    }
+
+    public void setPairUpId(String pairUpId)
+    {
+        this.pairUpId = pairUpId;
+    }
 }

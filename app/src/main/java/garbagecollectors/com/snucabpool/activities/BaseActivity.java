@@ -24,12 +24,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import garbagecollectors.com.snucabpool.Message;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.RequestActivity.RequestActivity;
+
+import static garbagecollectors.com.snucabpool.activities.SplashActivity.MessageDBTask;
 
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
@@ -50,6 +54,10 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
     protected static ArrayList<User> chatList;
 
+    protected static HashMap<String, ArrayList<Message>> messages;   //Key - PairUpID, Value- List of messages in that pairUp
+
+    protected static Message defaultMessage = new Message("def@ult", "", "", "", "", 1l);
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -58,6 +66,18 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+
+        MessageDBTask.addOnCompleteListener(task ->
+        {
+            DataSnapshot messageData = (DataSnapshot) MessageDBTask.getResult();
+
+            for(DataSnapshot dataSnapshot: messageData.getChildren())
+            {
+                Message message = dataSnapshot.getValue(Message.class);
+
+                UtilityMethods.putMessageInMap(messages, message);
+            }
+        });
         
         entryDatabaseReference.addChildEventListener(new ChildEventListener()
         {
