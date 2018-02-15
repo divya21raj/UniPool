@@ -51,6 +51,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
     private static FirebaseUser currentUser;
 
     protected static DatabaseReference userDatabaseReference;
+    protected static DatabaseReference messageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages");
+
+    Message defaultMessage = BaseActivity.getDefaultMessage();
 
     private ProgressDialog progressDialog;
 
@@ -215,6 +218,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
                 userNewOnDatabase = true;
 
                 userDatabaseReference.child(finalCurrentUser.getUserId()).setValue(finalCurrentUser);
+
+                messageDatabaseReference.child(finalCurrentUser.getUserId()).child(defaultMessage.getMessageId()).setValue(defaultMessage);
 
                 Toast.makeText(getApplicationContext(), "User added to database!", Toast.LENGTH_SHORT).show();
 

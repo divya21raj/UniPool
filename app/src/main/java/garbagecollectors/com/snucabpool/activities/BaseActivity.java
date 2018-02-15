@@ -315,4 +315,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     {
         BaseActivity.chatList = chatList;
     }
+
+    public static Message getDefaultMessage()
+    {
+        return defaultMessage;
+    }
 }
