@@ -75,7 +75,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             {
                 Message message = dataSnapshot.getValue(Message.class);
 
-                UtilityMethods.putMessageInMap(messages, message);
+                assert message != null;
+                if(!(message.getMessageId().equals("def@ult")))
+                    UtilityMethods.putMessageInMap(messages, message);
             }
         });
         
@@ -309,6 +311,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public static ArrayList<User> getChatList()
     {
         return chatList;
+    }
+
+    public static HashMap<String, ArrayList<Message>> getMessages()
+    {
+        return messages;
     }
 
     public static void setChatList(ArrayList<User> chatList)

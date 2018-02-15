@@ -68,6 +68,8 @@ public class HomeActivityTEA extends TripEntryAdapter
     @Override
     public void onBindViewHolder(MyHolder holder, int position)
     {
+        UtilityMethods.fillTripEntryHolder(holder, list.get(position));
+
         holder.itemView.setOnClickListener(view ->
         {
             progressDialog = new ProgressDialog(view.getContext());
@@ -101,7 +103,9 @@ public class HomeActivityTEA extends TripEntryAdapter
                 isAlreadyRequested = addRequestInList(requestSent, user.getPairUps(), tripEntry);
 
                 if(!isAlreadyRequested)
+                {
                     isRequestAlreadyInMap = putInMap(requestsReceived, tripEntry.getEntry_id(), user.getUserId());
+                }
 
                 user.setRequestSent(requestSent);
                 tripEntryUser[0].setRequestsReceived(requestsReceived);
@@ -135,10 +139,6 @@ public class HomeActivityTEA extends TripEntryAdapter
 
             });
         });
-
-        TripEntry tripEntry = list.get(position);
-
-        UtilityMethods.fillTripEntryHolder(holder, tripEntry);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

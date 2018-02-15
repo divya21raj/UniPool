@@ -1,6 +1,7 @@
 package garbagecollectors.com.snucabpool.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import java.util.List;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
+import garbagecollectors.com.snucabpool.activities.BaseActivity;
+import garbagecollectors.com.snucabpool.activities.MessageListActivity;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>
 {
@@ -46,6 +49,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>
 	{
 		User user = userList.get(position);
 		UtilityMethods.fillUserHolder(holder, user);
+
+		holder.itemView.setOnClickListener(view ->
+		{
+			MessageListActivity.setChatUser(user);
+			MessageListActivity.setPersonalMessageList(UtilityMethods.getMessageList(BaseActivity.getMessages(), user.getUserId()));
+
+			context.startActivity(new Intent(context, MessageListActivity.class));
+		});
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -377,5 +378,23 @@ public class UtilityMethods
             messages.put(targetMessage.getPairUpId(), messageList);
         }
 
+    }
+
+    public static List<Message> getMessageList(HashMap<String, ArrayList<Message>> messages, String userId)
+    {
+        ArrayList<Message> personalMessageList;
+        ArrayList<PairUp> pairUpList = BaseActivity.getFinalCurrentUser().getPairUps();
+
+        String pairUpId = null;
+
+        for(PairUp pairUp: pairUpList)
+        {
+            if(pairUp.getCreatorId().equals(userId)||pairUp.getRequesterId().equals(userId))
+                pairUpId = pairUp.getPairUpId();
+        }
+
+        personalMessageList = new ArrayList<>(messages.get(pairUpId));
+
+        return personalMessageList;
     }
 }
