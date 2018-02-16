@@ -54,6 +54,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>
 		{
 			MessageListActivity.setChatUser(user);
 			MessageListActivity.setPersonalMessageList(UtilityMethods.getMessageList(BaseActivity.getMessages(), user.getUserId()));
+			MessageListActivity.setPairUp(UtilityMethods.getPairUp(user, BaseActivity.getFinalCurrentUser().getPairUps()));
 
 			context.startActivity(new Intent(context, MessageListActivity.class));
 		});

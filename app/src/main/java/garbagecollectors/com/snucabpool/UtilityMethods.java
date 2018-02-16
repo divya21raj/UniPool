@@ -393,8 +393,60 @@ public class UtilityMethods
                 pairUpId = pairUp.getPairUpId();
         }
 
+        List messageList = messages.get(pairUpId);
+
+        if(messageList != null)
         personalMessageList = new ArrayList<>(messages.get(pairUpId));
 
+        else
+        {
+            personalMessageList = new ArrayList<>();
+            messages.put(pairUpId, personalMessageList);
+        }
+
         return personalMessageList;
+    }
+
+    public static PairUp getPairUp(User user, ArrayList<PairUp> pairUps)
+    {
+        PairUp pairUp = null;
+
+        for (PairUp up: pairUps)
+        {
+            if(up.getRequesterId().equals(user.getUserId()) || up.getCreatorId().equals(user.getUserId()))
+            {
+                pairUp = up;
+                break;
+            }
+        }
+        return pairUp;
+    }
+
+    public static void putMessageOnDB(Message message, User chatUser, User user)
+    {
+        DatabaseReference chatUserMessageReference = FirebaseDatabase.getInstance().getReference("messages/" + chatUser.getUserId());
+        DatabaseReference userMessageReference = FirebaseDatabase.getInstance().getReference("messages/" + user.getUserId());
+
+        String messageId = userMessageReference.push().getKey();
+        message.setMessageId(messageId);
+
+        userMessageReference.child(messageId).setValue(message);
+        chatUserMessageReference.child(messageId).setValue(message);
+    }
+
+    public static boolean messageAlreadyInList(Message message, List<Message> personalMessageList)
+    {
+        boolean flag = false;
+
+        for(Message message1: personalMessageList)
+        {
+            if(message.getMessageId().equals(message1.getMessageId()))
+            {
+                flag = true;
+                break;
+            }
+        }
+
+        return flag;
     }
 }

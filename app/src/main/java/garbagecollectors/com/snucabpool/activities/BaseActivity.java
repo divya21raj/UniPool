@@ -46,6 +46,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static FirebaseUser currentUser;
 
     protected static DatabaseReference userDatabaseReference;
+    protected static DatabaseReference userMessageDatabaseReference;
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     protected static DatabaseReference pairUpDatabaseReference = FirebaseDatabase.getInstance().getReference("pairUps");
 
@@ -54,7 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
     protected static ArrayList<User> chatList;
 
-    protected static HashMap<String, ArrayList<Message>> messages;   //Key - PairUpID, Value- List of messages in that pairUp
+    protected static HashMap<String, ArrayList<Message>> messages = new HashMap<>();   //Key - PairUpID, Value- List of messages in that pairUp
 
     protected static Message defaultMessage = new Message("def@ult", "", "", "", "", 1l);
 
@@ -68,6 +69,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         currentUser = mAuth.getCurrentUser();
 
         userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId());
+        userMessageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + finalCurrentUser.getUserId());
 
         MessageDBTask.addOnCompleteListener(task ->
         {
@@ -82,7 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                     UtilityMethods.putMessageInMap(messages, message);
             }
         });
-        
+
         entryDatabaseReference.addChildEventListener(new ChildEventListener()
         {
             @Override
@@ -134,6 +136,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 finalCurrentUser = dataSnapshot.getValue(User.class);
+                UtilityMethods.populateChatList(dataSnapshot);
             }
 
             @Override
@@ -144,6 +147,42 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             }
         });
 
+        userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
+        {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s)
+            {
+                Message message = dataSnapshot.getValue(Message.class);
+                UtilityMethods.putMessageInMap(messages, message);
+
+                //notify
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s)
+            {
+                //not happening
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot)
+            {
+                //not happening
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s)
+            {
+                //IDK
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                // Failed to read value
+                Log.w("Hello", "Failed to read value.", databaseError.toException());
+            }
+        });
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -308,6 +347,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public static void setPairUpDatabaseReference(DatabaseReference pairUpDatabaseReference)
     {
         BaseActivity.pairUpDatabaseReference = pairUpDatabaseReference;
+    }
+
+    public static DatabaseReference getUserMessageDatabaseReference()
+    {
+        return userMessageDatabaseReference;
     }
 
     public static ArrayList<User> getChatList()

@@ -52,6 +52,8 @@ public class SplashActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
+        BaseActivity.setCurrentUser(currentUser);
+
         userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
 
         messageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + currentUser.getUid());
