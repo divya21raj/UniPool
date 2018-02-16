@@ -45,7 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected FirebaseAuth mAuth;
     protected static FirebaseUser currentUser;
 
-    protected static DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
+    protected static DatabaseReference userDatabaseReference;
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     protected static DatabaseReference pairUpDatabaseReference = FirebaseDatabase.getInstance().getReference("pairUps");
 
@@ -66,6 +66,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+
+        userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId());
 
         MessageDBTask.addOnCompleteListener(task ->
         {
@@ -131,7 +133,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                finalCurrentUser = dataSnapshot.child(currentUser.getUid()).getValue(User.class);
+                finalCurrentUser = dataSnapshot.getValue(User.class);
             }
 
             @Override

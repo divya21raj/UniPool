@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,7 +96,7 @@ public class HomeActivityTEA extends TripEntryAdapter
 
                 tripEntryUser[0] = snapshot.getValue(User.class);
 
-                DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
+                DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
 
                 ArrayList<TripEntry> requestSent = user.getRequestSent();
                 HashMap<String, ArrayList<String>> requestsReceived = tripEntryUser[0].getRequestsReceived();

@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,7 +75,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
         holder.itemView.setOnClickListener(view ->
         {
-            DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
+            DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
             DatabaseReference pairUpDatabaseReference = BaseActivity.getPairUpDatabaseReference();
 
             TripEntry tripEntry = list.get(position);
