@@ -2,8 +2,7 @@ package garbagecollectors.com.snucabpool.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Button;
@@ -51,11 +50,9 @@ public class MessageListActivity extends AppCompatActivity
 
 		messageRecycler = (RecyclerView) findViewById(R.id.recyclerView_message_list);
 
-		messageAdapter = new MessageListAdapter(this, personalMessageList);
+		messageAdapter = new MessageListAdapter(personalMessageList, this);
 
-		RecyclerView.LayoutManager layoutManager = new GridLayoutManager(MessageListActivity.this,1);
-		messageRecycler.setLayoutManager(layoutManager);
-		messageRecycler.setItemAnimator((new DefaultItemAnimator()));
+		messageRecycler.setLayoutManager(new LinearLayoutManager(this));
 		messageRecycler.setAdapter(messageAdapter);
 
 		DatabaseReference userMessageDatabaseReference = BaseActivity.getUserMessageDatabaseReference();

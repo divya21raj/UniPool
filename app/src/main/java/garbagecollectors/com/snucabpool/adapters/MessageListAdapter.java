@@ -20,13 +20,20 @@ public class MessageListAdapter extends RecyclerView.Adapter
 	private static final int VIEW_TYPE_MESSAGE_SENT = 1;
 	private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
-	private Context mContext;
+	private Context context;
+	private LayoutInflater inflater;
 	private List<Message> mMessageList;
 
-	public MessageListAdapter(Context context, List<Message> messageList)
+	public MessageListAdapter(List<Message> messageList, Context context)
 	{
-		mContext = context;
+		this.context = context;
 		mMessageList = messageList;
+	}
+
+	public MessageListAdapter(Context context)
+	{
+		this.context = context;
+		inflater = LayoutInflater.from(context);
 	}
 
 	@Override
@@ -60,12 +67,12 @@ public class MessageListAdapter extends RecyclerView.Adapter
 
 		if (viewType == VIEW_TYPE_MESSAGE_SENT)
 		{
-			view = LayoutInflater.from(parent.getContext())
+			view = LayoutInflater.from(context)
 					.inflate(R.layout.item_sent_message, parent, false);
 			return new SentMessageHolder(view);
 		} else if (viewType == VIEW_TYPE_MESSAGE_RECEIVED)
 		{
-			view = LayoutInflater.from(parent.getContext())
+			view = LayoutInflater.from(context)
 					.inflate(R.layout.item_received_message, parent, false);
 			return new ReceivedMessageHolder(view);
 		}
