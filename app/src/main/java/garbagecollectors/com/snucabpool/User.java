@@ -3,10 +3,6 @@ package garbagecollectors.com.snucabpool;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by D2R on 29/11/2017.
- */
-
 public class User
 {
     private String userId;
@@ -19,8 +15,6 @@ public class User
     //We have Map because we're taking TripEntry object of the entry that we have made (that the other person has clicked on)
 
     private ArrayList<PairUp> pairUps;
-    //Key is userId paired up with, value is list of tripEntries paired up over.
-
 
     public User(String userId, String name, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, ArrayList<PairUp> pairUps)
     {

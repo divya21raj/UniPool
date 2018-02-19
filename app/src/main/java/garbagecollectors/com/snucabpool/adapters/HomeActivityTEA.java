@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,7 +60,7 @@ public class HomeActivityTEA extends TripEntryAdapter
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         // create a new view
-        View v = LayoutInflater.from(context).inflate(R.layout.card, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_trip_entry, parent, false);
 
         return new MyHolder(v);
     }
@@ -68,6 +69,8 @@ public class HomeActivityTEA extends TripEntryAdapter
     @Override
     public void onBindViewHolder(MyHolder holder, int position)
     {
+        UtilityMethods.fillTripEntryHolder(holder, list.get(position));
+
         holder.itemView.setOnClickListener(view ->
         {
             progressDialog = new ProgressDialog(view.getContext());
@@ -86,14 +89,14 @@ public class HomeActivityTEA extends TripEntryAdapter
             progressDialog.show();
 
             final User[] tripEntryUser = new User[1];
-            Task userTask = accessUserDatabase();    //the user that created the clicked tripEntry
+            Task userTask = accessUserDatabase("users/" + tripEntry.getUser_id());    //the user that created the clicked tripEntry
             userTask.addOnSuccessListener(aVoid ->
             {
                 DataSnapshot snapshot = (DataSnapshot) userTask.getResult();
 
-                tripEntryUser[0] = snapshot.child(tripEntry.getUser_id()).getValue(User.class);
+                tripEntryUser[0] = snapshot.getValue(User.class);
 
-                DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
+                DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
 
                 ArrayList<TripEntry> requestSent = user.getRequestSent();
                 HashMap<String, ArrayList<String>> requestsReceived = tripEntryUser[0].getRequestsReceived();
@@ -101,14 +104,16 @@ public class HomeActivityTEA extends TripEntryAdapter
                 isAlreadyRequested = addRequestInList(requestSent, user.getPairUps(), tripEntry);
 
                 if(!isAlreadyRequested)
+                {
                     isRequestAlreadyInMap = putInMap(requestsReceived, tripEntry.getEntry_id(), user.getUserId());
+                }
 
                 user.setRequestSent(requestSent);
                 tripEntryUser[0].setRequestsReceived(requestsReceived);
 
                 if(!isAlreadyRequested && !isRequestAlreadyInMap)
                 {
-                    //update firebase database to include arrayList that contains name of the card clicked in requests sent...
+                    //update firebase database to include arrayList that contains name of the item_trip_entry clicked in requests sent...
                     Task<Void> task1 = userDatabaseReference.child(user.getUserId()).child("requestSent").setValue(requestSent);
                     Task<Void> task2 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("requestsReceived").setValue(requestsReceived);
 
@@ -135,10 +140,6 @@ public class HomeActivityTEA extends TripEntryAdapter
 
             });
         });
-
-        TripEntry tripEntry = list.get(position);
-
-        UtilityMethods.fillHolder(holder, tripEntry);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

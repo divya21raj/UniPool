@@ -237,7 +237,7 @@ public class NewEntryActivity extends BaseActivity
 
                 entryDatabaseReference.child(entryId).setValue(tripEntry);
 
-                userDatabaseReference.child(finalCurrentUser.getUserId()).child("userTripEntries").setValue(finalCurrentUser.getUserTripEntries());
+                userDatabaseReference.child("userTripEntries").setValue(finalCurrentUser.getUserTripEntries());
 
                 Toast.makeText(this, "TripEntry created!", Toast.LENGTH_SHORT).show();
 

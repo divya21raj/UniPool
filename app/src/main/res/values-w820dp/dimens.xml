@@ -2,4 +2,24 @@
     <!-- Example customization of dimensions originally defined in res/values/dimens.xml
          (such as screen margins) for screens with more than 820dp of available width. This
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
+
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="card_margin">3dp</dimen>
+    <dimen name="title_padding">10dp</dimen>
+    <dimen name="card_text_size">12dp</dimen>
+
+    <dimen name="text_size_primary">16sp</dimen>
+    <dimen name="text_size_secondary">14sp</dimen>
+
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+
+    <dimen name="simple_padding_tiny">2dp</dimen>
+    <dimen name="simple_padding_small">4dp</dimen>
+    <dimen name="simple_padding_medium">8dp</dimen>
+    <dimen name="simple_padding_largish">12dp</dimen>
+    <dimen name="simple_padding_large">16dp</dimen>
+    <dimen name="simple_padding_larger">32dp</dimen>
+    <dimen name="simple_padding_huge">56dp</dimen>
 </resources>

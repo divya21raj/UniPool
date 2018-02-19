@@ -4,6 +4,7 @@
     <string name="WebClientId">560852588496-baos0qb9om1qmvade33hbh1l2ic70l00.apps.googleusercontent.com</string>
     <string name="new_entry">New Entry</string>
     <string name="title_requests">Requests</string>
+    <string name="placeholder">placeholder</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

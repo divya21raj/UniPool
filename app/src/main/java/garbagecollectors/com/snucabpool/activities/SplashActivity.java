@@ -27,8 +27,9 @@ public class SplashActivity extends AppCompatActivity
 {
     private static ArrayList<TripEntry> tripEntryList = new ArrayList<>();
 
-    private static DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
+    private static DatabaseReference userDatabaseReference;
     private static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
+    private static DatabaseReference messageDatabaseReference;
 
     FirebaseAuth mAuth;
     static FirebaseUser currentUser;
@@ -39,6 +40,9 @@ public class SplashActivity extends AppCompatActivity
     private TaskCompletionSource<DataSnapshot> EntryDBSource = new TaskCompletionSource<>();
     private Task EntryDBTask = EntryDBSource.getTask();
 
+    private static TaskCompletionSource<DataSnapshot> MessageDBSource = new TaskCompletionSource<>();
+    public static Task MessageDBTask = MessageDBSource.getTask();
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -47,7 +51,13 @@ public class SplashActivity extends AppCompatActivity
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        
+
+        BaseActivity.setCurrentUser(currentUser);
+
+        userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
+
+        messageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + currentUser.getUid());
+
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
@@ -89,11 +99,30 @@ public class SplashActivity extends AppCompatActivity
             }
 
             if(!(LoginActivity.userNewOnDatabase))
-                BaseActivity.setFinalCurrentUser(userData.child(currentUser.getUid()).getValue(User.class));
+                BaseActivity.setFinalCurrentUser(userData.getValue(User.class));
 
-            finish();
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+			Task chatListTask = UtilityMethods.populateChatList(userData);
 
+			messageDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    MessageDBSource.setResult(dataSnapshot);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+                    MessageDBSource.setException(databaseError.toException());
+                }
+            });
+
+            chatListTask.addOnCompleteListener(task1 ->
+            {
+                finish();
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            });
         });
 
         allTask.addOnFailureListener(e ->

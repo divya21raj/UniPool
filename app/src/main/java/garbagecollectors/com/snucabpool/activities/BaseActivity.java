@@ -24,12 +24,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import garbagecollectors.com.snucabpool.Message;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.RequestActivity.RequestActivity;
+
+import static garbagecollectors.com.snucabpool.activities.SplashActivity.MessageDBTask;
 
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
@@ -41,13 +45,19 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected FirebaseAuth mAuth;
     protected static FirebaseUser currentUser;
 
-    protected static DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
+    protected static DatabaseReference userDatabaseReference;
+    protected static DatabaseReference userMessageDatabaseReference;
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     protected static DatabaseReference pairUpDatabaseReference = FirebaseDatabase.getInstance().getReference("pairUps");
 
     protected static User finalCurrentUser;
 
     protected static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
+    protected static ArrayList<User> chatList;
+
+    protected static HashMap<String, ArrayList<Message>> messages = new HashMap<>();   //Key - PairUpID, Value- List of messages in that pairUp
+
+    protected static Message defaultMessage = new Message("def@ult", "", "", "", "", 1l);
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,7 +67,24 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        
+
+        userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId());
+        userMessageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + finalCurrentUser.getUserId());
+
+        MessageDBTask.addOnCompleteListener(task ->
+        {
+            DataSnapshot messageData = (DataSnapshot) MessageDBTask.getResult();
+
+            for(DataSnapshot dataSnapshot: messageData.getChildren())
+            {
+                Message message = dataSnapshot.getValue(Message.class);
+
+                assert message != null;
+                if(!(message.getMessageId().equals("def@ult")))
+                    UtilityMethods.putMessageInMap(messages, message);
+            }
+        });
+
         entryDatabaseReference.addChildEventListener(new ChildEventListener()
         {
             @Override
@@ -108,7 +135,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                finalCurrentUser = dataSnapshot.child(currentUser.getUid()).getValue(User.class);
+                finalCurrentUser = dataSnapshot.getValue(User.class);
+                UtilityMethods.populateChatList(dataSnapshot);
             }
 
             @Override
@@ -119,6 +147,42 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             }
         });
 
+        userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
+        {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s)
+            {
+                Message message = dataSnapshot.getValue(Message.class);
+                UtilityMethods.putMessageInMap(messages, message);
+
+                //notify
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s)
+            {
+                //not happening
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot)
+            {
+                //not happening
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s)
+            {
+                //IDK
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                // Failed to read value
+                Log.w("Hello", "Failed to read value.", databaseError.toException());
+            }
+        });
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -285,5 +349,28 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         BaseActivity.pairUpDatabaseReference = pairUpDatabaseReference;
     }
 
+    public static DatabaseReference getUserMessageDatabaseReference()
+    {
+        return userMessageDatabaseReference;
+    }
 
+    public static ArrayList<User> getChatList()
+    {
+        return chatList;
+    }
+
+    public static HashMap<String, ArrayList<Message>> getMessages()
+    {
+        return messages;
+    }
+
+    public static void setChatList(ArrayList<User> chatList)
+    {
+        BaseActivity.chatList = chatList;
+    }
+
+    public static Message getDefaultMessage()
+    {
+        return defaultMessage;
+    }
 }

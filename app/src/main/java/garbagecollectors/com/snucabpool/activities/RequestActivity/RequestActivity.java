@@ -37,7 +37,7 @@ public class RequestActivity extends BaseActivity
 	private TabLayout tabLayout;
 	private ViewPager viewPager;
 
-	static ProgressBar progressBar;
+	public static ProgressBar requestsProgressBar;
 
 	static DatabaseReference sentRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId() + "/requestSent");
 	static DatabaseReference receivedRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId() + "/requestsReceived");
@@ -81,8 +81,8 @@ public class RequestActivity extends BaseActivity
 		tabLayout = (TabLayout) findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(viewPager);
 
-		progressBar = (ProgressBar) findViewById(R.id.requests_progressBar);
-		progressBar.setVisibility(View.INVISIBLE);
+		requestsProgressBar = (ProgressBar) findViewById(R.id.requests_progressBar);
+		requestsProgressBar.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class RequestActivity extends BaseActivity
 
 	public static void refreshRequests()
 	{
-		progressBar.setVisibility(View.VISIBLE);
+		requestsProgressBar.setVisibility(View.VISIBLE);
 
 		sentRequestsSource = new TaskCompletionSource<>();
 		receivedRequestsSource = new TaskCompletionSource<>();
@@ -164,7 +164,7 @@ public class RequestActivity extends BaseActivity
 				ReceivedRequestsFragment.refreshRecycler();
 				SentRequestsFragment.refreshRecycler();
 
-				progressBar.setVisibility(View.INVISIBLE);
+				requestsProgressBar.setVisibility(View.INVISIBLE);
 			});
 		});
 	}

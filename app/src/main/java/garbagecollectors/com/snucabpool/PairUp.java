@@ -9,9 +9,9 @@ public class PairUp
     private String creatorId;   //person who created the tripEntry
     private String requesterId;
 
-    private ArrayList<Message> messages;
+    private ArrayList<String> messages;
 
-    public PairUp(String pairUpId, String creatorId, String requesterId, ArrayList<Message> messages)
+    public PairUp(String pairUpId, String creatorId, String requesterId, ArrayList<String> messages)
     {
         this.pairUpId = pairUpId;
         this.creatorId = creatorId;
@@ -20,8 +20,7 @@ public class PairUp
     }
 
     public PairUp()
-    {
-    }
+    {}
 
     public String getPairUpId()
     {
@@ -53,12 +52,12 @@ public class PairUp
         this.requesterId = requesterId;
     }
 
-    public ArrayList<Message> getMessages()
+    public ArrayList<String> getMessages()
     {
         return messages;
     }
 
-    public void setMessages(ArrayList<Message> messages)
+    public void setMessages(ArrayList<String> messages)
     {
         this.messages = messages;
     }

@@ -1,30 +1,39 @@
 package garbagecollectors.com.snucabpool;
 
+import android.content.Context;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
 import garbagecollectors.com.snucabpool.adapters.TripEntryAdapter;
+import garbagecollectors.com.snucabpool.adapters.UserAdapter;
 
 public class UtilityMethods
 {
-    public static Task accessUserDatabase()
+    public static Task accessUserDatabase(String userReference)
     {
         TaskCompletionSource<DataSnapshot> userSource = new TaskCompletionSource<>();
         Task userTask = userSource.getTask();
 
-        DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
+        DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference(userReference);
 
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
@@ -137,29 +146,11 @@ public class UtilityMethods
         tripEntryList.add(0, tripEntry);
     }
 
-    public static void updateUserList(ArrayList<User> userList, User user)
-    {
-        Iterator<User> iterator = userList.iterator();
-
-        while (iterator.hasNext())
-        {
-            User userFromList = iterator.next();
-
-            if(userFromList.getUserId().equals(user.getUserId()))
-            {
-                iterator.remove();
-                break;
-            }
-        }
-
-        userList.add(user);
-    }
-
     public static Task populateReceivedRequestsList(ArrayList<TripEntry> receivedRequestsList, HashMap<String, ArrayList<String>> receivedRequestsMap, ArrayList<TripEntry> tripEntries)
     {
         final TripEntry[] temp = new TripEntry[1];
 
-        Task userTask = accessUserDatabase();    //the user that created the clicked tripEntry
+        Task userTask = accessUserDatabase("users");    //all users
         userTask.addOnSuccessListener(aVoid ->
         {
             DataSnapshot snapshot = (DataSnapshot) userTask.getResult();
@@ -226,7 +217,7 @@ public class UtilityMethods
         return list;
     }
 
-    public static void fillHolder(TripEntryAdapter.MyHolder holder, TripEntry tripEntry)
+    public static void fillTripEntryHolder(TripEntryAdapter.MyHolder holder, TripEntry tripEntry)
     {
         holder.date.setText(tripEntry.getDate());
         holder.name_user.setText(tripEntry.getName());
@@ -235,6 +226,11 @@ public class UtilityMethods
         holder.destination.setText("to " + tripEntry.getDestination().getName());
     }
 
+    public static void fillUserHolder(UserAdapter.MyHolder holder, User user)
+    {
+        holder.name.setText(user.getName());
+        holder.email.setText("email");
+    }
 
     public static void removeFromMap(HashMap<String, ArrayList<String>> map, String keyId, String valueId)
     {
@@ -300,4 +296,167 @@ public class UtilityMethods
         return time;
     }
 
+    public static Task populateChatList(DataSnapshot userData)
+    {
+        final String[] userId = new String[1];
+
+        ArrayList<PairUp> pairUps = new ArrayList<>();
+
+        for(DataSnapshot dataSnapshot: userData.child("pairUps").getChildren())
+            pairUps.add(dataSnapshot.getValue(PairUp.class));
+
+        Task task = accessUserDatabase("users");
+
+        ArrayList<User> finalChatList = new ArrayList<>();
+
+        task.addOnCompleteListener(aTask ->
+        {
+            DataSnapshot snapshot = (DataSnapshot) task.getResult();
+
+            for(PairUp pairUp: pairUps)
+            {
+                if(!(pairUp.getCreatorId().equals("dummy")))
+                {
+                    if(pairUp.getCreatorId().equals(BaseActivity.getCurrentUser().getUid()))
+                        userId[0] = pairUp.getRequesterId();
+
+                    else
+                        userId[0] = pairUp.getCreatorId();
+
+                    finalChatList.add(snapshot.child(userId[0]).getValue(User.class));
+                }
+            }
+
+            BaseActivity.setChatList(finalChatList);
+        });
+
+        return task;
+    }
+
+    public static String formatDateTime(Long createdAtTime)
+    {
+        String formattedTime;
+
+        Date date = new Date(createdAtTime);
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
+
+        formattedTime = sdf.format(date);
+
+        return formattedTime;
+    }
+
+    public static void putMessageInMap(HashMap<String, ArrayList<Message>> messages, Message targetMessage)
+    {
+        boolean flag1 = false, flag2 = false;
+
+        if(messages == null)
+            messages = new HashMap<>();
+
+        for (Map.Entry<String, ArrayList<Message>> entry : messages.entrySet())
+        {
+            if (entry.getKey().equals(targetMessage.getPairUpId()))
+            {
+                for (Message message: entry.getValue())
+                {
+                    if (message.getMessageId().equals(targetMessage.getMessageId()))
+                    {
+                        flag1 = true;
+                        break;
+                    }
+                }
+
+                if(!flag1)
+                {
+                    entry.getValue().add(targetMessage);
+                    flag2 = true;
+                    break;
+                }
+            }
+        }
+
+        if(!flag1 && !flag2)
+        {
+            ArrayList<Message> messageList = new ArrayList<>();
+            messageList.add(targetMessage);
+
+            messages.put(targetMessage.getPairUpId(), messageList);
+        }
+
+    }
+
+    public static List<Message> getMessageList(HashMap<String, ArrayList<Message>> messages, String userId)
+    {
+        ArrayList<Message> personalMessageList;
+        ArrayList<PairUp> pairUpList = BaseActivity.getFinalCurrentUser().getPairUps();
+
+        String pairUpId = null;
+
+        for(PairUp pairUp: pairUpList)
+        {
+            if(pairUp.getCreatorId().equals(userId)||pairUp.getRequesterId().equals(userId))
+                pairUpId = pairUp.getPairUpId();
+        }
+
+        List messageList = messages.get(pairUpId);
+
+        if(messageList != null)
+        personalMessageList = new ArrayList<>(messages.get(pairUpId));
+
+        else
+        {
+            personalMessageList = new ArrayList<>();
+            messages.put(pairUpId, personalMessageList);
+        }
+
+        return personalMessageList;
+    }
+
+    public static PairUp getPairUp(User user, ArrayList<PairUp> pairUps)
+    {
+        PairUp pairUp = null;
+
+        for (PairUp up: pairUps)
+        {
+            if(up.getRequesterId().equals(user.getUserId()) || up.getCreatorId().equals(user.getUserId()))
+            {
+                pairUp = up;
+                break;
+            }
+        }
+        return pairUp;
+    }
+
+    public static void putMessageOnDB(Message message, User chatUser, User user)
+    {
+        DatabaseReference chatUserMessageReference = FirebaseDatabase.getInstance().getReference("messages/" + chatUser.getUserId());
+        DatabaseReference userMessageReference = FirebaseDatabase.getInstance().getReference("messages/" + user.getUserId());
+
+        String messageId = userMessageReference.push().getKey();
+        message.setMessageId(messageId);
+
+        userMessageReference.child(messageId).setValue(message);
+        chatUserMessageReference.child(messageId).setValue(message);
+    }
+
+    public static boolean messageAlreadyInList(Message message, List<Message> personalMessageList)
+    {
+        boolean flag = false;
+
+        for(Message message1: personalMessageList)
+        {
+            if(message.getMessageId().equals(message1.getMessageId()))
+            {
+                flag = true;
+                break;
+            }
+        }
+
+        return flag;
+    }
+
+    public static float dpToPx(Context context, float valueInDp)
+    {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
+    }
 }

@@ -51,6 +51,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
     private static FirebaseUser currentUser;
 
     protected static DatabaseReference userDatabaseReference;
+    protected static DatabaseReference messageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages");
+
+    Message defaultMessage = BaseActivity.getDefaultMessage();
 
     private ProgressDialog progressDialog;
 
@@ -216,6 +219,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
                 userDatabaseReference.child(finalCurrentUser.getUserId()).setValue(finalCurrentUser);
 
+                messageDatabaseReference.child(finalCurrentUser.getUserId()).child(defaultMessage.getMessageId()).setValue(defaultMessage);
+
                 Toast.makeText(getApplicationContext(), "User added to database!", Toast.LENGTH_SHORT).show();
 
                 updateUI(user);
@@ -253,11 +258,11 @@ public class LoginActivity extends Activity implements View.OnClickListener
         HashMap<String, ArrayList<String>> dummyRequestReceived = new HashMap<>();
         dummyRequestReceived.put("dummy", dummyUserIdList);
 
-        Message dummyMessage = new Message("", "dummy", 1L);
+        Message dummyMessage = new Message("dummy", "", "", "dummy", "dummy", 1L);
         ArrayList<Message> dummyMessages = new ArrayList<>();
         dummyMessages.add(dummyMessage);
 
-        PairUp dummyPairUp = new PairUp("dummydummy", "dummy", "dummy", dummyMessages);
+        PairUp dummyPairUp = new PairUp("dummydummy", "dummy", "dummy", dummyUserIdList);
         ArrayList<PairUp> dummyPairUps = new ArrayList<>();
         dummyPairUps.add(dummyPairUp);
 
