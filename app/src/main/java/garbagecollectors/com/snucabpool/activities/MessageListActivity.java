@@ -2,11 +2,15 @@ package garbagecollectors.com.snucabpool.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Button;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -20,16 +24,14 @@ import garbagecollectors.com.snucabpool.PairUp;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
-import garbagecollectors.com.snucabpool.adapters.MessageListAdapter;
 
 
 public class MessageListActivity extends AppCompatActivity
 {
-	private RecyclerView messageRecycler;
-	private MessageListAdapter messageAdapter;
-
-	private Button sendButton;
-	private EditText chatBoxEditText;
+	LinearLayout messagesLayout;
+	ImageView sendButton;
+	EditText messageArea;
+	ScrollView scrollView;
 
 	private static List<Message> personalMessageList;
 	private static User chatUser;
@@ -42,18 +44,15 @@ public class MessageListActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_message_list);
 
-		/*getActionBar().setTitle(chatUser.getName());
-		getSupportActionBar().setTitle(chatUser.getName());*/
+		messagesLayout = (LinearLayout) findViewById(R.id.layout1);
+		sendButton = (ImageView)findViewById(R.id.sendButton);
+		messageArea = (EditText)findViewById(R.id.message_edit_text);
+		scrollView = (ScrollView)findViewById(R.id.scrollView);
 
-		sendButton = (Button) findViewById(R.id.button_chatbox_send);
-		chatBoxEditText = (EditText) findViewById(R.id.editText_chatbox);
+		for(Message message: personalMessageList)
+			showMessage(message);
 
-		messageRecycler = (RecyclerView) findViewById(R.id.recyclerView_message_list);
-
-		messageAdapter = new MessageListAdapter(personalMessageList, this);
-
-		messageRecycler.setLayoutManager(new LinearLayoutManager(this));
-		messageRecycler.setAdapter(messageAdapter);
+		setScrollViewToBottom();
 
 		DatabaseReference userMessageDatabaseReference = BaseActivity.getUserMessageDatabaseReference();
 
@@ -69,9 +68,8 @@ public class MessageListActivity extends AppCompatActivity
 						!UtilityMethods.messageAlreadyInList(message, personalMessageList) && !message.getMessageId().equals("def@ult"))
 				{
 					personalMessageList.add(message);
-					messageAdapter.notifyDataSetChanged();
+					showMessage(message);
 				}
-
 			}
 
 			@Override
@@ -96,7 +94,7 @@ public class MessageListActivity extends AppCompatActivity
 
 		sendButton.setOnClickListener(view ->
 		{
-			String typedMessage = chatBoxEditText.getText().toString();
+			String typedMessage = messageArea.getText().toString();
 
 			if(!typedMessage.isEmpty())
 			{
@@ -108,12 +106,70 @@ public class MessageListActivity extends AppCompatActivity
 				UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);  //local update
 
 				personalMessageList.add(message);
-				messageAdapter.notifyDataSetChanged();
+				showMessage(message);
 
-				chatBoxEditText.setText("");
+				messageArea.setText("");
 			}
 		});
 
+		//detecting if keyboard on-screen
+		final View activityRootView = findViewById(R.id.activity_message_list);
+		activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(() ->
+		{
+			int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
+
+			if (heightDiff > UtilityMethods.dpToPx(MessageListActivity.this, 200))
+				setScrollViewToBottom();
+		});
+	}
+
+	private void setScrollViewToBottom()
+	{
+		View lastChild = scrollView.getChildAt(scrollView.getChildCount() - 1);
+		int bottom = lastChild.getBottom() + scrollView.getPaddingBottom();
+		int sy = scrollView.getScrollY();
+		int sh = scrollView.getHeight();
+		int delta = bottom - (sy + sh);
+
+		scrollView.smoothScrollBy(0, delta);
+	}
+
+	private void showMessage(Message message)
+	{
+		if(message.getSenderId().equals(BaseActivity.getFinalCurrentUser().getUserId()))
+		{
+			addMessageBox(message.getMessage(), 1);
+		}
+		else
+		{
+			addMessageBox(message.getMessage(), 2);
+		}
+	}
+
+	public void addMessageBox(String message, int type)
+	{
+		TextView textView = new TextView(MessageListActivity.this);
+		textView.setText(message);
+
+		LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		lp2.weight = 1.0f;
+
+		if(type == 1)
+		{
+			lp2.gravity = Gravity.RIGHT;
+			textView.setBackgroundResource(R.drawable.bubble_in);
+		}
+		else
+		{
+			lp2.gravity = Gravity.LEFT;
+			textView.setBackgroundResource(R.drawable.bubble_out);
+		}
+
+		textView.setLayoutParams(lp2);
+		messagesLayout.addView(textView);
+
+		//scrollView.fullScroll(View.FOCUS_DOWN);
+		setScrollViewToBottom();
 	}
 
 	public static PairUp getPairUp()

@@ -1,5 +1,9 @@
 package garbagecollectors.com.snucabpool;
 
+import android.content.Context;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.database.DataSnapshot;
@@ -448,5 +452,11 @@ public class UtilityMethods
         }
 
         return flag;
+    }
+
+    public static float dpToPx(Context context, float valueInDp)
+    {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
     }
 }
