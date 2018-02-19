@@ -108,7 +108,11 @@ public class SplashActivity extends AppCompatActivity
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot)
                 {
-                    MessageDBSource.setResult(dataSnapshot);
+                    try
+                    {
+                        MessageDBSource.setResult(dataSnapshot);
+                    }catch (IllegalStateException ignored)
+                    {}
                 }
 
                 @Override

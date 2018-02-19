@@ -81,8 +81,6 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         mAuth = FirebaseAuth.getInstance();
 
-        userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
-
         progressDialog = new ProgressDialog(this);
 
         signInButton = (SignInButton) findViewById(R.id.sign_in_button);
@@ -97,6 +95,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         // Check if user is signed in (non-null) and update UI accordingly.
         currentUser = mAuth.getCurrentUser();
+
         updateUI(currentUser);
     }
 
@@ -193,6 +192,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
     {
         dummyInitFinalCurrentUser(user);
 
+        userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + user.getUid());
+
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
@@ -213,11 +214,11 @@ public class LoginActivity extends Activity implements View.OnClickListener
         {
            DataSnapshot userDataSnapshot = (DataSnapshot) userDBTask.getResult();
 
-            if (!userDataSnapshot.child(finalCurrentUser.getUserId()).exists())
+            if (!userDataSnapshot.exists())
             {
                 userNewOnDatabase = true;
 
-                userDatabaseReference.child(finalCurrentUser.getUserId()).setValue(finalCurrentUser);
+                userDatabaseReference.setValue(finalCurrentUser);
 
                 messageDatabaseReference.child(finalCurrentUser.getUserId()).child(defaultMessage.getMessageId()).setValue(defaultMessage);
 

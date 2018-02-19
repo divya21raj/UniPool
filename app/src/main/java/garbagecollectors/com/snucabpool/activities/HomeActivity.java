@@ -52,7 +52,6 @@ public class HomeActivity extends BaseActivity
         recycle.setLayoutManager(layoutManager);
         recycle.setItemAnimator( new DefaultItemAnimator());
         recycle.setAdapter(recyclerAdapter);
-
     }
 
 	@Override
