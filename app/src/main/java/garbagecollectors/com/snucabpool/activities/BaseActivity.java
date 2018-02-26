@@ -31,6 +31,7 @@ import garbagecollectors.com.snucabpool.TripEntry;
 import garbagecollectors.com.snucabpool.User;
 import garbagecollectors.com.snucabpool.UtilityMethods;
 import garbagecollectors.com.snucabpool.activities.RequestActivity.RequestActivity;
+import garbagecollectors.com.snucabpool.activities.SettingsActivity.SettingsActivity;
 
 import static garbagecollectors.com.snucabpool.activities.SplashActivity.MessageDBTask;
 
@@ -41,15 +42,15 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     protected DrawerLayout drawerLayout;
 
-    protected FirebaseAuth mAuth;
-    protected static FirebaseUser currentUser;
+    public static FirebaseAuth mAuth;
+    public static FirebaseUser currentUser;
 
     protected static DatabaseReference userDatabaseReference;
     protected static DatabaseReference userMessageDatabaseReference;
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     protected static DatabaseReference pairUpDatabaseReference = FirebaseDatabase.getInstance().getReference("pairUps");
 
-    protected static User finalCurrentUser;
+    public static User finalCurrentUser;
 
     protected static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
     protected static ArrayList<User> chatList;

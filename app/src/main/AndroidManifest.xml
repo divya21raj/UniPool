@@ -22,11 +22,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.HomeActivity"
             android:label="Home"
@@ -35,6 +37,7 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.NewEntryActivity"
             android:label="Create a New Entry">
@@ -42,10 +45,15 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.RequestActivity.RequestActivity"
             android:label="@string/title_requests" />
-        <activity android:name=".activities.MessageListActivity"></activity>
+
+        <activity android:name=".activities.MessageListActivity" />
+
+        <activity android:name=".activities.SettingsActivity.SettingsActivity"
+            android:label="Settings"/>
     </application>
 
 </manifest>

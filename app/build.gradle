@@ -74,6 +74,10 @@ dependencies {
     compile 'com.android.support:support-v4:25.4.0'
 
     compile 'com.android.support:preference-v7:25.4.0'
+    compile 'com.android.support:preference-v14:25.4.0'
+
+    compile 'com.github.QuadFlask:colorpicker:0.0.13'
+
     testCompile 'junit:junit:4.12'
 }
 apply plugin: "com.google.gms.google-services"
