@@ -49,6 +49,8 @@ public class MessageListActivity extends AppCompatActivity
 		messageArea = (EditText)findViewById(R.id.message_edit_text);
 		scrollView = (ScrollView)findViewById(R.id.scrollView);
 
+		setTitle(chatUser.getName());
+
 		for(Message message: personalMessageList)
 			showMessage(message);
 

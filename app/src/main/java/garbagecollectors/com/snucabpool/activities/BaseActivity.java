@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -266,7 +265,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 		switch (menuItem.getItemId())
 		{
 			case R.id.nav_settings:
-				Toast.makeText(getApplicationContext(), "Coming soon!", Toast.LENGTH_LONG).show();
+				startActivity(new Intent(this, SettingsActivity.class));
 				break;
 
 			case R.id.nav_logout:
