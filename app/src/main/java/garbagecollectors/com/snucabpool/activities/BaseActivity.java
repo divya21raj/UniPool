@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -223,6 +224,30 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         return true;
     }
 
+    protected void navDrawerStateListener()
+    {
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener()
+        {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset)
+            {}
+
+            @Override
+            public void onDrawerOpened(View drawerView)
+            {
+                setNavHeaderStuff();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView)
+            {}
+
+            @Override
+            public void onDrawerStateChanged(int newState)
+            {}
+        });
+    }
+
     private void updateNavigationBarState()
     {
         int actionId = getNavigationMenuItemId();
@@ -232,10 +257,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     void selectBottomNavigationBarItem(int itemId)
     {
         Menu menu = bottomNavigationView.getMenu();
-        for (int i = 0, size = menu.size(); i < size; i++) {
+        for (int i = 0, size = menu.size(); i < size; i++)
+        {
             MenuItem item = menu.getItem(i);
             boolean shouldBeChecked = item.getItemId() == itemId;
-            if (shouldBeChecked) {
+            if (shouldBeChecked)
+            {
                 item.setChecked(true);
                 break;
             }
@@ -249,7 +276,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 		{
 			case android.R.id.home:
 				drawerLayout.openDrawer(GravityCompat.START);
-				setNavHeaderStuff();
 				return true;
 
 			case R.id.action_refresh:
@@ -273,6 +299,22 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 				mAuth.signOut();
 				finish();
 				startActivity(new Intent(this, LoginActivity.class));
+				break;
+
+            case R.id.nav_home:
+                finish();
+                startActivity(new Intent(this, HomeActivity.class));
+                break;
+
+            case R.id.nav_newEntry:
+                finish();
+                startActivity(new Intent(this, NewEntryActivity.class));
+                break;
+
+            case R.id.nav_requests:
+                finish();
+                startActivity(new Intent(this, RequestActivity.class));
+                break;
 		}
 	}
 

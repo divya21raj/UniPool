@@ -8,11 +8,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
+import garbagecollectors.com.snucabpool.activities.HomeActivity;
 import garbagecollectors.com.snucabpool.activities.LoginActivity;
+import garbagecollectors.com.snucabpool.activities.NewEntryActivity;
+import garbagecollectors.com.snucabpool.activities.RequestActivity.RequestActivity;
 
 import static garbagecollectors.com.snucabpool.activities.BaseActivity.currentUser;
 import static garbagecollectors.com.snucabpool.activities.BaseActivity.finalCurrentUser;
@@ -45,6 +49,26 @@ public class SettingsActivity extends AppCompatActivity
 			return true;
 		});
 
+		drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener()
+		{
+			@Override
+			public void onDrawerSlide(View drawerView, float slideOffset)
+			{}
+
+			@Override
+			public void onDrawerOpened(View drawerView)
+			{
+				setNavHeaderStuff();
+			}
+
+			@Override
+			public void onDrawerClosed(View drawerView)
+			{}
+
+			@Override
+			public void onDrawerStateChanged(int newState)
+			{}
+		});
 	}
 
 	@Override
@@ -81,6 +105,21 @@ public class SettingsActivity extends AppCompatActivity
 				BaseActivity.mAuth.signOut();
 				finish();
 				startActivity(new Intent(this, LoginActivity.class));
+
+			case R.id.nav_home:
+				finish();
+				startActivity(new Intent(this, HomeActivity.class));
+				break;
+
+			case R.id.nav_newEntry:
+				finish();
+				startActivity(new Intent(this, NewEntryActivity.class));
+				break;
+
+			case R.id.nav_requests:
+				finish();
+				startActivity(new Intent(this, RequestActivity.class));
+				break;
 		}
 	}
 }

@@ -14,5 +14,4 @@ public class SettingsFragment extends PreferenceFragmentCompat
 		addPreferencesFromResource(R.xml.app_preferences);
 	}
 
-
 }

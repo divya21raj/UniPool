@@ -64,6 +64,8 @@ public class NewEntryActivity extends BaseActivity
 
         drawerLayout = (DrawerLayout) findViewById(R.id.new_entry_layout);
 
+        navDrawerStateListener();
+
         navigationView = (NavigationView) findViewById(R.id.nav_drawer);
         navigationView.setNavigationItemSelectedListener(menuItem ->
         {
