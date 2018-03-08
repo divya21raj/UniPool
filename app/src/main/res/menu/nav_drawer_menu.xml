@@ -3,7 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:id="@+id/main_group_drawer">
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="Home" />
+
+        <item
+            android:id="@+id/nav_newEntry"
+            android:icon="@drawable/ic_drive_eta"
+            android:title="New Entry" />
+
+        <item
+            android:id="@+id/nav_requests"
+            android:icon="@drawable/ic_people"
+            android:title="Requests" />
+
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/misc_group_drawer">
 
         <item
             android:id="@+id/nav_settings"

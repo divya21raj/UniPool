@@ -63,6 +63,8 @@ public class RequestActivity extends BaseActivity
 
 		drawerLayout = (DrawerLayout) findViewById(R.id.requests_layout);
 
+		navDrawerStateListener();
+
 		navigationView = (NavigationView) findViewById(R.id.nav_drawer);
 		navigationView.setNavigationItemSelectedListener(menuItem ->
 		{
