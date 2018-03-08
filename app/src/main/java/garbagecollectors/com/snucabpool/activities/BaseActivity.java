@@ -50,6 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static DatabaseReference userMessageDatabaseReference;
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     protected static DatabaseReference pairUpDatabaseReference = FirebaseDatabase.getInstance().getReference("pairUps");
+    protected static DatabaseReference notificationDatabaseReference = FirebaseDatabase.getInstance().getReference("notifications");
 
     public static User finalCurrentUser;
 
@@ -359,6 +360,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public static void setEntryDatabaseReference(DatabaseReference entryDatabaseReference)
     {
         BaseActivity.entryDatabaseReference = entryDatabaseReference;
+    }
+
+    public static DatabaseReference getNotificationDatabaseReference()
+    {
+        return notificationDatabaseReference;
     }
 
     public static User getFinalCurrentUser()
