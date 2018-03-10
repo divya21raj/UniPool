@@ -1,5 +1,6 @@
 package garbagecollectors.com.snucabpool.activities.RequestActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
@@ -95,7 +97,7 @@ public class RequestActivity extends BaseActivity
 		return true;
 	}
 
-	public static void refreshRequests()
+	public static void refreshRequests(Context context)
 	{
 		requestsProgressBar.setVisibility(View.VISIBLE);
 
@@ -169,6 +171,9 @@ public class RequestActivity extends BaseActivity
 				requestsProgressBar.setVisibility(View.INVISIBLE);
 			});
 		});
+
+		allTask.addOnFailureListener(e ->
+				Toast.makeText(context, "Can't fetch requests, problem with the internet connection!", Toast.LENGTH_LONG).show());
 	}
 
 	private void setupViewPager(ViewPager viewPager)

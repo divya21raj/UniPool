@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -267,7 +268,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
         ArrayList<PairUp> dummyPairUps = new ArrayList<>();
         dummyPairUps.add(dummyPairUp);
 
-        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), dummyUserEntries, dummyRequestSent, dummyRequestReceived, dummyPairUps);
+        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), dummyUserEntries, dummyRequestSent, dummyRequestReceived, deviceToken, dummyPairUps);
     }
 
     private void updateUI(FirebaseUser currentUser)

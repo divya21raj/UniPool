@@ -145,7 +145,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             public void onCancelled(DatabaseError error)
             {
                 // Failed to read value
-                Log.w("Hello", "Failed to read value.", error.toException());
+                Log.w("UserDB", "Failed to read userDB value.", error.toException());
             }
         });
 
@@ -182,7 +182,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             public void onCancelled(DatabaseError databaseError)
             {
                 // Failed to read value
-                Log.w("Hello", "Failed to read value.", databaseError.toException());
+                Log.w("userDB", "Failed to read UserMessages.", databaseError.toException());
             }
         });
 
@@ -280,7 +280,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 				return true;
 
 			case R.id.action_refresh:
-				RequestActivity.refreshRequests();
+				RequestActivity.refreshRequests(getApplicationContext());
 				break;
 
 		}

@@ -71,7 +71,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
         requestsProgressDialog.setMessage("Please wait...");
         requestsProgressDialog.show();
 
-        MessageDBTask.addOnSuccessListener(o -> requestsProgressDialog.dismiss());
+        MessageDBTask.addOnCompleteListener(o -> requestsProgressDialog.dismiss());
 
         holder.itemView.setOnClickListener(view ->
         {
@@ -132,7 +132,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                         allTask.addOnSuccessListener(bVoid ->
                         {
                             requestsProgressDialog.dismiss();
-                            RequestActivity.refreshRequests();
+                            RequestActivity.refreshRequests(context);
                         });
 
                         allTask.addOnFailureListener(e ->
