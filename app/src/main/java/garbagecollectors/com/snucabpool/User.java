@@ -29,14 +29,12 @@ public class User
         this.pairUps = pairUps;
     }
 
+    public User()
+    {}
+
     public String getUserId()
     {
         return userId;
-    }
-
-    void setUserId(String userId)
-    {
-        this.userId = userId;
     }
 
     public String getName()
@@ -67,10 +65,6 @@ public class User
     public void setRequestsReceived(HashMap<String, ArrayList<String>> requestsReceived)
     {
         this.requestsReceived = requestsReceived;
-    }
-
-    public User()
-    {
     }
 
     public ArrayList<TripEntry> getUserTripEntries()

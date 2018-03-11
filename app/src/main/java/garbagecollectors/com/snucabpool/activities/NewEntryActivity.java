@@ -27,7 +27,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
 import garbagecollectors.com.snucabpool.DatePickerFragment;
 import garbagecollectors.com.snucabpool.GenLocation;
@@ -40,12 +39,10 @@ public class NewEntryActivity extends BaseActivity
     GenLocation source, destination;
     String time, sourceSet, destinationSet;
     String AM_PM ;
-    Button buttonstartSetDialog,buttonChangeDate, buttonFinalSave;
+    Button buttonStartSetDialog,buttonChangeDate, buttonFinalSave;
     TextView text_source,text_destination,text_time;
 
     public static String date;
-
-    private HashMap<Long, Float> map = new HashMap<>();          //HashMap contains entry_id(Long value) and lambda(Float value)
 
     TimePickerDialog timePickerDialog;
 
@@ -75,13 +72,13 @@ public class NewEntryActivity extends BaseActivity
             return true;
         });
 
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
         source = null;
         destination = null;
 
         time = "";
-
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         text_source = (TextView)findViewById(R.id.searched_source);//Check
         text_source.setText("Select Pickup Point");
@@ -93,8 +90,8 @@ public class NewEntryActivity extends BaseActivity
 
         buttonChangeDate.setOnClickListener(v -> openTimePickerDialog(false));
 
-        buttonstartSetDialog = (Button)findViewById(R.id.btnChangeDate);
-        buttonstartSetDialog.setOnClickListener(v ->
+        buttonStartSetDialog = (Button)findViewById(R.id.btnChangeDate);
+        buttonStartSetDialog.setOnClickListener(v ->
         {
             DialogFragment newFragment = new DatePickerFragment();
             newFragment.show(getFragmentManager(),"Date Picker");
@@ -111,6 +108,7 @@ public class NewEntryActivity extends BaseActivity
                 e.printStackTrace();
             }
         });
+
     }
 
     private void openTimePickerDialog(boolean is24r)

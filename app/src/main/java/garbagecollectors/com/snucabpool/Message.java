@@ -27,29 +27,9 @@ public class Message
         return message;
     }
 
-    public void setMessage(String message)
-    {
-        this.message = message;
-    }
-
     public String getSenderId()
     {
         return senderId;
-    }
-
-    public void setSenderId(String senderId)
-    {
-        this.senderId = senderId;
-    }
-
-    public Long getCreatedAtTime()
-    {
-        return createdAtTime;
-    }
-
-    public void setCreatedAtTime(Long createdAtTime)
-    {
-        this.createdAtTime = createdAtTime;
     }
 
     public String getMessageId()
@@ -62,23 +42,9 @@ public class Message
         this.messageId = messageId;
     }
 
-	public String getReceiverId()
-	{
-		return receiverId;
-	}
-
-	public void setReceiverId(String receiverId)
-	{
-		this.receiverId = receiverId;
-	}
-
     public String getPairUpId()
     {
         return pairUpId;
     }
 
-    public void setPairUpId(String pairUpId)
-    {
-        this.pairUpId = pairUpId;
-    }
 }

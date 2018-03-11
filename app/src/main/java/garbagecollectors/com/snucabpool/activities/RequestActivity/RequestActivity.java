@@ -87,6 +87,7 @@ public class RequestActivity extends BaseActivity
 
 		requestsProgressBar = (ProgressBar) findViewById(R.id.requests_progressBar);
 		requestsProgressBar.setVisibility(View.INVISIBLE);
+
 	}
 
 	@Override

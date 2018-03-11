@@ -174,11 +174,6 @@ public class MessageListActivity extends AppCompatActivity
 		setScrollViewToBottom();
 	}
 
-	public static PairUp getPairUp()
-	{
-		return pairUp;
-	}
-
 	public static void setPairUp(PairUp pairUp)
 	{
 		MessageListActivity.pairUp = pairUp;

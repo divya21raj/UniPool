@@ -9,7 +9,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.activities.BaseActivity;
@@ -92,6 +95,9 @@ public class SettingsActivity extends AppCompatActivity
 
 		TextView emailOnHeader = (TextView) findViewById(R.id.header_email);
 		emailOnHeader.setText(currentUser.getEmail());
+
+		ImageView userImageOnHeader = (ImageView) findViewById(R.id.header_userImage);
+		Picasso.get().load(currentUser.getPhotoUrl()).into(userImageOnHeader);
 	}
 
 	private void dealWithSelectedMenuItem(MenuItem menuItem)

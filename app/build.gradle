@@ -1,6 +1,4 @@
-plugins {
-    id "me.tatarka.retrolambda" version "3.7.0"
-}
+plugins {}
 apply plugin: 'com.android.application'
 //noinspection GradleCompatible
 apply plugin: 'com.android.application'
@@ -10,12 +8,6 @@ tasks.whenTaskAdded { task ->
         task.enabled = false
     }
 }
-
-
-retrolambda {
-    jvmArgs '-noverify'
-}
-
 
 android {
     compileSdkVersion 25
@@ -77,6 +69,8 @@ dependencies {
     compile 'com.android.support:preference-v14:25.4.0'
 
     compile 'com.github.QuadFlask:colorpicker:0.0.13'
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     testCompile 'junit:junit:4.12'
 }

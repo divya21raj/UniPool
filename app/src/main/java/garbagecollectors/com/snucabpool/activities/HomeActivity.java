@@ -44,16 +44,17 @@ public class HomeActivity extends BaseActivity
 	    });
 
 	    bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+	    bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-        recycle = (RecyclerView) findViewById(R.id.recycle);
+	    recycle = (RecyclerView) findViewById(R.id.recycle);
 
-        recyclerAdapter = new HomeActivityTEA(tripEntryList,HomeActivity.this);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(HomeActivity.this,1);
+	    recyclerAdapter = new HomeActivityTEA(tripEntryList,HomeActivity.this);
+	    RecyclerView.LayoutManager layoutManager = new GridLayoutManager(HomeActivity.this,1);
 
-        recycle.setLayoutManager(layoutManager);
-        recycle.setItemAnimator( new DefaultItemAnimator());
-        recycle.setAdapter(recyclerAdapter);
+	    recycle.setLayoutManager(layoutManager);
+	    recycle.setItemAnimator( new DefaultItemAnimator());
+	    recycle.setAdapter(recyclerAdapter);
+
     }
 
 	@Override

@@ -19,17 +19,11 @@ public class PairUp
         this.messages = messages;
     }
 
-    public PairUp()
-    {}
+    public PairUp() {}
 
     public String getPairUpId()
     {
         return pairUpId;
-    }
-
-    public void setPairUpId(String pairUpId)
-    {
-        this.pairUpId = pairUpId;
     }
 
     public String getCreatorId()
@@ -37,29 +31,14 @@ public class PairUp
         return creatorId;
     }
 
-    public void setCreatorId(String creatorId)
-    {
-        this.creatorId = creatorId;
-    }
-
     public String getRequesterId()
     {
         return requesterId;
     }
 
-    public void setRequesterId(String requesterId)
-    {
-        this.requesterId = requesterId;
-    }
-
     public ArrayList<String> getMessages()
     {
         return messages;
-    }
-
-    public void setMessages(ArrayList<String> messages)
-    {
-        this.messages = messages;
     }
 
 }

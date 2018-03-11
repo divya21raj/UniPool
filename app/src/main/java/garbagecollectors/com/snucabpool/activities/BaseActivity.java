@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -191,7 +193,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     }
 
 	@Override
-    protected void onStart() {
+    protected void onStart()
+    {
         super.onStart();
         updateNavigationBarState();
     }
@@ -231,7 +234,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset)
-            {}
+            {
+                setNavHeaderStuff();
+            }
 
             @Override
             public void onDrawerOpened(View drawerView)
@@ -276,7 +281,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 		switch (item.getItemId())
 		{
 			case android.R.id.home:
-				drawerLayout.openDrawer(GravityCompat.START);
+			    setNavHeaderStuff();
+                drawerLayout.openDrawer(GravityCompat.START);
 				return true;
 
 			case R.id.action_refresh:
@@ -326,6 +332,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
 		TextView emailOnHeader = (TextView) findViewById(R.id.header_email);
 		emailOnHeader.setText(currentUser.getEmail());
+
+        ImageView userImageOnHeader = (ImageView) findViewById(R.id.header_userImage);
+        Picasso.get().load(currentUser.getPhotoUrl()).into(userImageOnHeader);
 	}
 
     protected abstract int getContentViewId();
@@ -340,26 +349,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public static void setCurrentUser(FirebaseUser currentUser)
     {
         BaseActivity.currentUser = currentUser;
-    }
-
-    public static DatabaseReference getUserDatabaseReference()
-    {
-        return userDatabaseReference;
-    }
-
-    public static void setUserDatabaseReference(DatabaseReference userDatabaseReference)
-    {
-        BaseActivity.userDatabaseReference = userDatabaseReference;
-    }
-
-    public static DatabaseReference getEntryDatabaseReference()
-    {
-        return entryDatabaseReference;
-    }
-
-    public static void setEntryDatabaseReference(DatabaseReference entryDatabaseReference)
-    {
-        BaseActivity.entryDatabaseReference = entryDatabaseReference;
     }
 
     public static DatabaseReference getNotificationDatabaseReference()
@@ -382,19 +371,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         return tripEntryList;
     }
 
-    public static void setTripEntryList(ArrayList<TripEntry> tripEntryList)
-    {
-        BaseActivity.tripEntryList = tripEntryList;
-    }
-
     public static DatabaseReference getPairUpDatabaseReference()
     {
         return pairUpDatabaseReference;
-    }
-
-    public static void setPairUpDatabaseReference(DatabaseReference pairUpDatabaseReference)
-    {
-        BaseActivity.pairUpDatabaseReference = pairUpDatabaseReference;
     }
 
     public static DatabaseReference getUserMessageDatabaseReference()

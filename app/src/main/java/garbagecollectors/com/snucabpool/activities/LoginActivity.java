@@ -283,6 +283,4 @@ public class LoginActivity extends Activity implements View.OnClickListener
             startActivity(new Intent(getApplicationContext(), SplashActivity.class));
         }
     }
-
-
 }

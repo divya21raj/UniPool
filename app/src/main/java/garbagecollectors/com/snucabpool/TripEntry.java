@@ -42,19 +42,9 @@ public class TripEntry
     public TripEntry()
     {}
 
-    HashMap<String, Float> getLambdaMap()
-    {
-        return lambdaMap;
-    }
-
     public String getEntry_id()
     {
         return entry_id;
-    }
-
-    public void setEntry_id(String entry_id)
-    {
-        this.entry_id = entry_id;
     }
 
     public String getName()
@@ -92,19 +82,9 @@ public class TripEntry
         return date;
     }
 
-    public void setDate(String date)
-    {
-        this.date = date;
-    }
-
     public GenLocation getSource()
     {
         return source;
-    }
-
-    public void setSource(GenLocation source)
-    {
-        this.source = source;
     }
 
     public GenLocation getDestination()
@@ -112,8 +92,4 @@ public class TripEntry
         return destination;
     }
 
-    public void setDestination(GenLocation destination)
-    {
-        this.destination = destination;
-    }
 }
