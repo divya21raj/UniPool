@@ -120,7 +120,7 @@ public class HomeActivityTEA extends TripEntryAdapter
 
                     HashMap<String, String> notificationObject = new HashMap<>();
                     notificationObject.put("from", user.getUserId());
-                    notificationObject.put("type", "request");
+                    notificationObject.put("type", "requestCreated");
 
                     Task<Void> task3 = notificationDatabaseReference.child(tripEntryUser[0].getUserId()).push().setValue(notificationObject);
 
