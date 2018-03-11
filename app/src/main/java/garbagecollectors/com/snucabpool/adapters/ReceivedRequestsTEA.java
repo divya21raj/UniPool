@@ -71,12 +71,13 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
         requestsProgressDialog.setMessage("Please wait...");
         requestsProgressDialog.show();
 
-        MessageDBTask.addOnSuccessListener(o -> requestsProgressDialog.dismiss());
+        MessageDBTask.addOnCompleteListener(o -> requestsProgressDialog.dismiss());
 
         holder.itemView.setOnClickListener(view ->
         {
             DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
             DatabaseReference pairUpDatabaseReference = BaseActivity.getPairUpDatabaseReference();
+            DatabaseReference notificationDatabaseReference = BaseActivity.getNotificationDatabaseReference();
 
             TripEntry tripEntry = list.get(position);
 
@@ -120,6 +121,10 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                         BaseActivity.getChatList().add(tripEntryUser[0]);
                         ChatFragment.recycleAdapter.notifyDataSetChanged();
 
+                        HashMap<String, String> notificationObject = new HashMap<>();
+                        notificationObject.put("from", finalCurrentUser.getUserId());
+                        notificationObject.put("type", "requestAccepted");
+
                         Task<Void> task1 = userDatabaseReference.child(finalCurrentUser.getUserId()).child("pairUps").setValue(currentUserPairUps);
                         Task<Void> task2 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("pairUps").setValue(tripEntryUserPairUps);
 
@@ -128,11 +133,13 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
                         Task<Void> task5 = pairUpDatabaseReference.child(pairUpId).setValue(pairUp);
 
-                        Task<Void> allTask = Tasks.whenAll(task1, task2, task3, task4, task5);
+                        Task<Void> task6 = notificationDatabaseReference.child(tripEntryUser[0].getUserId()).push().setValue(notificationObject);
+
+                        Task<Void> allTask = Tasks.whenAll(task1, task2, task3, task4, task5, task6);
                         allTask.addOnSuccessListener(bVoid ->
                         {
                             requestsProgressDialog.dismiss();
-                            RequestActivity.refreshRequests();
+                            RequestActivity.refreshRequests(context);
                         });
 
                         allTask.addOnFailureListener(e ->

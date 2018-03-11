@@ -14,15 +14,18 @@ public class User
     //Key is the entryId of entry requested, Value is list of userIDs who've requested that entry
     //We have Map because we're taking TripEntry object of the entry that we have made (that the other person has clicked on)
 
+    private String deviceToken;
+
     private ArrayList<PairUp> pairUps;
 
-    public User(String userId, String name, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, ArrayList<PairUp> pairUps)
+    public User(String userId, String name, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, ArrayList<PairUp> pairUps)
     {
         this.userId = userId;
         this.name = name;
         this.userTripEntries = userTripEntries;
         this.requestSent = requestSent;
         this.requestsReceived = requestsReceived;
+        this.deviceToken = deviceToken;
         this.pairUps = pairUps;
     }
 
@@ -78,5 +81,15 @@ public class User
     public ArrayList<PairUp> getPairUps()
     {
         return pairUps;
+    }
+
+    public String getDeviceToken()
+    {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken)
+    {
+        this.deviceToken = deviceToken;
     }
 }

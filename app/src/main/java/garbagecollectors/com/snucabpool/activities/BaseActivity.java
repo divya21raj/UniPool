@@ -50,6 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static DatabaseReference userMessageDatabaseReference;
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     protected static DatabaseReference pairUpDatabaseReference = FirebaseDatabase.getInstance().getReference("pairUps");
+    protected static DatabaseReference notificationDatabaseReference = FirebaseDatabase.getInstance().getReference("notifications");
 
     public static User finalCurrentUser;
 
@@ -144,7 +145,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             public void onCancelled(DatabaseError error)
             {
                 // Failed to read value
-                Log.w("Hello", "Failed to read value.", error.toException());
+                Log.w("UserDB", "Failed to read userDB value.", error.toException());
             }
         });
 
@@ -181,7 +182,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             public void onCancelled(DatabaseError databaseError)
             {
                 // Failed to read value
-                Log.w("Hello", "Failed to read value.", databaseError.toException());
+                Log.w("userDB", "Failed to read UserMessages.", databaseError.toException());
             }
         });
 
@@ -279,7 +280,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 				return true;
 
 			case R.id.action_refresh:
-				RequestActivity.refreshRequests();
+				RequestActivity.refreshRequests(getApplicationContext());
 				break;
 
 		}
@@ -359,6 +360,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public static void setEntryDatabaseReference(DatabaseReference entryDatabaseReference)
     {
         BaseActivity.entryDatabaseReference = entryDatabaseReference;
+    }
+
+    public static DatabaseReference getNotificationDatabaseReference()
+    {
+        return notificationDatabaseReference;
     }
 
     public static User getFinalCurrentUser()

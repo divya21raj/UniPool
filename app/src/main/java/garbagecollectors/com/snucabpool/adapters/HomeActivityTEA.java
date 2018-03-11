@@ -97,6 +97,7 @@ public class HomeActivityTEA extends TripEntryAdapter
                 tripEntryUser[0] = snapshot.getValue(User.class);
 
                 DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
+                DatabaseReference notificationDatabaseReference = BaseActivity.getNotificationDatabaseReference();
 
                 ArrayList<TripEntry> requestSent = user.getRequestSent();
                 HashMap<String, ArrayList<String>> requestsReceived = tripEntryUser[0].getRequestsReceived();
@@ -117,7 +118,13 @@ public class HomeActivityTEA extends TripEntryAdapter
                     Task<Void> task1 = userDatabaseReference.child(user.getUserId()).child("requestSent").setValue(requestSent);
                     Task<Void> task2 = userDatabaseReference.child(tripEntryUser[0].getUserId()).child("requestsReceived").setValue(requestsReceived);
 
-                    Task<Void> allTask = Tasks.whenAll(task1, task2);
+                    HashMap<String, String> notificationObject = new HashMap<>();
+                    notificationObject.put("from", user.getUserId());
+                    notificationObject.put("type", "requestCreated");
+
+                    Task<Void> task3 = notificationDatabaseReference.child(tripEntryUser[0].getUserId()).push().setValue(notificationObject);
+
+                    Task<Void> allTask = Tasks.whenAll(task1, task2, task3);
                     allTask.addOnSuccessListener(bVoid ->
                     {
                         progressDialog.dismiss();

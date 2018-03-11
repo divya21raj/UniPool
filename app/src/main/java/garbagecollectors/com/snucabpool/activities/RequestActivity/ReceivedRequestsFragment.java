@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ public class ReceivedRequestsFragment extends Fragment
 {
     RecyclerView recycle;
     static ReceivedRequestsTEA recyclerAdapter;
+
+    String TAG = "Requests";
 
     User user;
     HashMap<String, ArrayList<String>> receivedRequestsMap;
@@ -69,6 +72,9 @@ public class ReceivedRequestsFragment extends Fragment
 
         task.addOnSuccessListener(o ->
         {
+            Log.i(TAG, receivedRequestsMap.toString() + "\n\n");
+            Log.i(TAG, receivedRequestsList.toString());
+
             recyclerAdapter = new ReceivedRequestsTEA(receivedRequestsList, getContext());
 
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);

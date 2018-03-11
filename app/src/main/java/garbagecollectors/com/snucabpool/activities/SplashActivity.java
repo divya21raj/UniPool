@@ -111,7 +111,8 @@ public class SplashActivity extends AppCompatActivity
                     try
                     {
                         MessageDBSource.setResult(dataSnapshot);
-                    }catch (IllegalStateException ignored)
+                    }
+                    catch (IllegalStateException ignored)
                     {}
                 }
 
