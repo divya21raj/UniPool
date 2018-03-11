@@ -2,6 +2,7 @@ package garbagecollectors.com.snucabpool;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
@@ -20,11 +21,14 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 		String clickAction = remoteMessage.getNotification().getClickAction();
 
+		Uri sound = Uri.parse(remoteMessage.getNotification().getSound());
+
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
 				.setSmallIcon(R.mipmap.ic_launcher)
 				.setContentTitle(notificationTitle)
 				.setContentText(notificationBody)
-				.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+				.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+				.setSound(sound);
 
 		//clicking on the notification
 		Intent resultIntent = new Intent(clickAction);

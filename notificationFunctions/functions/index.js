@@ -42,6 +42,7 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
 							title : "SNU Cabpool",
 							body : `${userName} sent you a request.`,
 							icon : "default",
+							sound : "default",
 							click_action : "android.intent.action.TARGET_NOTIFICATION"
 						}
 					};
