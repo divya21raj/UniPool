@@ -9,7 +9,7 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
 	.onWrite(event =>
 	{
 		const user_id = event.params.user_id;
-		const notification = event.params.notification;
+		const notification_id = event.params.notification_id;
 
 		console.log('We have a notif to send to : ', user_id);
 
@@ -18,26 +18,42 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
 			return console.log('A notif has been deleted from the DB : ', notification_id);
 		}
 
-		const deviceToken = admin.database().ref(`/users/${user_id}/deviceToken`).once('value');
-
-		return deviceToken.then(result =>
+		const fromUser = admin.database().ref(`/notifications/${user_id}/${notification_id}`).once('value');
+		return fromUser.then(fromUserResult =>
 		{
-			const token_id = result.val();
+			const from_user_id = fromUserResult.val().from;
+			console.log('New notif from : ', from_user_id);
 
-			const payload =
+			const userQuery = admin.database().ref(`users/${from_user_id}/name`).once('value');
+			return userQuery.then(userResult =>
 			{
-				notification :
+				const userName = userResult.val();
+
+				const deviceToken = admin.database().ref(`/users/${user_id}/deviceToken`).once('value');
+
+				return deviceToken.then(result =>
 				{
-					title : "Trip Entry Request",
-					body : "You've recieved a new request!",
-					icon : "default"
-				}
-			};
+					const token_id = result.val();
 
-			return admin.messaging().sendToDevice(token_id, payload).then(response =>
-			{
-				console.log('This was the notifications feature!');
-				return 1;
+					const payload =
+					{
+						notification :
+						{
+							title : "SNU Cabpool",
+							body : `${userName} sent you a request.`,
+							icon : "default",
+							click_action : "android.intent.action.TARGET_NOTIFICATION"
+						}
+					};
+
+					return admin.messaging().sendToDevice(token_id, payload).then(response =>
+					{
+						console.log('This was the notifications feature!');
+						return 1;
+					});
+
+				});
+
 			});
 
 		});
