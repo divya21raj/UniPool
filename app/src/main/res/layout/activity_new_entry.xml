@@ -185,12 +185,24 @@
                         android:clickable="true"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:hint="dd-M-YYYY"
+                        android:hint="dd/M/YYYY"
                         android:layout_marginStart="60dp" />
                 </RelativeLayout>
             </LinearLayout>
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/finalSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="finalSave"
+            android:layout_below="@+id/setTimeLinearLayout"
+            android:layout_marginTop="120dp"
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="CREATE ENTRY"
+            android:textColor="@color/viewBg"/>
 
         <include
             layout="@layout/element_bottom_navigation"

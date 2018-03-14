@@ -41,7 +41,7 @@ public class NewEntryActivity extends BaseActivity
     String AM_PM ;
 
     EditText findSource, findDestination, setTime, setDate;
-    Button buttonStartSetDialog,buttonChangeDate, buttonFinalSave;
+    Button buttonFinalSave;
 
     public static String date;
 
@@ -94,7 +94,7 @@ public class NewEntryActivity extends BaseActivity
             newFragment.show(getFragmentManager(),"Date Picker");
         });
 
-        /*buttonFinalSave = (Button)findViewById(R.id.finalSave);
+        buttonFinalSave = (Button)findViewById(R.id.finalSave);
         buttonFinalSave.setOnClickListener(v ->
         {
             try
@@ -105,7 +105,6 @@ public class NewEntryActivity extends BaseActivity
                 e.printStackTrace();
             }
         });
-        */
     }
 
     private void openTimePickerDialog(boolean is24r)
