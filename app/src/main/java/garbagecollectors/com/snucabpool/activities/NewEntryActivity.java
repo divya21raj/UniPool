@@ -12,7 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -39,8 +39,9 @@ public class NewEntryActivity extends BaseActivity
     GenLocation source, destination;
     String time, sourceSet, destinationSet;
     String AM_PM ;
-    Button buttonStartSetDialog,buttonChangeDate, buttonFinalSave;
-    TextView text_source,text_destination,text_time;
+
+    EditText findSource, findDestination, setTime, setDate;
+    Button buttonFinalSave;
 
     public static String date;
 
@@ -80,18 +81,14 @@ public class NewEntryActivity extends BaseActivity
 
         time = "";
 
-        text_source = (TextView)findViewById(R.id.searched_source);//Check
-        text_source.setText("Select Pickup Point");
-        text_destination = (TextView)findViewById(R.id.searched_destination);
-        text_destination.setText("Select Drop Location");
-        text_time = (TextView)findViewById(R.id.searched_time);
+        findSource = (EditText) findViewById(R.id.findSourceEditText);
+        findDestination = (EditText) findViewById(R.id.findDestinationEditText);
+        setTime = (EditText) findViewById(R.id.setTimeEditText);
+        setDate = (EditText) findViewById(R.id.setDateEditText);
 
-        buttonChangeDate = (Button)findViewById(R.id.SetTime);
+        setTime.setOnClickListener(view -> openTimePickerDialog(false));
 
-        buttonChangeDate.setOnClickListener(v -> openTimePickerDialog(false));
-
-        buttonStartSetDialog = (Button)findViewById(R.id.btnChangeDate);
-        buttonStartSetDialog.setOnClickListener(v ->
+        setDate.setOnClickListener(v ->
         {
             DialogFragment newFragment = new DatePickerFragment();
             newFragment.show(getFragmentManager(),"Date Picker");
@@ -108,7 +105,6 @@ public class NewEntryActivity extends BaseActivity
                 e.printStackTrace();
             }
         });
-
     }
 
     private void openTimePickerDialog(boolean is24r)
@@ -149,7 +145,8 @@ public class NewEntryActivity extends BaseActivity
                 AM_PM = "PM";
 
             time=HourOfDay+":"+minOfDay+" "+AM_PM;
-            text_time.setText(time);
+
+            setTime.setText(time);
         }
     };
 
@@ -187,7 +184,8 @@ public class NewEntryActivity extends BaseActivity
 
                     sourceSet = (place.getName() + ",\n" +
                             place.getAddress() + "\n" + place.getPhoneNumber());//check
-                    text_source.setText(sourceSet);
+
+                    findSource.setText(sourceSet);
                     break;
                 case 2:
                     latLng = place.getLatLng();
@@ -195,7 +193,8 @@ public class NewEntryActivity extends BaseActivity
 
                     destinationSet = (place.getName() + ",\n" +
                             place.getAddress() + "\n" + place.getPhoneNumber());//check
-                    text_destination.setText(destinationSet);
+
+                    findDestination.setText(destinationSet);
                     break;
             }
         } else if (resultCode == PlaceAutocomplete.RESULT_ERROR)
@@ -298,4 +297,8 @@ public class NewEntryActivity extends BaseActivity
         return R.id.navigation_newEntry;
     }
 
+    public void getCurrentLocation(View view)
+    {
+
+    }
 }

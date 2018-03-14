@@ -9,7 +9,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.widget.DatePicker;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import java.util.Calendar;
 
@@ -53,17 +53,17 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     public void onDateSet(DatePicker view, int year, int month, int day)
     {
         //Do something with the date chosen by the user
-        TextView text_date = (TextView) getActivity().findViewById(R.id.searched_date);
+        EditText setDate = (EditText) getActivity().findViewById(R.id.setDateEditText);
         if((year==year_now && month==month_now && day>=day_now)|| (year==year_now && month>month_now) ||
                 (year>year_now))
         {
             stringOfDate = day + "/" + (++month) + "/" + year;
 
-            text_date.setText(stringOfDate);
+            setDate.setText(stringOfDate);
             NewEntryActivity.date=stringOfDate;
         }
         else
-            text_date.setText("Invalid Date");
+            setDate.setText("Invalid Date");
 
     }
 }
