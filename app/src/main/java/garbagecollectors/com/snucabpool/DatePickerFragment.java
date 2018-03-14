@@ -9,11 +9,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.widget.DatePicker;
-import android.widget.TextView;
 
 import java.util.Calendar;
-
-import garbagecollectors.com.snucabpool.activities.NewEntryActivity;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener
 {
@@ -52,7 +49,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     public void onDateSet(DatePicker view, int year, int month, int day)
     {
-        //Do something with the date chosen by the user
+        /*//Do something with the date chosen by the user
         TextView text_date = (TextView) getActivity().findViewById(R.id.searched_date);
         if((year==year_now && month==month_now && day>=day_now)|| (year==year_now && month>month_now) ||
                 (year>year_now))
@@ -63,7 +60,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
             NewEntryActivity.date=stringOfDate;
         }
         else
-            text_date.setText("Invalid Date");
+            text_date.setText("Invalid Date");*/
 
     }
 }
