@@ -1,12 +1,19 @@
 package garbagecollectors.com.snucabpool.activities;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
@@ -16,10 +23,16 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceLikelihood;
+import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -33,12 +46,14 @@ import garbagecollectors.com.snucabpool.GenLocation;
 import garbagecollectors.com.snucabpool.R;
 import garbagecollectors.com.snucabpool.TripEntry;
 
-public class NewEntryActivity extends BaseActivity
+public class NewEntryActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener,
+                                                              GoogleApiClient.ConnectionCallbacks
 {
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     GenLocation source, destination;
     String time, sourceSet, destinationSet;
-    String AM_PM ;
+    String AM_PM;
 
     EditText findSource, findDestination, setTime, setDate;
     Button buttonFinalSave;
@@ -47,6 +62,10 @@ public class NewEntryActivity extends BaseActivity
 
     TimePickerDialog timePickerDialog;
 
+    GoogleApiClient mGoogleApiClient;
+
+    View currentLocationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -54,7 +73,7 @@ public class NewEntryActivity extends BaseActivity
         setContentView(R.layout.activity_new_entry);
 
         final ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
+        if (actionBar != null)
         {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -91,10 +110,10 @@ public class NewEntryActivity extends BaseActivity
         setDate.setOnClickListener(v ->
         {
             DialogFragment newFragment = new DatePickerFragment();
-            newFragment.show(getFragmentManager(),"Date Picker");
+            newFragment.show(getFragmentManager(), "Date Picker");
         });
 
-        buttonFinalSave = (Button)findViewById(R.id.finalSave);
+        buttonFinalSave = (Button) findViewById(R.id.finalSave);
         buttonFinalSave.setOnClickListener(v ->
         {
             try
@@ -105,6 +124,33 @@ public class NewEntryActivity extends BaseActivity
                 e.printStackTrace();
             }
         });
+
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .enableAutoManage(this, 0, this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        if (mGoogleApiClient != null)
+            mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected())
+        {
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
     }
 
     private void openTimePickerDialog(boolean is24r)
@@ -133,18 +179,19 @@ public class NewEntryActivity extends BaseActivity
 
             calSet.set(Calendar.HOUR_OF_DAY, hourOfDay);
             calSet.set(Calendar.MINUTE, minute);
-            int HourOfDay=calSet.get(Calendar.HOUR_OF_DAY);
-            String minOfDay= String.valueOf(calSet.get(Calendar.MINUTE));
-            if(minOfDay.length()==1){
-                minOfDay="0"+minOfDay;
+            int HourOfDay = calSet.get(Calendar.HOUR_OF_DAY);
+            String minOfDay = String.valueOf(calSet.get(Calendar.MINUTE));
+            if (minOfDay.length() == 1)
+            {
+                minOfDay = "0" + minOfDay;
             }
 
-            if(hourOfDay < 12)
+            if (hourOfDay < 12)
                 AM_PM = "AM";
             else
                 AM_PM = "PM";
 
-            time=HourOfDay+":"+minOfDay+" "+AM_PM;
+            time = HourOfDay + ":" + minOfDay + " " + AM_PM;
 
             setTime.setText(time);
         }
@@ -155,7 +202,7 @@ public class NewEntryActivity extends BaseActivity
         try
         {
             Intent intent =
-                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
                             .build(this);
             startActivityForResult(intent, 1);
 
@@ -180,7 +227,8 @@ public class NewEntryActivity extends BaseActivity
 
                 case 1:
                     latLng = place.getLatLng();
-                    source = new GenLocation(place.getName().toString(), place.getAddress().toString(), latLng.latitude, latLng.longitude);//check
+                    source = new GenLocation(place.getName().toString(), place.getAddress().toString(),
+                                                latLng.latitude, latLng.longitude);//check
 
                     sourceSet = (place.getName() + ",\n" +
                             place.getAddress() + "\n" + place.getPhoneNumber());//check
@@ -189,7 +237,8 @@ public class NewEntryActivity extends BaseActivity
                     break;
                 case 2:
                     latLng = place.getLatLng();
-                    destination = new GenLocation(place.getName().toString(), place.getAddress().toString(), latLng.latitude, latLng.longitude);//check
+                    destination = new GenLocation(place.getName().toString(), place.getAddress().toString(),
+                                                    latLng.latitude, latLng.longitude);//check
 
                     destinationSet = (place.getName() + ",\n" +
                             place.getAddress() + "\n" + place.getPhoneNumber());//check
@@ -213,8 +262,8 @@ public class NewEntryActivity extends BaseActivity
     {
         try
         {
-            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                            .build(this);
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                    .build(this);
             startActivityForResult(intent, 2);
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e)
         {
@@ -228,9 +277,10 @@ public class NewEntryActivity extends BaseActivity
         {
             case 0:
                 String entryId = entryDatabaseReference.push().getKey();
-                String name= currentUser.getDisplayName();
+                String name = currentUser.getDisplayName();
 
-                TripEntry tripEntry = new TripEntry(name,entryId, currentUser.getUid(), time, date, source, destination, null);
+                TripEntry tripEntry = new TripEntry(name, entryId, currentUser.getUid(),
+                                                        time, date, source, destination, null);
 
                 finalCurrentUser.getUserTripEntries().add(tripEntry);
 
@@ -245,11 +295,13 @@ public class NewEntryActivity extends BaseActivity
                 break;
 
             case 1:
-                Toast.makeText(this, "The pickup point and drop location can't be the same, silly!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "The pickup point and drop location can't be the same, silly!",
+                        Toast.LENGTH_SHORT).show();
                 break;
 
             case 2:
-                Toast.makeText(this, "The devs are still working on time travel...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "The devs are still working on time travel...",
+                        Toast.LENGTH_SHORT).show();
                 break;
 
             case 3:
@@ -267,19 +319,21 @@ public class NewEntryActivity extends BaseActivity
         Date currentTime = new Date();
         Date inputTime = null;
 
-        if(date!=null)
+        if (date != null)
             inputTime = parser.parse(date + "." + time);
 
-        if((time.isEmpty()||source == null||destination == null))
+        if ((time.isEmpty() || source == null || destination == null ||
+                findSource.getText().toString().isEmpty()|| findDestination.getText().toString().isEmpty()))
             flag = 3;
 
-        else if((source.getLatitude().compareTo(destination.getLatitude()) == 0) && (source.getLongitude().compareTo(destination.getLongitude()) == 0))
+        else if ((source.getLatitude().compareTo(destination.getLatitude()) == 0) &&
+                    (source.getLongitude().compareTo(destination.getLongitude()) == 0))
             flag = 1;
 
-        else if(date == null)
+        else if (date == null)
             flag = 2;
 
-        else if(inputTime.before(currentTime))
+        else if (inputTime.before(currentTime))
             flag = 2;
 
         return flag;
@@ -297,8 +351,122 @@ public class NewEntryActivity extends BaseActivity
         return R.id.navigation_newEntry;
     }
 
-    public void getCurrentLocation(View view)
+    public void onRequestCurrentLocation(View view)
+    {
+        currentLocationView = view;
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION))
+            {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            }
+            else
+            {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+        else getCurrentPlace();
+
+    }
+
+    private void getCurrentPlace()
+    {
+        final Place[] place = new Place[1];
+        final LatLng[] latLng = new LatLng[1];
+
+        @SuppressLint("MissingPermission") PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi.
+                getCurrentPlace(mGoogleApiClient, null);
+        result.setResultCallback(likelyPlaces ->
+        {
+            PlaceLikelihood placeLikelihood = likelyPlaces.get( 0 );
+            place[0] = placeLikelihood.getPlace();
+            latLng[0] = place[0].getLatLng();
+
+            if(currentLocationView.getTag().equals("gct_source"))
+            {
+                source = new GenLocation(place[0].getName().toString(), place[0].getAddress().toString(),
+                                            latLng[0].latitude, latLng[0].longitude);
+                sourceSet = (place[0].getName() + ",\n" +
+                        place[0].getAddress() + "\n" + place[0].getPhoneNumber());//check
+                findSource.setText(sourceSet);
+
+            }
+
+            else if(currentLocationView.getTag().equals("gct_destination"))
+            {
+                destination = new GenLocation(place[0].getName().toString(), place[0].getAddress().toString(),
+                                                latLng[0].latitude, latLng[0].longitude);
+                destinationSet = (place[0].getName() + ",\n" +
+                        place[0].getAddress() + "\n" + place[0].getPhoneNumber());//check
+                findDestination.setText(destinationSet);
+            }
+
+            likelyPlaces.release();
+        });
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults)
+    {
+        switch (requestCode)
+        {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
+                {
+                // If request is cancelled, the result arrays are empty.
+                    if (grantResults.length > 0
+                            && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    {
+                        // permission was granted, yay! Do the
+                        // contacts-related task you need to do.
+                        getCurrentPlace();
+                    }
+                    else
+                    {
+                        // permission denied, boo! Disable the
+                        // functionality that depends on this permission.
+                    }
+
+                    return;
+                }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
+    {
+        Toast.makeText(this, "Connection problem!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle)
     {
 
+    }
+
+    @Override
+    public void onConnectionSuspended(int i)
+    {
+        Toast.makeText(this, "Connection problem!", Toast.LENGTH_SHORT).show();
     }
 }
