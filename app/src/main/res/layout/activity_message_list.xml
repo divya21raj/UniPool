@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:orientation="vertical"
-    tools:context="garbagecollectors.com.snucabpool.activities.MessageListActivity">
+    tools:context="garbagecollectors.com.unipool.activities.MessageListActivity">
 
     <ScrollView
         android:layout_width="match_parent"

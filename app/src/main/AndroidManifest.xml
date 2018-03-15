@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="garbagecollectors.com.snucabpool">
+    package="garbagecollectors.com.unipool">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,7 +16,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB8Ik3P9bFz_prcjauv0oGMM_4gQmK2U_I" />
 
-        <activity android:name=".activities.LoginActivity">
+        <activity android:name="garbagecollectors.com.unipool.activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,14 +24,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.SplashActivity">
+        <activity android:name="garbagecollectors.com.unipool.activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".activities.HomeActivity"
+            android:name="garbagecollectors.com.unipool.activities.HomeActivity"
             android:label="Home"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -40,7 +40,7 @@
         </activity>
 
         <activity
-            android:name=".activities.NewEntryActivity"
+            android:name="garbagecollectors.com.unipool.activities.NewEntryActivity"
             android:label="Create a New Entry">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +48,7 @@
         </activity>
 
         <activity
-            android:name=".activities.RequestActivity.RequestActivity"
+            android:name="garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity"
             android:label="@string/title_requests">
             <intent-filter>
                 <action android:name="android.intent.action.TARGET_NOTIFICATION" />
@@ -56,13 +56,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.MessageListActivity" />
+        <activity android:name="garbagecollectors.com.unipool.activities.MessageListActivity" />
 
-        <activity android:name=".activities.SettingsActivity.SettingsActivity"
+        <activity android:name="garbagecollectors.com.unipool.activities.SettingsActivity.SettingsActivity"
             android:label="Settings"/>
       
         <service
-            android:name=".FirebaseMessagingService">
+            android:name="garbagecollectors.com.unipool.FirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

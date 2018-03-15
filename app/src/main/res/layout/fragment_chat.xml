@@ -3,7 +3,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="garbagecollectors.com.snucabpool.activities.RequestActivity.SentRequestsFragment">
+             tools:context="garbagecollectors.com.unipool.activities.RequestActivity.SentRequestsFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_users"

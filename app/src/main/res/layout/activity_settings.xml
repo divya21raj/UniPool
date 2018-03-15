@@ -5,13 +5,13 @@
     android:id="@+id/settings_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="garbagecollectors.com.snucabpool.activities.SettingsActivity.SettingsActivity">
+    tools:context="garbagecollectors.com.unipool.activities.SettingsActivity.SettingsActivity">
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/settingsFragment"
-        android:name="garbagecollectors.com.snucabpool.activities.SettingsActivity.SettingsFragment"/>
+        android:name="garbagecollectors.com.unipool.activities.SettingsActivity.SettingsFragment"/>
 
     <include
         android:id="@+id/nav_drawer"
