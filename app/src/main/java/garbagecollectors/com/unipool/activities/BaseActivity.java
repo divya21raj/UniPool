@@ -151,11 +151,13 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             }
         });
 
-        userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
+        /*userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
         {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s)
             {
+                Toast.makeText(getApplicationContext(), "Got it in Base activity", Toast.LENGTH_SHORT).show();
+
                 Message message = dataSnapshot.getValue(Message.class);
                 UtilityMethods.putMessageInMap(messages, message);
 
@@ -186,7 +188,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 // Failed to read value
                 Log.w("userDB", "Failed to read UserMessages.", databaseError.toException());
             }
-        });
+        });*/
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -400,4 +402,5 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     {
         return defaultMessage;
     }
+
 }

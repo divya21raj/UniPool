@@ -92,6 +92,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                 requestsProgressDialog.show();
 
                 final User[] tripEntryUser = new User[1];
+
                 Task userTask = accessUserDatabase("users/" + tripEntry.getUser_id());    //the user that created the clicked tripEntry
                 userTask.addOnSuccessListener(aVoid ->
                 {
@@ -117,6 +118,8 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                         UtilityMethods.removeFromList(tripEntryUserSentRequests, tripEntry.getEntry_id());
 
                         finalCurrentUser.setRequestsReceived(finalCurrentUserReceivedRequests);
+                        finalCurrentUser.setPairUps(currentUserPairUps);
+                        BaseActivity.setFinalCurrentUser(finalCurrentUser);
 
                         BaseActivity.getChatList().add(tripEntryUser[0]);
                         ChatFragment.recycleAdapter.notifyDataSetChanged();

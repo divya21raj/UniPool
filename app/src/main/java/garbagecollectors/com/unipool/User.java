@@ -77,6 +77,11 @@ public class User
         return pairUps;
     }
 
+    public void setPairUps(ArrayList<PairUp> pairUps)
+    {
+        this.pairUps = pairUps;
+    }
+
     public String getDeviceToken()
     {
         return deviceToken;

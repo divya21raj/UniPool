@@ -13,7 +13,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "26.0.2"
     defaultConfig {
-        applicationId 'garbagecollectors.com.snucabpool'
+        applicationId 'garbagecollectors.com.unipool'
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1

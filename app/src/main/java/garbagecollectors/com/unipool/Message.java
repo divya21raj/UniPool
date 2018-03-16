@@ -47,4 +47,8 @@ public class Message
         return pairUpId;
     }
 
+    public String getReceiverId()
+    {
+        return receiverId;
+    }
 }
