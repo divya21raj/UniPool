@@ -66,90 +66,95 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        setContentView(getContentViewId());
-
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-
-        userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId());
-        userMessageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + finalCurrentUser.getUserId());
-
-        MessageDBTask.addOnCompleteListener(task ->
+        try
         {
-            DataSnapshot messageData = (DataSnapshot) MessageDBTask.getResult();
+            super.onCreate(savedInstanceState);
+            setContentView(getContentViewId());
 
-            for(DataSnapshot dataSnapshot: messageData.getChildren())
+            mAuth = FirebaseAuth.getInstance();
+            currentUser = mAuth.getCurrentUser();
+
+            userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId());
+            userMessageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + finalCurrentUser.getUserId());
+
+            MessageDBTask.addOnCompleteListener(task ->
             {
-                Message message = dataSnapshot.getValue(Message.class);
+                DataSnapshot messageData = (DataSnapshot) MessageDBTask.getResult();
 
-                assert message != null;
-                if(!(message.getMessageId().equals("def@ult")))
-                    UtilityMethods.putMessageInMap(messages, message);
-            }
-        });
+                for (DataSnapshot dataSnapshot : messageData.getChildren())
+                {
+                    Message message = dataSnapshot.getValue(Message.class);
 
-        entryDatabaseReference.addChildEventListener(new ChildEventListener()
-        {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s)
+                    assert message != null;
+                    if (!(message.getMessageId().equals("def@ult")))
+                    {
+                        UtilityMethods.putMessageInMap(messages, message);
+                    }
+                }
+            });
+
+
+            entryDatabaseReference.addChildEventListener(new ChildEventListener()
             {
-                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                UtilityMethods.updateTripList(tripEntryList, tripEntry);
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s)
+                {
+                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                    UtilityMethods.updateTripList(tripEntryList, tripEntry);
 
-                HomeActivity.updateRecycleAdapter();
-            }
+                    HomeActivity.updateRecycleAdapter();
+                }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s)
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s)
+                {
+                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                    UtilityMethods.updateTripList(tripEntryList, tripEntry);
+
+                    HomeActivity.updateRecycleAdapter();
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot)
+                {
+                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                    UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
+
+                    HomeActivity.updateRecycleAdapter();
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s)
+                {
+                    //IDK
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+                    // Failed to read value
+                    Log.w("Hello", "Failed to read value.", databaseError.toException());
+                }
+            });
+
+            userDatabaseReference.addValueEventListener(new ValueEventListener()
             {
-                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                UtilityMethods.updateTripList(tripEntryList, tripEntry);
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    finalCurrentUser = dataSnapshot.getValue(User.class);
+                    UtilityMethods.populateChatList(dataSnapshot);
+                }
 
-                HomeActivity.updateRecycleAdapter();
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot)
-            {
-                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
-
-                HomeActivity.updateRecycleAdapter();
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s)
-            {
-                //IDK
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-                // Failed to read value
-                Log.w("Hello", "Failed to read value.", databaseError.toException());
-            }
-        });
-
-        userDatabaseReference.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                finalCurrentUser = dataSnapshot.getValue(User.class);
-                UtilityMethods.populateChatList(dataSnapshot);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error)
-            {
-                // Failed to read value
-                Log.w("UserDB", "Failed to read userDB value.", error.toException());
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError error)
+                {
+                    // Failed to read value
+                    Log.w("UserDB", "Failed to read userDB value.", error.toException());
+                }
+            });
 
         /*userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
         {
@@ -190,8 +195,14 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             }
         });*/
 
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+            bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+            bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        }
+        catch (NullPointerException nlp)
+        {
+            finish();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        }
     }
 
 	@Override

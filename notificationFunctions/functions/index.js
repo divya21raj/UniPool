@@ -59,7 +59,7 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
 					{
 						notification :
 						{
-							title : "SNU Cabpool",
+							title : "UniPool",
 							body : `${body}`,
 							icon : "default",
 							sound : "default",
