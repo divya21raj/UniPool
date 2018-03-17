@@ -1,7 +1,5 @@
 package garbagecollectors.com.unipool;
 
-import android.net.Uri;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,7 +7,7 @@ public class User
 {
     private String userId;
     private String name;
-    private Uri photoUrl;
+    private String photoUrl;
 
     private ArrayList<TripEntry> userTripEntries =new ArrayList<>();
 
@@ -22,7 +20,7 @@ public class User
 
     private ArrayList<PairUp> pairUps;
 
-    public User(String userId, String name, Uri photoUrl, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, ArrayList<PairUp> pairUps)
+    public User(String userId, String name, String photoUrl, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, ArrayList<PairUp> pairUps)
     {
         this.userId = userId;
         this.name = name;
@@ -97,12 +95,12 @@ public class User
         this.deviceToken = deviceToken;
     }
 
-    public Uri getPhotoUrl()
+    public String getPhotoUrl()
     {
         return photoUrl;
     }
 
-    public void setPhotoUrl(Uri photoUrl)
+    public void setPhotoUrl(String photoUrl)
     {
         this.photoUrl = photoUrl;
     }
