@@ -67,7 +67,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
     TaskCompletionSource<DataSnapshot> userDBSource = new TaskCompletionSource();
     Task userDBTask = userDBSource.getTask();
 
-    AppStatus appStatus;
+    AppStatus appStatus = new AppStatus(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

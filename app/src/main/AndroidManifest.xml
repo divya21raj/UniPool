@@ -7,7 +7,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -16,68 +16,60 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB8Ik3P9bFz_prcjauv0oGMM_4gQmK2U_I" />
 
-        <activity android:name="garbagecollectors.com.unipool.activities.LoginActivity">
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="garbagecollectors.com.unipool.activities.SplashActivity"
+            android:name=".activities.SplashActivity"
             android:theme="@style/AppThemeNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="garbagecollectors.com.unipool.activities.HomeActivity"
+            android:name=".activities.HomeActivity"
             android:label="Home"
             android:theme="@style/AppTheme">
-
-            <meta-data android:name="android.app.searchable"
+            <meta-data
+                android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="garbagecollectors.com.unipool.activities.NewEntryActivity"
+            android:name=".activities.NewEntryActivity"
             android:label="Create a New Entry">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity"
+            android:name=".activities.RequestActivity.RequestActivity"
             android:label="@string/title_requests">
             <intent-filter>
                 <action android:name="android.intent.action.TARGET_NOTIFICATION" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.MessageListActivity" />
 
-        <activity android:name="garbagecollectors.com.unipool.activities.MessageListActivity" />
-
-        <activity android:name="garbagecollectors.com.unipool.activities.SettingsActivity.SettingsActivity"
-            android:label="Settings"/>
-      
-        <service
-            android:name="garbagecollectors.com.unipool.FirebaseMessagingService">
+        <service android:name=".FirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
+        <activity android:name=".activities.AboutActivity"></activity>
     </application>
 
 </manifest>

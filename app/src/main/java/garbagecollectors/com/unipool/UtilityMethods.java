@@ -230,7 +230,7 @@ public class UtilityMethods
     public static void fillUserHolder(UserAdapter.MyHolder holder, User user)
     {
         holder.name.setText(user.getName());
-        holder.email.setText("email");
+        holder.email.setText("");
         Picasso.get().load(user.getPhotoUrl()).into(holder.photo);
     }
 

@@ -34,7 +34,6 @@ import garbagecollectors.com.unipool.TripEntry;
 import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
-import garbagecollectors.com.unipool.activities.SettingsActivity.SettingsActivity;
 
 import static garbagecollectors.com.unipool.activities.SplashActivity.MessageDBTask;
 
@@ -311,8 +310,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 	{
 		switch (menuItem.getItemId())
 		{
-			case R.id.nav_settings:
-				startActivity(new Intent(this, SettingsActivity.class));
+			case R.id.nav_about:
+				startActivity(new Intent(this, AboutActivity.class));
 				break;
 
 			case R.id.nav_logout:
