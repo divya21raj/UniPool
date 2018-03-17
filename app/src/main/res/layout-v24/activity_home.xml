@@ -9,19 +9,21 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.SearchView.SearchAutoComplete
+        <!--<android.support.v7.widget.SearchView
+            android:id="@+id/homeSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/homeSearch"
-            android:pointerIcon="arrow"/>
-
+            android:background="@color/colorPrimary"
+            app:queryBackground="@color/viewBg"
+            app:defaultQueryHint="Search entry"/>-->
+        
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/recycle"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_below="@+id/homeSearch"
             android:layout_above="@+id/bottom_navigation">
 
