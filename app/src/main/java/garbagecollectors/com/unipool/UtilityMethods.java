@@ -459,4 +459,21 @@ public class UtilityMethods
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
     }
+
+    public static void putMessageInList(Message message, List<Message> personalMessageList)
+    {
+        boolean flag = false;
+
+        for(Message m: personalMessageList)
+        {
+            if(m.getMessageId().equals(message.getMessageId()))
+            {
+                flag = true;
+                break;
+            }
+        }
+
+        if(!flag)
+            personalMessageList.add(message);
+    }
 }

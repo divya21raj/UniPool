@@ -1,6 +1,7 @@
 package garbagecollectors.com.unipool.activities.RequestActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -33,6 +34,7 @@ import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.TripEntry;
 import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.BaseActivity;
+import garbagecollectors.com.unipool.activities.LoginActivity;
 
 public class RequestActivity extends BaseActivity
 {
@@ -41,8 +43,8 @@ public class RequestActivity extends BaseActivity
 
 	public static ProgressBar requestsProgressBar;
 
-	static DatabaseReference sentRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId() + "/requestSent");
-	static DatabaseReference receivedRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId() + "/requestsReceived");
+	static DatabaseReference sentRequestsDatabaseReference;
+	static DatabaseReference receivedRequestsDatabaseReference;
 
 	static TaskCompletionSource<DataSnapshot> sentRequestsSource;
 	static TaskCompletionSource<DataSnapshot> receivedRequestsSource;
@@ -53,41 +55,60 @@ public class RequestActivity extends BaseActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_request);
-
-		final ActionBar actionBar = getSupportActionBar();
-		if(actionBar != null)
+		try
 		{
-			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_24dp);
-			actionBar.setDisplayHomeAsUpEnabled(true);
-		}
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_request);
 
-		drawerLayout = (DrawerLayout) findViewById(R.id.requests_layout);
+			sentRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference(
+					"users/" + finalCurrentUser.getUserId() + "/requestSent");
 
-		navDrawerStateListener();
+			receivedRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference(
+					"users/" + finalCurrentUser.getUserId() + "/requestsReceived");
+			final ActionBar actionBar = getSupportActionBar();
+			if(actionBar != null)
+			{
+				actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_24dp);
+				actionBar.setDisplayHomeAsUpEnabled(true);
+			}
 
-		navigationView = (NavigationView) findViewById(R.id.nav_drawer);
-		navigationView.setNavigationItemSelectedListener(menuItem ->
-		{
-			dealWithSelectedMenuItem(menuItem);
-			drawerLayout.closeDrawers();
+			drawerLayout = (DrawerLayout) findViewById(R.id.requests_layout);
+
+			navDrawerStateListener();
+
+			navigationView = (NavigationView) findViewById(R.id.nav_drawer);
+			navigationView.setNavigationItemSelectedListener(menuItem ->
+					{
+				dealWithSelectedMenuItem(menuItem);
+					drawerLayout.closeDrawers();
 
 			return true;
 		});
 
-		bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-		bottomNavigationView.setOnNavigationItemSelectedListener(this);
+			bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+			bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-		viewPager = (ViewPager) findViewById(R.id.viewpager);
-		setupViewPager(viewPager);
+			viewPager = (ViewPager) findViewById(R.id.viewpager);
+			setupViewPager(viewPager);
 
-		tabLayout = (TabLayout) findViewById(R.id.tabs);
-		tabLayout.setupWithViewPager(viewPager);
+			tabLayout = (TabLayout) findViewById(R.id.tabs);
+			try
+			{
+				TabLayout.Tab tab = tabLayout.getTabAt(Integer.parseInt(getIntent().getStringExtra("openingTab")));
+				tab.select();
+			}catch (NumberFormatException nfe)
+			{/*whoops*/}
+			tabLayout.setupWithViewPager(viewPager);
 
-		requestsProgressBar = (ProgressBar) findViewById(R.id.requests_progressBar);
-		requestsProgressBar.setVisibility(View.INVISIBLE);
+			requestsProgressBar = (ProgressBar) findViewById(R.id.requests_progressBar);
+			requestsProgressBar.setVisibility(View.INVISIBLE);
 
+		}
+		catch (NullPointerException nlp)
+		{
+			finish();
+			startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+		}
 	}
 
 	@Override

@@ -16,7 +16,9 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
 import java.util.List;
 
 import garbagecollectors.com.unipool.Message;
@@ -24,6 +26,8 @@ import garbagecollectors.com.unipool.PairUp;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.UtilityMethods;
+
+import static garbagecollectors.com.unipool.activities.BaseActivity.notificationDatabaseReference;
 
 
 public class MessageListActivity extends AppCompatActivity
@@ -56,7 +60,8 @@ public class MessageListActivity extends AppCompatActivity
 
 		setScrollViewToBottom();
 
-		DatabaseReference userMessageDatabaseReference = BaseActivity.getUserMessageDatabaseReference();
+		DatabaseReference userMessageDatabaseReference = FirebaseDatabase.getInstance().
+								getReference("messages/" + BaseActivity.getFinalCurrentUser().getUserId());
 
 		userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
 		{
@@ -64,19 +69,26 @@ public class MessageListActivity extends AppCompatActivity
 			public void onChildAdded(DataSnapshot dataSnapshot, String s)
 			{
 				Message message = dataSnapshot.getValue(Message.class);
-				UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);
 
-				if (message != null &&
-						!UtilityMethods.messageAlreadyInList(message, personalMessageList) && !message.getMessageId().equals("def@ult"))
+				//Toast.makeText(getApplicationContext(), "Got it in ML activity", Toast.LENGTH_SHORT).show();
+
+				if(message != null)
 				{
-					personalMessageList.add(message);
-					showMessage(message);
+					UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);
+
+					//Toast.makeText(getApplicationContext(), "Is receiver", Toast.LENGTH_SHORT).show();
+					if (!message.getMessageId().equals("def@ult"))
+					{
+						UtilityMethods.putMessageInList(message, personalMessageList);
+						showMessage(message);
+					}
 				}
+
 			}
 
-			@Override
-			public void onChildChanged(DataSnapshot dataSnapshot, String s)
-			{}
+		@Override
+		public void onChildChanged(DataSnapshot dataSnapshot, String s)
+		{}
 
 			@Override
 			public void onChildRemoved(DataSnapshot dataSnapshot)
@@ -107,8 +119,11 @@ public class MessageListActivity extends AppCompatActivity
 
 				UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);  //local update
 
-				personalMessageList.add(message);
-				showMessage(message);
+				HashMap<String, String> notificationObject = new HashMap<>();
+				notificationObject.put("from", BaseActivity.getFinalCurrentUser().getUserId());
+				notificationObject.put("type", "chat");
+
+				notificationDatabaseReference.child(chatUser.getUserId()).push().setValue(notificationObject);
 
 				messageArea.setText("");
 			}
@@ -142,7 +157,7 @@ public class MessageListActivity extends AppCompatActivity
 		{
 			addMessageBox(message.getMessage(), 1);
 		}
-		else
+		else if(message.getSenderId().equals(chatUser.getUserId()))
 		{
 			addMessageBox(message.getMessage(), 2);
 		}
@@ -153,7 +168,8 @@ public class MessageListActivity extends AppCompatActivity
 		TextView textView = new TextView(MessageListActivity.this);
 		textView.setText(message);
 
-		LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+																		ViewGroup.LayoutParams.WRAP_CONTENT);
 		lp2.weight = 1.0f;
 
 		if(type == 1)
@@ -189,4 +205,23 @@ public class MessageListActivity extends AppCompatActivity
 		MessageListActivity.personalMessageList = personalMessageList;
 	}
 
+	public static List<Message> getPersonalMessageList()
+	{
+		return personalMessageList;
+	}
+
+	public static User getChatUser()
+	{
+		return chatUser;
+	}
+
+	public static PairUp getPairUp()
+	{
+		return pairUp;
+	}
+
+	public static void refresh()
+	{
+
+	}
 }
