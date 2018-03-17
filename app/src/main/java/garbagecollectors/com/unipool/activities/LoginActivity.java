@@ -3,6 +3,7 @@ package garbagecollectors.com.unipool.activities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -270,7 +271,13 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
-        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), dummyUserEntries, dummyRequestSent, dummyRequestReceived, deviceToken, dummyPairUps);
+        String url = "";
+        Uri photoUrl = user.getPhotoUrl();
+        if(photoUrl != null)
+            url = photoUrl.toString();
+
+        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), url,
+                                    dummyUserEntries, dummyRequestSent, dummyRequestReceived, deviceToken, dummyPairUps);
     }
 
     private void updateUI(FirebaseUser currentUser)

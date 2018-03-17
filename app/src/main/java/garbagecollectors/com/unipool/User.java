@@ -7,6 +7,8 @@ public class User
 {
     private String userId;
     private String name;
+    private String photoUrl;
+
     private ArrayList<TripEntry> userTripEntries =new ArrayList<>();
 
     private ArrayList<TripEntry> requestSent;
@@ -18,10 +20,11 @@ public class User
 
     private ArrayList<PairUp> pairUps;
 
-    public User(String userId, String name, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, ArrayList<PairUp> pairUps)
+    public User(String userId, String name, String photoUrl, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, ArrayList<PairUp> pairUps)
     {
         this.userId = userId;
         this.name = name;
+        this.photoUrl = photoUrl;
         this.userTripEntries = userTripEntries;
         this.requestSent = requestSent;
         this.requestsReceived = requestsReceived;
@@ -90,5 +93,15 @@ public class User
     public void setDeviceToken(String deviceToken)
     {
         this.deviceToken = deviceToken;
+    }
+
+    public String getPhotoUrl()
+    {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl)
+    {
+        this.photoUrl = photoUrl;
     }
 }
