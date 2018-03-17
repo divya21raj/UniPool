@@ -92,6 +92,12 @@ public class RequestActivity extends BaseActivity
 			setupViewPager(viewPager);
 
 			tabLayout = (TabLayout) findViewById(R.id.tabs);
+			try
+			{
+				TabLayout.Tab tab = tabLayout.getTabAt(Integer.parseInt(getIntent().getStringExtra("openingTab")));
+				tab.select();
+			}catch (NumberFormatException nfe)
+			{/*whoops*/}
 			tabLayout.setupWithViewPager(viewPager);
 
 			requestsProgressBar = (ProgressBar) findViewById(R.id.requests_progressBar);

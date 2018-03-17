@@ -10,7 +10,6 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService
 {
-
 	@Override
 	public void onMessageReceived(RemoteMessage remoteMessage)
 	{
@@ -33,6 +32,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 		//clicking on the notification
 		Intent resultIntent = new Intent(clickAction);
 
+		if(notificationBody.contains("accepted"))
+			resultIntent.putExtra("openingTab", "0");
+		else if(notificationBody.contains("sent"))
+			resultIntent.putExtra("openingTab", "1");
+
 		PendingIntent resultPendingIntent =
 				PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -42,9 +46,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 		int notificationId = (int) System.currentTimeMillis();
 		NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
-		// Builds notification and issues it
-		notificationManager.notify(notificationId, mBuilder.build());
-
+		if(!notificationBody.contains("messages"))
+		{
+			// Builds notification and issues it
+			notificationManager.notify(notificationId, mBuilder.build());
+		}
 
 	}
 }

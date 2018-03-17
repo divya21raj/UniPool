@@ -37,13 +37,18 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
 				switch (notif_type)
 				{
 					case "requestAccepted":
-						body = `${userName} has accepted your request.`;
+						body = `${userName} has accepted your request`;
 						console.log('Sure is!');
 						break;
 
 					case "requestCreated":
-						body = `${userName} has sent your request.`;
+						body = `${userName} has sent your request`;
 						console.log('Sure is!');
+						break;
+
+					case "chat":
+						body = `New messages from ${userName}`;
+						console.log('Chat notif');
 						break;
 
 					default: break;

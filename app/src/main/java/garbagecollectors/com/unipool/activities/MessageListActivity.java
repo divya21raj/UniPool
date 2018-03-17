@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
 import java.util.List;
 
 import garbagecollectors.com.unipool.Message;
@@ -25,6 +26,8 @@ import garbagecollectors.com.unipool.PairUp;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.UtilityMethods;
+
+import static garbagecollectors.com.unipool.activities.BaseActivity.notificationDatabaseReference;
 
 
 public class MessageListActivity extends AppCompatActivity
@@ -76,7 +79,7 @@ public class MessageListActivity extends AppCompatActivity
 					//Toast.makeText(getApplicationContext(), "Is receiver", Toast.LENGTH_SHORT).show();
 					if (!message.getMessageId().equals("def@ult"))
 					{
-						personalMessageList.add(message);
+						UtilityMethods.putMessageInList(message, personalMessageList);
 						showMessage(message);
 					}
 				}
@@ -115,6 +118,12 @@ public class MessageListActivity extends AppCompatActivity
 				UtilityMethods.putMessageOnDB(message, chatUser, BaseActivity.getFinalCurrentUser());  //online update
 
 				UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);  //local update
+
+				HashMap<String, String> notificationObject = new HashMap<>();
+				notificationObject.put("from", BaseActivity.getFinalCurrentUser().getUserId());
+				notificationObject.put("type", "chat");
+
+				notificationDatabaseReference.child(chatUser.getUserId()).push().setValue(notificationObject);
 
 				messageArea.setText("");
 			}
