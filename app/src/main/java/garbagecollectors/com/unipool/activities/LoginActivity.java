@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import garbagecollectors.com.unipool.AppStatus;
 import garbagecollectors.com.unipool.GenLocation;
 import garbagecollectors.com.unipool.Message;
 import garbagecollectors.com.unipool.PairUp;
@@ -65,6 +66,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     TaskCompletionSource<DataSnapshot> userDBSource = new TaskCompletionSource();
     Task userDBTask = userDBSource.getTask();
+
+    AppStatus appStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -113,11 +116,17 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void signIn()
     {
-        progressDialog.setMessage("Please Wait!");
-        progressDialog.show();
+        if(appStatus.isOnline()){
+            progressDialog.setMessage("Please Wait!");
+            progressDialog.show();
 
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        } else {
+            Toast.makeText(getApplicationContext(),
+                    "Please make sure you have active internet connection",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
