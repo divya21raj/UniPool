@@ -4,9 +4,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -38,11 +35,11 @@ public class HomeActivity extends BaseActivity
         	actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-	    drawerLayout = (DrawerLayout) findViewById(R.id.home_layout);
+	    drawerLayout = findViewById(R.id.home_layout);
 
         navDrawerStateListener();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_drawer);
+        navigationView = findViewById(R.id.nav_drawer);
 	    navigationView.setNavigationItemSelectedListener(menuItem ->
 	    {
 		    dealWithSelectedMenuItem(menuItem);
@@ -51,10 +48,10 @@ public class HomeActivity extends BaseActivity
 		    return true;
 	    });
 
-	    bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+	    bottomNavigationView = findViewById(R.id.bottom_navigation);
 	    bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-	    recycle = (RecyclerView) findViewById(R.id.recycle);
+	    recycle = findViewById(R.id.recycle);
 
 	    recyclerAdapter = new HomeActivityTEA(tripEntryList,HomeActivity.this);
 	    RecyclerView.LayoutManager layoutManager = new GridLayoutManager(HomeActivity.this,1);
@@ -62,6 +59,7 @@ public class HomeActivity extends BaseActivity
 	    recycle.setLayoutManager(layoutManager);
 	    recycle.setItemAnimator( new DefaultItemAnimator());
 	    recycle.setAdapter(recyclerAdapter);
+
     }
 
 	@Override
