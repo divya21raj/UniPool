@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/about_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="garbagecollectors.com.unipool.activities.AboutActivity">
+
+    <RelativeLayout
+        android:id="@+id/aboutRelative"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        android:textColor="@color/colorPrimaryDark"
+        <TextView
+            android:id="@+id/devView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:text="Developers"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="26sp"
+            tools:typeface="monospace"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/drView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/devView"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimary"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClickAbout"
+            android:text="@string/divya_raj"/>
+        <TextView
+            android:id="@+id/asView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/drView"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimary"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClickAbout"
+            android:text="@string/abhishek_srivastava"/>
+        <TextView
+            android:id="@+id/ssView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/asView"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimary"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClickAbout"
+            android:text="@string/simran_srivastava"/>
+        <TextView
+            android:id="@+id/rdView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/ssView"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimary"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClickAbout"
+            android:text="@string/rohan_datta"/>
+        <TextView
+            android:id="@+id/ajView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rdView"
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClickAbout"
+            android:text="@string/atishay_jain"/>
+
+        <TextView
+            android:id="@+id/logoView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="260dp"
+            android:text="Logo"
+            android:textSize="26sp"
+            tools:typeface="sans"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:id="@+id/sgView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/logoView"
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/colorPrimary"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClickAbout"
+            android:text="@string/saurabh_gangadharan"/>
+
+        <ImageView
+            android:id="@+id/githubView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="35dp"
+            android:layout_below="@id/sgView"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClickAbout"
+            android:background="@drawable/github"/>
+
+    </RelativeLayout>
+
+
+    <include
+        android:id="@+id/nav_drawer"
+        layout="@layout/element_navigation_drawer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start" />
+
+
+</android.support.v4.widget.DrawerLayout>
