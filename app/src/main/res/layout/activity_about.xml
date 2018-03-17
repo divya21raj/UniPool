@@ -12,7 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        android:textColor="@color/colorPrimaryDark"
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/logo_trans"
+            android:alpha="0.10"
+            android:backgroundTint="@color/colorPrimary" />
         <TextView
             android:id="@+id/devView"
             android:layout_width="wrap_content"
@@ -117,21 +124,24 @@
             android:onClick="onClickAbout"
             android:text="@string/saurabh_gangadharan"/>
 
-        <ImageView
-            android:id="@+id/githubView"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="30dp"
-            android:layout_marginTop="35dp"
-            android:layout_below="@id/sgView"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="onClickAbout"
-            android:background="@drawable/github"/>
+            android:layout_marginBottom="20dp">
+
+            <ImageView
+                android:id="@+id/githubView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="onClickAbout"
+                android:background="@drawable/github"/>
+        </LinearLayout>
 
     </RelativeLayout>
-
 
     <include
         android:id="@+id/nav_drawer"
