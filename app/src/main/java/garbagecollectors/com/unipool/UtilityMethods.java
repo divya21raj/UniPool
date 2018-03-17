@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -230,6 +231,7 @@ public class UtilityMethods
     {
         holder.name.setText(user.getName());
         holder.email.setText("email");
+        Picasso.get().load(user.getPhotoUrl()).into(holder.photo);
     }
 
     public static void removeFromMap(HashMap<String, ArrayList<String>> map, String keyId, String valueId)

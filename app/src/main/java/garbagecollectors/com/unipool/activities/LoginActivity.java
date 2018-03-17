@@ -270,7 +270,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
-        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), dummyUserEntries, dummyRequestSent, dummyRequestReceived, deviceToken, dummyPairUps);
+        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), user.getPhotoUrl(), dummyUserEntries, dummyRequestSent, dummyRequestReceived, deviceToken, dummyPairUps);
     }
 
     private void updateUI(FirebaseUser currentUser)
