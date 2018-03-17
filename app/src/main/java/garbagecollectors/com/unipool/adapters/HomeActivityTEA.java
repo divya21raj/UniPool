@@ -32,7 +32,7 @@ import static garbagecollectors.com.unipool.UtilityMethods.putInMap;
 public class HomeActivityTEA extends TripEntryAdapter
 {
     private List<TripEntry> list;
-    private List<TripEntry> listCopy;
+    private List<TripEntry> listCopy = new ArrayList<>();
     private Context context;
 
     private boolean isRequestAlreadyInMap;
@@ -49,6 +49,7 @@ public class HomeActivityTEA extends TripEntryAdapter
     {
         this.list = list;
         this.context = context;
+        listCopy.addAll(list);
     }
 
     public HomeActivityTEA()
@@ -149,6 +150,35 @@ public class HomeActivityTEA extends TripEntryAdapter
         });
     }
 
+    public void filter(String text)
+    {
+        list.clear();
+
+        if(text.isEmpty())
+            list.addAll(listCopy);
+
+        else
+        {
+            text = text.toLowerCase();
+
+            for(TripEntry tripEntry: listCopy)
+            {
+                String name = tripEntry.getName().toLowerCase();
+                String destination = tripEntry.getDestination().getName().toLowerCase();
+                String source = tripEntry.getSource().getName().toLowerCase();
+
+                String time = tripEntry.getTime();
+                String date = tripEntry.getDate();
+
+                if(name.contains(text) ||destination.contains(text) || source.contains(text)
+                            || time.contains(text) || date.contains(text))
+                    list.add(tripEntry);
+            }
+        }
+
+        notifyDataSetChanged();
+    }
+
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount()
@@ -167,25 +197,5 @@ public class HomeActivityTEA extends TripEntryAdapter
         return arr;
     }
 
-    public void filter(String text)
-    {
-        list.clear();
-        if(text.isEmpty())
-        {
-            list.addAll(listCopy);
-        }
-        else
-        {
-            text = text.toLowerCase();
-            for(TripEntry trip : listCopy)
-            {
-                if((trip.getSource().toString().toLowerCase().contains(text))||(trip.getDestination().toString().toLowerCase().contains(text)))
-                {
-                    list.add(trip);
-                }
-            }
-        }
-        notifyDataSetChanged();
-    }
 }
 
