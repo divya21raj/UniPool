@@ -76,8 +76,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
             appStatus = new AppStatus(getApplicationContext());
 
-            if (appStatus.isOnline())
-            {
                 mAuth = FirebaseAuth.getInstance();
                 currentUser = mAuth.getCurrentUser();
 
@@ -206,14 +204,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
                 bottomNavigationView = findViewById(R.id.bottom_navigation);
                 bottomNavigationView.setOnNavigationItemSelectedListener(this);
-            }
-
-            else
-            {
-                Toast.makeText(getApplicationContext(),
-                        "No internet = No cab...stay safe, my caveman!",
-                        Toast.LENGTH_LONG).show();
-            }
         }
 
         catch(NullPointerException nlp)
