@@ -38,7 +38,7 @@ public class ChatFragment extends Fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        recycle = (RecyclerView) view.findViewById(R.id.recycle_users);
+        recycle = view.findViewById(R.id.recycle_users);
 
         recycleAdapter = new UserAdapter(BaseActivity.getChatList(), getContext());
 

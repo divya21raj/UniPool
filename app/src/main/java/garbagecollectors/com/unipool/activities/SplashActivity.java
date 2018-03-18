@@ -18,6 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import garbagecollectors.com.unipool.AppStatus;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.TripEntry;
 import garbagecollectors.com.unipool.User;
@@ -49,92 +50,109 @@ public class SplashActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
+        AppStatus appStatus = new AppStatus(this);
 
-        BaseActivity.setCurrentUser(currentUser);
-
-        userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
-
-        messageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + currentUser.getUid());
-
-        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+        if (appStatus.isOnline())
         {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                UserDBSource.setResult(dataSnapshot);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-                UserDBSource.setException(databaseError.toException());
-            }
-        });
+            mAuth = FirebaseAuth.getInstance();
+            currentUser = mAuth.getCurrentUser();
 
-        entryDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                EntryDBSource.setResult(dataSnapshot);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-                EntryDBSource.setException(databaseError.toException());
-            }
-        });
+            BaseActivity.setCurrentUser(currentUser);
 
-        Task<Void> allTask = Tasks.whenAll(UserDBTask, EntryDBTask);
-        allTask.addOnSuccessListener(aVoid ->
-        {
-            DataSnapshot userData = (DataSnapshot) UserDBTask.getResult();
-            DataSnapshot entryData = (DataSnapshot) EntryDBTask.getResult();
+            userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
 
-            for(DataSnapshot dataSnapshot :entryData.getChildren())
-            {
-                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                UtilityMethods.updateTripList(tripEntryList, tripEntry);
-            }
+            messageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + currentUser.getUid());
 
-            if(!(LoginActivity.userNewOnDatabase))
-                BaseActivity.setFinalCurrentUser(userData.getValue(User.class));
-
-			Task chatListTask = UtilityMethods.populateChatList(userData);
-
-			messageDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+            userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
             {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot)
                 {
-                    try
-                    {
-                        MessageDBSource.setResult(dataSnapshot);
-                    }
-                    catch (IllegalStateException ignored)
-                    {}
+                    UserDBSource.setResult(dataSnapshot);
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError)
                 {
-                    MessageDBSource.setException(databaseError.toException());
+                    UserDBSource.setException(databaseError.toException());
+                    Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
                 }
             });
 
-            chatListTask.addOnCompleteListener(task1 ->
+            entryDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
             {
-                finish();
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-            });
-        });
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    EntryDBSource.setResult(dataSnapshot);
+                }
 
-        allTask.addOnFailureListener(e ->
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+                    EntryDBSource.setException(databaseError.toException());
+                    Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            Task<Void> allTask = Tasks.whenAll(UserDBTask, EntryDBTask);
+            allTask.addOnSuccessListener(aVoid ->
+            {
+                DataSnapshot userData = (DataSnapshot) UserDBTask.getResult();
+                DataSnapshot entryData = (DataSnapshot) EntryDBTask.getResult();
+
+                for (DataSnapshot dataSnapshot : entryData.getChildren())
+                {
+                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                    UtilityMethods.updateTripList(tripEntryList, tripEntry);
+                }
+
+                if (!(LoginActivity.userNewOnDatabase))
+                    BaseActivity.setFinalCurrentUser(userData.getValue(User.class));
+
+                Task chatListTask = UtilityMethods.populateChatList(userData);
+
+                messageDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+                {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot)
+                    {
+                        try
+                        {
+                            MessageDBSource.setResult(dataSnapshot);
+                        } catch (IllegalStateException ignored)
+                        {
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError)
+                    {
+                        MessageDBSource.setException(databaseError.toException());
+                        Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                chatListTask.addOnCompleteListener(task1 ->
+                {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                });
+            });
+
+            allTask.addOnFailureListener(e ->
+            {
+                // apologize profusely to the user!
+                Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        else
         {
-            // apologize profusely to the user!
-            Toast.makeText(this, "FAIL", Toast.LENGTH_LONG).show();
-        });
+            Toast.makeText(getApplicationContext(),
+                    "No internet = No cab...stay safe, my caveman!",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     public static ArrayList<TripEntry> getTripEntryList()

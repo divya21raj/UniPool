@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +29,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import garbagecollectors.com.unipool.AppStatus;
 import garbagecollectors.com.unipool.Message;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.TripEntry;
@@ -46,6 +48,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     public static FirebaseAuth mAuth;
     public static FirebaseUser currentUser;
+
+    protected static AppStatus appStatus;
 
     protected static DatabaseReference userDatabaseReference;
     protected static DatabaseReference userMessageDatabaseReference;
@@ -70,141 +74,157 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             super.onCreate(savedInstanceState);
             setContentView(getContentViewId());
 
-            mAuth = FirebaseAuth.getInstance();
-            currentUser = mAuth.getCurrentUser();
+            appStatus = new AppStatus(getApplicationContext());
 
-            userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId());
-            userMessageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + finalCurrentUser.getUserId());
-
-            MessageDBTask.addOnCompleteListener(task ->
+            if (appStatus.isOnline())
             {
-                DataSnapshot messageData = (DataSnapshot) MessageDBTask.getResult();
+                mAuth = FirebaseAuth.getInstance();
+                currentUser = mAuth.getCurrentUser();
 
-                for (DataSnapshot dataSnapshot : messageData.getChildren())
+                userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId());
+                userMessageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + finalCurrentUser.getUserId());
+
+                MessageDBTask.addOnCompleteListener(task ->
                 {
-                    Message message = dataSnapshot.getValue(Message.class);
+                    DataSnapshot messageData = (DataSnapshot) MessageDBTask.getResult();
 
-                    assert message != null;
-                    if (!(message.getMessageId().equals("def@ult")))
+                    for (DataSnapshot dataSnapshot : messageData.getChildren())
                     {
-                        UtilityMethods.putMessageInMap(messages, message);
+                        Message message = dataSnapshot.getValue(Message.class);
+
+                        assert message != null;
+                        if (!(message.getMessageId().equals("def@ult")))
+                        {
+                            UtilityMethods.putMessageInMap(messages, message);
+                        }
                     }
-                }
-            });
+                });
 
 
-            entryDatabaseReference.addChildEventListener(new ChildEventListener()
-            {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s)
+                entryDatabaseReference.addChildEventListener(new ChildEventListener()
                 {
-                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                    UtilityMethods.updateTripList(tripEntryList, tripEntry);
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
+                    {
+                        TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                        UtilityMethods.updateTripList(tripEntryList, tripEntry);
 
-                    HomeActivity.updateRecycleAdapter();
-                }
+                        HomeActivity.updateRecycleAdapter();
+                    }
 
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s)
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s)
+                    {
+                        TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                        UtilityMethods.updateTripList(tripEntryList, tripEntry);
+
+                        HomeActivity.updateRecycleAdapter();
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot)
+                    {
+                        TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                        UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
+
+                        HomeActivity.updateRecycleAdapter();
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s)
+                    {
+                        //IDK
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError)
+                    {
+                        // Failed to read value
+                        Log.w("Hello", "Failed to read value.", databaseError.toException());
+                        Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                userDatabaseReference.addValueEventListener(new ValueEventListener()
                 {
-                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                    UtilityMethods.updateTripList(tripEntryList, tripEntry);
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot)
+                    {
+                        // This method is called once with the initial value and again
+                        // whenever data at this location is updated.
+                        finalCurrentUser = dataSnapshot.getValue(User.class);
+                        UtilityMethods.populateChatList(dataSnapshot);
+                    }
 
-                    HomeActivity.updateRecycleAdapter();
-                }
+                    @Override
+                    public void onCancelled(DatabaseError error)
+                    {
+                        // Failed to read value
+                        Log.w("UserDB", "Failed to read userDB value.", error.toException());
+                        Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot)
+                /*userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
                 {
-                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                    UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
+                    {
+                        Toast.makeText(getApplicationContext(), "Got it in Base activity", Toast.LENGTH_SHORT).show();
 
-                    HomeActivity.updateRecycleAdapter();
-                }
+                        Message message = dataSnapshot.getValue(Message.class);
+                        UtilityMethods.putMessageInMap(messages, message);
 
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s)
-                {
-                    //IDK
-                }
+                        //notify
+                    }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError)
-                {
-                    // Failed to read value
-                    Log.w("Hello", "Failed to read value.", databaseError.toException());
-                }
-            });
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s)
+                    {
+                        //not happening
+                    }
 
-            userDatabaseReference.addValueEventListener(new ValueEventListener()
-            {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot)
-                {
-                    // This method is called once with the initial value and again
-                    // whenever data at this location is updated.
-                    finalCurrentUser = dataSnapshot.getValue(User.class);
-                    UtilityMethods.populateChatList(dataSnapshot);
-                }
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot)
+                    {
+                        //not happening
+                    }
 
-                @Override
-                public void onCancelled(DatabaseError error)
-                {
-                    // Failed to read value
-                    Log.w("UserDB", "Failed to read userDB value.", error.toException());
-                }
-            });
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s)
+                    {
+                        //IDK
+                    }
 
-        /*userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
-        {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s)
-            {
-                Toast.makeText(getApplicationContext(), "Got it in Base activity", Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void onCancelled(DatabaseError databaseError)
+                    {
+                        // Failed to read value
+                        Log.w("userDB", "Failed to read UserMessages.", databaseError.toException());
+                    }
+                });*/
 
-                Message message = dataSnapshot.getValue(Message.class);
-                UtilityMethods.putMessageInMap(messages, message);
-
-                //notify
+                bottomNavigationView = findViewById(R.id.bottom_navigation);
+                bottomNavigationView.setOnNavigationItemSelectedListener(this);
             }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s)
+            else
             {
-                //not happening
+                Toast.makeText(getApplicationContext(),
+                        "No internet = No cab...stay safe, my caveman!",
+                        Toast.LENGTH_LONG).show();
             }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot)
-            {
-                //not happening
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s)
-            {
-                //IDK
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-                // Failed to read value
-                Log.w("userDB", "Failed to read UserMessages.", databaseError.toException());
-            }
-        });*/
-
-            bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-            bottomNavigationView.setOnNavigationItemSelectedListener(this);
         }
-        catch (NullPointerException nlp)
+
+        catch(NullPointerException nlp)
         {
             finish();
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         }
+
     }
 
-	@Override
+    @Override
     protected void onStart()
     {
         super.onStart();
@@ -339,13 +359,13 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
 	protected void setNavHeaderStuff()
 	{
-		TextView userNameOnHeader = (TextView) findViewById(R.id.header_username);
+		TextView userNameOnHeader = findViewById(R.id.header_username);
 		userNameOnHeader.setText(finalCurrentUser.getName());
 
-		TextView emailOnHeader = (TextView) findViewById(R.id.header_email);
+		TextView emailOnHeader = findViewById(R.id.header_email);
 		emailOnHeader.setText(currentUser.getEmail());
 
-        ImageView userImageOnHeader = (ImageView) findViewById(R.id.header_userImage);
+        ImageView userImageOnHeader = findViewById(R.id.header_userImage);
         Picasso.get().load(currentUser.getPhotoUrl()).into(userImageOnHeader);
 	}
 

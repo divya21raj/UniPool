@@ -10,11 +10,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
@@ -79,11 +76,11 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.new_entry_layout);
+        drawerLayout = findViewById(R.id.new_entry_layout);
 
         navDrawerStateListener();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_drawer);
+        navigationView = findViewById(R.id.nav_drawer);
         navigationView.setNavigationItemSelectedListener(menuItem ->
         {
             dealWithSelectedMenuItem(menuItem);
@@ -92,7 +89,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
             return true;
         });
 
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         source = null;
@@ -100,10 +97,10 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
 
         time = "";
 
-        findSource = (EditText) findViewById(R.id.findSourceEditText);
-        findDestination = (EditText) findViewById(R.id.findDestinationEditText);
-        setTime = (EditText) findViewById(R.id.setTimeEditText);
-        setDate = (EditText) findViewById(R.id.setDateEditText);
+        findSource = findViewById(R.id.findSourceEditText);
+        findDestination = findViewById(R.id.findDestinationEditText);
+        setTime = findViewById(R.id.setTimeEditText);
+        setDate = findViewById(R.id.setDateEditText);
 
         setTime.setOnClickListener(view -> openTimePickerDialog(false));
 
@@ -113,7 +110,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
             newFragment.show(getFragmentManager(), "Date Picker");
         });
 
-        buttonFinalSave = (Button) findViewById(R.id.finalSave);
+        buttonFinalSave = findViewById(R.id.finalSave);
         buttonFinalSave.setOnClickListener(v ->
         {
             try
@@ -255,6 +252,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         } else if (resultCode == RESULT_CANCELED)
         {
             // The user canceled the operation.
+            Toast.makeText(getApplicationContext(), "Cancelled...", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -439,11 +437,12 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                     }
                     else
                     {
+                        Toast.makeText(getApplicationContext(), "You have to accept that to get current location",
+                                                Toast.LENGTH_SHORT).show();
                         // permission denied, boo! Disable the
                         // functionality that depends on this permission.
                     }
 
-                    return;
                 }
 
             // other 'case' lines to check for other

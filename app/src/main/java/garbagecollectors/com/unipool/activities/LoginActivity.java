@@ -88,7 +88,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         progressDialog = new ProgressDialog(this);
 
-        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
     }
@@ -116,15 +116,19 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void signIn()
     {
-        if(appStatus.isOnline()){
+        if(appStatus.isOnline())
+        {
             progressDialog.setMessage("Please Wait!");
             progressDialog.show();
 
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
-        } else {
+        }
+
+        else
+        {
             Toast.makeText(getApplicationContext(),
-                    "Please make sure you have active internet connection",
+                    "No internet = No cab...stay safe, my caveman!",
                     Toast.LENGTH_LONG).show();
         }
     }
@@ -158,6 +162,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
             updateUI(null);
         }
     }
@@ -184,6 +189,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
                         } catch (ParseException e)
                         {
                             e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
                         }
                     }
                     else
@@ -195,7 +201,6 @@ public class LoginActivity extends Activity implements View.OnClickListener
                         updateUI(null);
                     }
 
-                    // ...
                 });
     }
 
@@ -217,7 +222,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
             public void onCancelled(DatabaseError databaseError)
             {
                 userDBSource.setException(databaseError.toException());
-                Toast.makeText(getApplicationContext(), "Couldn't make it!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Couldn't make it, try again...", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -231,16 +236,17 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
                 userDatabaseReference.setValue(finalCurrentUser);
 
-                messageDatabaseReference.child(finalCurrentUser.getUserId()).child(defaultMessage.getMessageId()).setValue(defaultMessage);
+                messageDatabaseReference.child(finalCurrentUser.getUserId()).child(defaultMessage.getMessageId()).
+                                                                            setValue(defaultMessage);
 
-                Toast.makeText(getApplicationContext(), "User added to database!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "User added to database!", Toast.LENGTH_SHORT).show();
 
                 updateUI(user);
             }
 
             else
             {
-                Toast.makeText(getApplicationContext(), "User already there, no need to add!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "User already there, no need to add!", Toast.LENGTH_SHORT).show();
                 userNewOnDatabase = false;
 
                 updateUI(user);
@@ -256,7 +262,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         GenLocation dummyGenLocation = new GenLocation("dummy", "dummy", 0d, 0d);
 
-        TripEntry dummyTripEntry = new TripEntry("dummy", "0", "DummyUser", "12:00", "1/11/12", dummyGenLocation, dummyGenLocation, dummyLambdaMap);
+        TripEntry dummyTripEntry = new TripEntry("dummy", "0", "DummyUser", "12:00",
+                                                    "1/11/12", dummyGenLocation, dummyGenLocation, dummyLambdaMap);
 
         ArrayList<TripEntry> dummyUserEntries = new ArrayList<>();
         dummyUserEntries.add(dummyTripEntry);
@@ -270,7 +277,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
         HashMap<String, ArrayList<String>> dummyRequestReceived = new HashMap<>();
         dummyRequestReceived.put("dummy", dummyUserIdList);
 
-        Message dummyMessage = new Message("dummy", "", "", "dummy", "dummy", 1L);
+        Message dummyMessage = new Message("dummy", "", "", "dummy",
+                                                    "dummy", 1L);
         ArrayList<Message> dummyMessages = new ArrayList<>();
         dummyMessages.add(dummyMessage);
 
