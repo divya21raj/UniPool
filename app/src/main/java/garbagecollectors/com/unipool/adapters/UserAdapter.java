@@ -76,9 +76,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>
 		{
 			super(itemView);
 
-			name = (TextView) itemView.findViewById(R.id.item_friend_name_text_view);
-			email = (TextView) itemView.findViewById(R.id.item_friend_email_text_view);
-			photo = (ImageView) itemView.findViewById(R.id.item_user_image_view);
+			name = itemView.findViewById(R.id.item_friend_name_text_view);
+			email = itemView.findViewById(R.id.item_friend_email_text_view);
+			photo = itemView.findViewById(R.id.item_user_image_view);
 		}
 	}
 }

@@ -395,13 +395,16 @@ public class UtilityMethods
         for(PairUp pairUp: pairUpList)
         {
             if(pairUp.getCreatorId().equals(userId)||pairUp.getRequesterId().equals(userId))
+            {
                 pairUpId = pairUp.getPairUpId();
+                break;
+            }
         }
 
         List messageList = messages.get(pairUpId);
 
         if(messageList != null)
-        personalMessageList = new ArrayList<>(messages.get(pairUpId));
+            personalMessageList = new ArrayList<>(messages.get(pairUpId));
 
         else
         {
@@ -461,7 +464,7 @@ public class UtilityMethods
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
     }
 
-    public static void putMessageInList(Message message, List<Message> personalMessageList)
+    public static boolean putMessageInList(Message message, List<Message> personalMessageList)
     {
         boolean flag = false;
 
@@ -476,5 +479,7 @@ public class UtilityMethods
 
         if(!flag)
             personalMessageList.add(message);
+
+        return flag;
     }
 }

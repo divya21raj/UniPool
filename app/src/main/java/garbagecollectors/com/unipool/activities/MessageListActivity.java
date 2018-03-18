@@ -83,10 +83,11 @@ public class MessageListActivity extends AppCompatActivity
 						UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);
 
 						//Toast.makeText(getApplicationContext(), "Is receiver", Toast.LENGTH_SHORT).show();
-						if (!message.getMessageId().equals("def@ult"))
+						if (!message.getMessageId().equals("def@ult") && (message.getSenderId().equals(chatUser.getUserId())
+										|| message.getReceiverId().equals(chatUser.getUserId())))
 						{
-							UtilityMethods.putMessageInList(message, personalMessageList);
-							showMessage(message);
+							if(!(UtilityMethods.putMessageInList(message, personalMessageList)))
+								showMessage(message);
 						}
 					}
 
@@ -136,6 +137,8 @@ public class MessageListActivity extends AppCompatActivity
 					notificationDatabaseReference.child(chatUser.getUserId()).push().setValue(notificationObject);
 
 					messageArea.setText("");
+					personalMessageList.add(message);
+					showMessage(message);
 				}
 			});
 
