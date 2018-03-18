@@ -116,17 +116,18 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void signIn()
     {
+        progressDialog.setMessage("Please Wait!");
+        progressDialog.show();
+
         if(appStatus.isOnline())
         {
-            progressDialog.setMessage("Please Wait!");
-            progressDialog.show();
-
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         }
 
         else
         {
+            progressDialog.dismiss();
             Toast.makeText(getApplicationContext(),
                     "No internet = No cab...stay safe, my caveman!",
                     Toast.LENGTH_LONG).show();
