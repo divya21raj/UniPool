@@ -68,7 +68,7 @@ public class ReceivedRequestsFragment extends Fragment
         receivedRequestsList = new ArrayList<>();
         Task task = UtilityMethods.populateReceivedRequestsList(receivedRequestsList, receivedRequestsMap, tripEntries);
 
-        recycle = (RecyclerView) view.findViewById(R.id.recycle_requests);
+        recycle = view.findViewById(R.id.recycle_requests);
 
         task.addOnSuccessListener(o ->
         {

@@ -32,12 +32,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        //Create a new DatePickerDialog instance and return it
-        /*
-            DatePickerDialog Public Constructors - Here we uses first one
-            public DatePickerDialog (Context context, DatePickerDialog.OnDateSetListener callBack, int year, int monthOfYear, int dayOfMonth)
-            public DatePickerDialog (Context context, int theme, DatePickerDialog.OnDateSetListener listener, int year, int monthOfYear, int dayOfMonth)
-         */
         setDateNow(year,month,day);
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
@@ -53,7 +47,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     public void onDateSet(DatePicker view, int year, int month, int day)
     {
         //Do something with the date chosen by the user
-        EditText setDate = (EditText) getActivity().findViewById(R.id.setDateEditText);
+        EditText setDate = getActivity().findViewById(R.id.setDateEditText);
         if((year==year_now && month==month_now && day>=day_now)|| (year==year_now && month>month_now) ||
                 (year>year_now))
         {
