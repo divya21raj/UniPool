@@ -1,8 +1,10 @@
 package garbagecollectors.com.unipool.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
@@ -44,11 +46,19 @@ public class SplashActivity extends AppCompatActivity
     private static TaskCompletionSource<DataSnapshot> MessageDBSource = new TaskCompletionSource<>();
     public static Task MessageDBTask = MessageDBSource.getTask();
 
+    AnimationDrawable loadingAnimation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        ImageView splashLogo = findViewById(R.id.splashLogo);
+        splashLogo.setBackgroundResource(R.drawable.loading_animation);
+        loadingAnimation = (AnimationDrawable) splashLogo.getBackground();
+
+        loadingAnimation.start();
 
         AppStatus appStatus = new AppStatus(this);
 
@@ -149,6 +159,8 @@ public class SplashActivity extends AppCompatActivity
 
         else
         {
+            loadingAnimation.stop();
+
             Toast.makeText(getApplicationContext(),
                     "No internet = No cab...stay safe, my caveman!",
                     Toast.LENGTH_LONG).show();

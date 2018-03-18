@@ -10,6 +10,7 @@
 
    <ImageView
        android:layout_width="300dp"
+       android:id="@+id/splashLogo"
        android:layout_height="300dp"
        android:background="@drawable/logo"
        android:layout_centerHorizontal="true"

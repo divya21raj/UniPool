@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<animation-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+
+    <item android:drawable="@drawable/unipool_wipers1_01" android:duration="200" />
+    <item android:drawable="@drawable/unipool_wipers2_01" android:duration="200" />
+    <item android:drawable="@drawable/unipool_wipers3_01" android:duration="200" />
+    <item android:drawable="@drawable/unipool_wipers4" android:duration="200" />
+    <item android:drawable="@drawable/unipool_wipers5" android:duration="200" />
+    <item android:drawable="@drawable/unipool_wipers6_01" android:duration="200" />
+    <item android:drawable="@drawable/unipool_wipers7_01" android:duration="200" />
+    <item android:drawable="@drawable/unipool_wipers8_01" android:duration="200" />
+    <item android:drawable="@drawable/unipool_wipers9_01" android:duration="200" />
+    <item android:drawable="@drawable/unipool_wipers10_01" android:duration="200" />
+    <item android:drawable="@drawable/unipool_wipers11_01" android:duration="200" />
+</animation-list>
