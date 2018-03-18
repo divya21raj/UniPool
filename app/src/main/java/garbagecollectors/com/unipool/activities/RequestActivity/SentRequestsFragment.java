@@ -46,7 +46,7 @@ public class SentRequestsFragment extends Fragment
 
         sentRequests = finalCurrentUser.getRequestSent();
 
-        recycle = (RecyclerView) view.findViewById(R.id.recycle_requests);
+        recycle = view.findViewById(R.id.recycle_requests);
 
         if(sentRequests.size() >= 1)
         {

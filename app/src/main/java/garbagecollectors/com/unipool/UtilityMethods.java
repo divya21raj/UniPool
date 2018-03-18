@@ -79,7 +79,6 @@ public class UtilityMethods
                     flag = true;
                     break;
                 }
-
             }
         }
 

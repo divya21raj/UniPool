@@ -8,23 +8,29 @@ import java.io.IOException;
  * Created by shaloin on 17/3/18.
  */
 
-public class AppStatus {
+public class AppStatus
+{
     Context context;
 
     public AppStatus(Context context){
         this.context=context;
     }
 
-    public boolean isOnline(){
+    public boolean isOnline()
+    {
         Runtime runtime=Runtime.getRuntime();
-        try{
+        try
+        {
             Process ipProcess=runtime.exec("/system/bin/ping -c 1 8.8.8.8");
             int exitValue=ipProcess.waitFor();
             return (exitValue==0);
-
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e)
+        {
             e.printStackTrace();
         }
         return false;

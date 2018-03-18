@@ -3,14 +3,11 @@ package garbagecollectors.com.unipool.activities.RequestActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -72,11 +69,11 @@ public class RequestActivity extends BaseActivity
 				actionBar.setDisplayHomeAsUpEnabled(true);
 			}
 
-			drawerLayout = (DrawerLayout) findViewById(R.id.requests_layout);
+			drawerLayout = findViewById(R.id.requests_layout);
 
 			navDrawerStateListener();
 
-			navigationView = (NavigationView) findViewById(R.id.nav_drawer);
+			navigationView = findViewById(R.id.nav_drawer);
 			navigationView.setNavigationItemSelectedListener(menuItem ->
 					{
 				dealWithSelectedMenuItem(menuItem);
@@ -85,13 +82,13 @@ public class RequestActivity extends BaseActivity
 			return true;
 		});
 
-			bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+			bottomNavigationView = findViewById(R.id.bottom_navigation);
 			bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-			viewPager = (ViewPager) findViewById(R.id.viewpager);
+			viewPager = findViewById(R.id.viewpager);
 			setupViewPager(viewPager);
 
-			tabLayout = (TabLayout) findViewById(R.id.tabs);
+			tabLayout = findViewById(R.id.tabs);
 			try
 			{
 				TabLayout.Tab tab = tabLayout.getTabAt(Integer.parseInt(getIntent().getStringExtra("openingTab")));
@@ -100,7 +97,7 @@ public class RequestActivity extends BaseActivity
 			{/*whoops*/}
 			tabLayout.setupWithViewPager(viewPager);
 
-			requestsProgressBar = (ProgressBar) findViewById(R.id.requests_progressBar);
+			requestsProgressBar = findViewById(R.id.requests_progressBar);
 			requestsProgressBar.setVisibility(View.INVISIBLE);
 
 		}
@@ -156,6 +153,7 @@ public class RequestActivity extends BaseActivity
 			public void onCancelled(DatabaseError databaseError)
 			{
 				receivedRequestsSource.setException(databaseError.toException());
+				Toast.makeText(context, "Network Issues!", Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -192,6 +190,8 @@ public class RequestActivity extends BaseActivity
 
 				requestsProgressBar.setVisibility(View.INVISIBLE);
 			});
+
+			task.addOnFailureListener(e -> Toast.makeText(context, "Network Issues!", Toast.LENGTH_SHORT).show());
 		});
 
 		allTask.addOnFailureListener(e ->
