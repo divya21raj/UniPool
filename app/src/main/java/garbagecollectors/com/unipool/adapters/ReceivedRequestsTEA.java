@@ -4,6 +4,7 @@ package garbagecollectors.com.unipool.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,14 +39,8 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
     private List<TripEntry> list;
     private Context context;
     private boolean isAlreadyInList = false;
-    private boolean requestSent = false;
 
     private ProgressDialog requestsProgressDialog;
-
-    public ReceivedRequestsTEA(Context context)
-    {
-        super(context);
-    }
 
     public ReceivedRequestsTEA(List<TripEntry> list, Context context)
     {
@@ -65,7 +60,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MyHolder holder, int position)
+    public void onBindViewHolder(@NonNull MyHolder holder, int position)
     {
         requestsProgressDialog = new ProgressDialog(context);
         requestsProgressDialog.setMessage("Please wait...");
@@ -73,7 +68,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
         MessageDBTask.addOnCompleteListener(o -> requestsProgressDialog.dismiss());
 
-        holder.itemView.setOnClickListener(view ->
+        holder.requestButton.setOnClickListener(view ->
         {
             DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
             DatabaseReference pairUpDatabaseReference = BaseActivity.getPairUpDatabaseReference();
@@ -100,7 +95,12 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
                     tripEntryUser[0] = snapshot.getValue(User.class);
 
-                    ArrayList<PairUp> tripEntryUserPairUps = tripEntryUser[0].getPairUps();
+                    ArrayList<PairUp> tripEntryUserPairUps = null;
+                    if (tripEntryUser[0] != null)
+                        tripEntryUserPairUps = tripEntryUser[0].getPairUps();
+                    else
+                        Toast.makeText(context, "Problems! Please try again...", Toast.LENGTH_LONG);
+
                     ArrayList<TripEntry> tripEntryUserSentRequests = tripEntryUser[0].getRequestSent();
 
                     String pairUpId = finalCurrentUser.getUserId() + tripEntryUser[0].getUserId();

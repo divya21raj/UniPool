@@ -201,13 +201,13 @@ public class UtilityMethods
         return tripEntry;
     }
 
-    public static ArrayList<TripEntry> removeFromList(ArrayList<TripEntry> list, String id)
+    public static ArrayList<TripEntry> removeFromList(ArrayList<TripEntry> list, String entryId)
     {
         Iterator<TripEntry> iterator = list.iterator();
 
         while (iterator.hasNext())
         {
-            if (iterator.next().getEntry_id().equals(id))
+            if (iterator.next().getEntry_id().equals(entryId))
             {
                 iterator.remove();
                 break;

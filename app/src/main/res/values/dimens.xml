@@ -4,7 +4,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="card_margin">3dp</dimen>
     <dimen name="title_padding">10dp</dimen>
-    <dimen name="card_text_size">12dp</dimen>
+    <dimen name="card_text_size">12sp</dimen>
 
     <dimen name="text_size_primary">16sp</dimen>
     <dimen name="text_size_secondary">14sp</dimen>

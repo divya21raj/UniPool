@@ -403,6 +403,16 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         return userMessageDatabaseReference;
     }
 
+    public static DatabaseReference getUserDatabaseReference()
+    {
+        return userDatabaseReference;
+    }
+
+    public static DatabaseReference getEntryDatabaseReference()
+    {
+        return entryDatabaseReference;
+    }
+
     public static ArrayList<User> getChatList()
     {
         return chatList;

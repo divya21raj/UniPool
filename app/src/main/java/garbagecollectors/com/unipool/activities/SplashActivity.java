@@ -131,8 +131,7 @@ public class SplashActivity extends AppCompatActivity
                         {
                             MessageDBSource.setResult(dataSnapshot);
                         } catch (IllegalStateException ignored)
-                        {
-                        }
+                        {}
                     }
 
                     @Override

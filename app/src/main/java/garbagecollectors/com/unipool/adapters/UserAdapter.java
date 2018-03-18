@@ -20,14 +20,7 @@ import garbagecollectors.com.unipool.activities.MessageListActivity;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>
 {
 	private List<User> userList;
-	private LayoutInflater inflater;
 	private Context context;
-
-	public UserAdapter(Context context)
-	{
-		this.context = context;
-		inflater = LayoutInflater.from(context);
-	}
 
 	public UserAdapter(List<User> userList, Context context)
 	{
