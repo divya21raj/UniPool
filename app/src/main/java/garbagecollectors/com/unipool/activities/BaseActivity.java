@@ -159,12 +159,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 public void onCancelled(DatabaseError error)
                 {
                     // Failed to read value
-                    Log.w("UserDB", "Failed to read userDB value.", error.toException());
-                    Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
-                }
-            });
+                        Log.w("UserDB", "Failed to read userDB value.", error.toException());
+                        Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-            /*userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
+                /*userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
                 {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s)
@@ -203,8 +203,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                     }
                 });*/
 
-            bottomNavigationView = findViewById(R.id.bottom_navigation);
-            bottomNavigationView.setOnNavigationItemSelectedListener(this);
+                bottomNavigationView = findViewById(R.id.bottom_navigation);
+                bottomNavigationView.setOnNavigationItemSelectedListener(this);
         }
 
         catch(NullPointerException nlp)

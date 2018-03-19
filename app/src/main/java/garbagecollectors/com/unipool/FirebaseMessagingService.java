@@ -32,10 +32,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 		//clicking on the notification
 		Intent resultIntent = new Intent(clickAction);
 
+		assert notificationBody != null;
 		if(notificationBody.contains("accepted"))
-			resultIntent.putExtra("openingTab", "0");
+			resultIntent.putExtra("openingTab", 2);
 		else if(notificationBody.contains("sent"))
-			resultIntent.putExtra("openingTab", "1");
+			resultIntent.putExtra("openingTab", 1);
 
 		PendingIntent resultPendingIntent =
 				PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);

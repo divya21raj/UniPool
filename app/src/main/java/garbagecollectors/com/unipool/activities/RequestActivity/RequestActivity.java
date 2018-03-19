@@ -48,6 +48,7 @@ public class RequestActivity extends BaseActivity
 
 	static Task<DataSnapshot> sentRequestsDBTask;
 	static Task<DataSnapshot> receivedRequestsDBTask;
+	private int tabIndex;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -62,6 +63,7 @@ public class RequestActivity extends BaseActivity
 
 			receivedRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference(
 					"users/" + finalCurrentUser.getUserId() + "/requestsReceived");
+
 			final ActionBar actionBar = getSupportActionBar();
 			if(actionBar != null)
 			{
@@ -75,12 +77,14 @@ public class RequestActivity extends BaseActivity
 
 			navigationView = findViewById(R.id.nav_drawer);
 			navigationView.setNavigationItemSelectedListener(menuItem ->
-					{
+			{
 				dealWithSelectedMenuItem(menuItem);
-					drawerLayout.closeDrawers();
+				drawerLayout.closeDrawers();
 
-			return true;
-		});
+				return true;
+			});
+
+			tabIndex = getIntent().getIntExtra("openingTab", 0);
 
 			bottomNavigationView = findViewById(R.id.bottom_navigation);
 			bottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -89,16 +93,11 @@ public class RequestActivity extends BaseActivity
 			setupViewPager(viewPager);
 
 			tabLayout = findViewById(R.id.tabs);
-			try
-			{
-				TabLayout.Tab tab = tabLayout.getTabAt(Integer.parseInt(getIntent().getStringExtra("openingTab")));
-				tab.select();
-			}catch (NumberFormatException nfe)
-			{/*whoops*/}
 			tabLayout.setupWithViewPager(viewPager);
 
 			requestsProgressBar = findViewById(R.id.requests_progressBar);
 			requestsProgressBar.setVisibility(View.INVISIBLE);
+
 
 		}
 		catch (NullPointerException nlp)
@@ -205,6 +204,7 @@ public class RequestActivity extends BaseActivity
 		adapter.addFragment(new ReceivedRequestsFragment(), "Received");
 		adapter.addFragment(new ChatFragment(), "Chat");
 		viewPager.setAdapter(adapter);
+		viewPager.setCurrentItem(tabIndex);
 	}
 
 	class ViewPagerAdapter extends FragmentPagerAdapter
