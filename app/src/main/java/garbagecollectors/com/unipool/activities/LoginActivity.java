@@ -67,7 +67,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
     TaskCompletionSource<DataSnapshot> userDBSource = new TaskCompletionSource();
     Task userDBTask = userDBSource.getTask();
 
-    AppStatus appStatus = new AppStatus(this);
+    AppStatus appStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -91,6 +91,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
         signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
+
+        appStatus = new AppStatus(this);
     }
 
     @Override
@@ -119,19 +121,10 @@ public class LoginActivity extends Activity implements View.OnClickListener
         progressDialog.setMessage("Please wait...");
         progressDialog.show();
 
-        if(appStatus.isOnline())
-        {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
-        }
+        appStatus.run();
 
-        else
-        {
-            progressDialog.dismiss();
-            Toast.makeText(getApplicationContext(),
-                    "No internet = No cab...stay safe, my caveman!",
-                    Toast.LENGTH_LONG).show();
-        }
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override

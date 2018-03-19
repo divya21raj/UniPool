@@ -51,114 +51,106 @@ public class MessageListActivity extends AppCompatActivity
 		setContentView(R.layout.activity_message_list);
 
 		AppStatus appStatus = new AppStatus(this);
-		if(appStatus.isOnline())
+		appStatus.run();
+
+		messagesLayout = findViewById(R.id.layout1);
+		sendButton = findViewById(R.id.sendButton);
+		messageArea = findViewById(R.id.message_edit_text);
+		scrollView = findViewById(R.id.scrollView);
+
+		setTitle(chatUser.getName());
+
+		for (Message message : personalMessageList)
+			showMessage(message);
+
+		setScrollViewToBottom();
+
+		DatabaseReference userMessageDatabaseReference = FirebaseDatabase.getInstance().
+				getReference("messages/" + BaseActivity.getFinalCurrentUser().getUserId());
+
+		userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
 		{
-
-			messagesLayout = findViewById(R.id.layout1);
-			sendButton = findViewById(R.id.sendButton);
-			messageArea = findViewById(R.id.message_edit_text);
-			scrollView = findViewById(R.id.scrollView);
-
-			setTitle(chatUser.getName());
-
-			for (Message message : personalMessageList)
-				showMessage(message);
-
-			setScrollViewToBottom();
-
-			DatabaseReference userMessageDatabaseReference = FirebaseDatabase.getInstance().
-					getReference("messages/" + BaseActivity.getFinalCurrentUser().getUserId());
-
-			userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
+			@Override
+			public void onChildAdded(DataSnapshot dataSnapshot, String s)
 			{
-				@Override
-				public void onChildAdded(DataSnapshot dataSnapshot, String s)
+				Message message = dataSnapshot.getValue(Message.class);
+
+				//Toast.makeText(getApplicationContext(), "Got it in ML activity", Toast.LENGTH_SHORT).show();
+
+				if (message != null)
 				{
-					Message message = dataSnapshot.getValue(Message.class);
+					UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);
 
-					//Toast.makeText(getApplicationContext(), "Got it in ML activity", Toast.LENGTH_SHORT).show();
-
-					if (message != null)
+					//Toast.makeText(getApplicationContext(), "Is receiver", Toast.LENGTH_SHORT).show();
+					if (!message.getMessageId().equals("def@ult") && (message.getSenderId().equals(chatUser.getUserId())
+							|| message.getReceiverId().equals(chatUser.getUserId())))
 					{
-						UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);
-
-						//Toast.makeText(getApplicationContext(), "Is receiver", Toast.LENGTH_SHORT).show();
-						if (!message.getMessageId().equals("def@ult") && (message.getSenderId().equals(chatUser.getUserId())
-										|| message.getReceiverId().equals(chatUser.getUserId())))
-						{
-							if(!(UtilityMethods.putMessageInList(message, personalMessageList)))
-								showMessage(message);
-						}
+						if(!(UtilityMethods.putMessageInList(message, personalMessageList)))
+							showMessage(message);
 					}
-
 				}
 
-				@Override
-				public void onChildChanged(DataSnapshot dataSnapshot, String s)
-				{
-				}
+			}
 
-				@Override
-				public void onChildRemoved(DataSnapshot dataSnapshot)
-				{
-				}
-
-				@Override
-				public void onChildMoved(DataSnapshot dataSnapshot, String s)
-				{
-				}
-
-				@Override
-				public void onCancelled(DatabaseError databaseError)
-				{
-					// Failed to read value
-					Log.w("Hello", "Failed to read value.", databaseError.toException());
-					Toast.makeText(getApplicationContext(), "Network Issues! Try again...", Toast.LENGTH_SHORT).show();
-				}
-			});
-
-			sendButton.setOnClickListener(view ->
+			@Override
+			public void onChildChanged(DataSnapshot dataSnapshot, String s)
 			{
-				String typedMessage = messageArea.getText().toString();
+			}
 
-				if (!typedMessage.isEmpty())
-				{
-					Message message = new Message("", pairUp.getPairUpId(), typedMessage,
-							BaseActivity.getFinalCurrentUser().getUserId(), chatUser.getUserId(), UtilityMethods.getCurrentTime());
-
-					UtilityMethods.putMessageOnDB(message, chatUser, BaseActivity.getFinalCurrentUser());  //online update
-
-					UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);  //local update
-
-					HashMap<String, String> notificationObject = new HashMap<>();
-					notificationObject.put("from", BaseActivity.getFinalCurrentUser().getUserId());
-					notificationObject.put("type", "chat");
-
-					notificationDatabaseReference.child(chatUser.getUserId()).push().setValue(notificationObject);
-
-					messageArea.setText("");
-					personalMessageList.add(message);
-					showMessage(message);
-				}
-			});
-
-			//detecting if keyboard on-screen
-			final View activityRootView = findViewById(R.id.activity_message_list);
-			activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(() ->
+			@Override
+			public void onChildRemoved(DataSnapshot dataSnapshot)
 			{
-				int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
+			}
 
-				if (heightDiff > UtilityMethods.dpToPx(MessageListActivity.this, 200))
-					setScrollViewToBottom();
-			});
-		}
+			@Override
+			public void onChildMoved(DataSnapshot dataSnapshot, String s)
+			{
+			}
 
-		else
+			@Override
+			public void onCancelled(DatabaseError databaseError)
+			{
+				// Failed to read value
+				Log.w("Hello", "Failed to read value.", databaseError.toException());
+				Toast.makeText(getApplicationContext(), "Network Issues! Try again...", Toast.LENGTH_SHORT).show();
+			}
+		});
+
+		sendButton.setOnClickListener(view ->
 		{
-			Toast.makeText(getApplicationContext(),
-					"No internet = No cab...stay safe, my caveman!",
-					Toast.LENGTH_LONG).show();
-		}
+			String typedMessage = messageArea.getText().toString();
+
+			if (!typedMessage.isEmpty())
+			{
+				Message message = new Message("", pairUp.getPairUpId(), typedMessage,
+						BaseActivity.getFinalCurrentUser().getUserId(), chatUser.getUserId(), UtilityMethods.getCurrentTime());
+
+				UtilityMethods.putMessageOnDB(message, chatUser, BaseActivity.getFinalCurrentUser());  //online update
+
+				UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);  //local update
+
+				HashMap<String, String> notificationObject = new HashMap<>();
+				notificationObject.put("from", BaseActivity.getFinalCurrentUser().getUserId());
+				notificationObject.put("type", "chat");
+
+				notificationDatabaseReference.child(chatUser.getUserId()).push().setValue(notificationObject);
+
+				messageArea.setText("");
+				personalMessageList.add(message);
+				showMessage(message);
+			}
+		});
+
+		//detecting if keyboard on-screen
+		final View activityRootView = findViewById(R.id.activity_message_list);
+		activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(() ->
+		{
+			int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
+
+			if (heightDiff > UtilityMethods.dpToPx(MessageListActivity.this, 200))
+				setScrollViewToBottom();
+		});
+
 	}
 
 	private void setScrollViewToBottom()
