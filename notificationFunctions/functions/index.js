@@ -42,7 +42,7 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
 						break;
 
 					case "requestCreated":
-						body = `${userName} has sent your request`;
+						body = `${userName} has sent you a request`;
 						console.log('Sure is!');
 						break;
 
@@ -59,6 +59,7 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
 				return deviceToken.then(result =>
 				{
 					const token_id = result.val();
+					console.log(`Device token is ${token_id}`);
 
 					const payload =
 					{
@@ -75,6 +76,13 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
 					return admin.messaging().sendToDevice(token_id, payload).then(response =>
 					{
 						console.log('This was the notifications feature!');
+
+						const error = response.error;
+      			if (error)
+						{
+							console.error('Failure sending notification to', token_id, error);
+						}
+
 						return 1;
 					});
 

@@ -304,6 +304,11 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         if(currentUser != null)
         {
+            String deviceToken = FirebaseInstanceId.getInstance().getToken();
+            userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
+
+            userDatabaseReference.child("deviceToken").setValue(deviceToken);
+
             finish();
             startActivity(new Intent(getApplicationContext(), SplashActivity.class));
         }
