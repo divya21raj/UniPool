@@ -56,6 +56,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
     protected static DatabaseReference userDatabaseReference;
     protected static DatabaseReference messageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages");
 
+    private static DatabaseReference expiryDatabaseReference = FirebaseDatabase.getInstance().getReference("deleteExpired");
+
+
     Message defaultMessage = BaseActivity.getDefaultMessage();
 
     private ProgressDialog progressDialog;
@@ -276,7 +279,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
         ArrayList<Message> dummyMessages = new ArrayList<>();
         dummyMessages.add(dummyMessage);
 
-        PairUp dummyPairUp = new PairUp("dummydummy", "dummy", "dummy", dummyUserIdList);
+        PairUp dummyPairUp = new PairUp("dummydummy", "dummy", "dummy", "dummy", dummyUserIdList);
         ArrayList<PairUp> dummyPairUps = new ArrayList<>();
         dummyPairUps.add(dummyPairUp);
 
@@ -288,7 +291,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
             url = photoUrl.toString();
 
         finalCurrentUser = new User(user.getUid(), user.getDisplayName(), url,
-                                    dummyUserEntries, dummyRequestSent, dummyRequestReceived, deviceToken, dummyPairUps);
+                                    dummyUserEntries, dummyRequestSent, dummyRequestReceived, deviceToken, true, dummyPairUps);
     }
 
     private void updateUI(FirebaseUser currentUser)
@@ -302,8 +305,11 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
             userDatabaseReference.child("deviceToken").setValue(deviceToken);
 
+            expiryDatabaseReference.child(currentUser.getUid()).setValue(true);
+
             finish();
             startActivity(new Intent(getApplicationContext(), SplashActivity.class));
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
     }
 }

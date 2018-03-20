@@ -9,13 +9,16 @@ public class PairUp
     private String creatorId;   //person who created the tripEntry
     private String requesterId;
 
+    private String expiryDate;
+
     private ArrayList<String> messages;
 
-    public PairUp(String pairUpId, String creatorId, String requesterId, ArrayList<String> messages)
+    public PairUp(String pairUpId, String creatorId, String requesterId, String expiryDate, ArrayList<String> messages)
     {
         this.pairUpId = pairUpId;
         this.creatorId = creatorId;
         this.requesterId = requesterId;
+        this.expiryDate = expiryDate;
         this.messages = messages;
     }
 
@@ -41,4 +44,13 @@ public class PairUp
         return messages;
     }
 
+    public String getExpiryDate()
+    {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(String expiryDate)
+    {
+        this.expiryDate = expiryDate;
+    }
 }

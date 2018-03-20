@@ -50,7 +50,6 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
 
     GenLocation source, destination;
     String time, sourceSet, destinationSet;
-    String AM_PM;
 
     EditText findSource, findDestination, setTime, setDate;
     Button buttonFinalSave;
@@ -183,12 +182,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 minOfDay = "0" + minOfDay;
             }
 
-            if (hourOfDay < 12)
-                AM_PM = "AM";
-            else
-                AM_PM = "PM";
-
-            time = HourOfDay + ":" + minOfDay + " " + AM_PM;
+            time = HourOfDay + ":" + minOfDay;
 
             setTime.setText(time);
         }
@@ -252,7 +246,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         } else if (resultCode == RESULT_CANCELED)
         {
             // The user canceled the operation.
-            Toast.makeText(getApplicationContext(), "Cancelled...", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Cancelled...", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -276,6 +270,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
             case 0:
                 String entryId = entryDatabaseReference.push().getKey();
                 String name = currentUser.getDisplayName();
+                System.currentTimeMillis();
 
                 TripEntry tripEntry = new TripEntry(name, entryId, currentUser.getUid(),
                                                         time, date, source, destination, null);
@@ -353,6 +348,12 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
     {
         currentLocationView = view;
 
+        if(currentLocationView.getTag().equals("gct_source"))
+            findSource.setText(R.string.currentLoc);
+
+        else if(currentLocationView.getTag().equals("gct_destination"))
+            findDestination.setText(R.string.currentLoc);
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED)
@@ -365,6 +366,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
+                Toast.makeText(this, "The app doesn't have permission to access your location", Toast.LENGTH_LONG).show();
             }
             else
             {

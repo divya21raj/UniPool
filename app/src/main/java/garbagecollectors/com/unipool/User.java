@@ -18,9 +18,11 @@ public class User
 
     private String deviceToken;
 
+    private boolean isOnline;
+
     private ArrayList<PairUp> pairUps;
 
-    public User(String userId, String name, String photoUrl, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, ArrayList<PairUp> pairUps)
+    public User(String userId, String name, String photoUrl, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, boolean isOnline, ArrayList<PairUp> pairUps)
     {
         this.userId = userId;
         this.name = name;
@@ -29,6 +31,7 @@ public class User
         this.requestSent = requestSent;
         this.requestsReceived = requestsReceived;
         this.deviceToken = deviceToken;
+        this.isOnline = isOnline;
         this.pairUps = pairUps;
     }
 
@@ -103,5 +106,15 @@ public class User
     public void setPhotoUrl(String photoUrl)
     {
         this.photoUrl = photoUrl;
+    }
+
+    public boolean isOnline()
+    {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online)
+    {
+        isOnline = online;
     }
 }

@@ -13,5 +13,6 @@
     <string name="atishay_jain">Atishay Jain</string>
     <string name="saurabh_gangadharan">Saurabh Gangadharan</string>
     <string name="Three_Dots">⋮</string>
+    <string name="currentLoc">Getting your current location...</string>
 
 </resources>

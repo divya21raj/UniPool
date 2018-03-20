@@ -57,6 +57,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static DatabaseReference pairUpDatabaseReference = FirebaseDatabase.getInstance().getReference("pairUps");
     protected static DatabaseReference notificationDatabaseReference = FirebaseDatabase.getInstance().getReference("notifications");
 
+    private static DatabaseReference expiryDatabaseReference = FirebaseDatabase.getInstance().getReference("deleteExpired");
+
     public static User finalCurrentUser;
 
     protected static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
@@ -220,6 +222,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     {
         super.onStart();
         updateNavigationBarState();
+        finalCurrentUser.setOnline(true);
+        userDatabaseReference.child("isOnline").setValue("true");
     }
 
     // Remove inter-activity transition to avoid screen tossing on tapping bottom bottom_nav items
@@ -227,7 +231,17 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public void onPause()
     {
         super.onPause();
+
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        finalCurrentUser.setOnline(false);
+        userDatabaseReference.child("isOnline").setValue("false");
+        expiryDatabaseReference.child(currentUser.getUid()).removeValue();
     }
 
     @Override
