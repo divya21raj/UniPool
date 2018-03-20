@@ -252,7 +252,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         } else if (resultCode == RESULT_CANCELED)
         {
             // The user canceled the operation.
-            Toast.makeText(getApplicationContext(), "Cancelled...", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Cancelled...", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -276,6 +276,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
             case 0:
                 String entryId = entryDatabaseReference.push().getKey();
                 String name = currentUser.getDisplayName();
+                System.currentTimeMillis();
 
                 TripEntry tripEntry = new TripEntry(name, entryId, currentUser.getUid(),
                                                         time, date, source, destination, null);
@@ -353,12 +354,19 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
     {
         currentLocationView = view;
 
+        if(currentLocationView.getTag().equals("gct_source"))
+            findSource.setText(R.string.currentLoc);
+
+        else if(currentLocationView.getTag().equals("gct_destination"))
+            findDestination.setText(R.string.currentLoc);
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED)
         {
             // Permission is not granted
             // Should we show an explanation?
+            Toast.makeText(this, "The app does.t have permission to access your location", Toast.LENGTH_LONG).show();
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION))
             {

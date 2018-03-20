@@ -220,6 +220,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     {
         super.onStart();
         updateNavigationBarState();
+        finalCurrentUser.setOnline(true);
+        userDatabaseReference.child("isOnline").setValue("true");
     }
 
     // Remove inter-activity transition to avoid screen tossing on tapping bottom bottom_nav items
@@ -227,7 +229,16 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public void onPause()
     {
         super.onPause();
+
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        finalCurrentUser.setOnline(false);
+        userDatabaseReference.child("isOnline").setValue("false");
     }
 
     @Override
