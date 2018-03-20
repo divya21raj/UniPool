@@ -57,6 +57,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static DatabaseReference pairUpDatabaseReference = FirebaseDatabase.getInstance().getReference("pairUps");
     protected static DatabaseReference notificationDatabaseReference = FirebaseDatabase.getInstance().getReference("notifications");
 
+    private static DatabaseReference expiryDatabaseReference = FirebaseDatabase.getInstance().getReference("deleteExpired");
+
     public static User finalCurrentUser;
 
     protected static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
@@ -239,6 +241,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         super.onBackPressed();
         finalCurrentUser.setOnline(false);
         userDatabaseReference.child("isOnline").setValue("false");
+        expiryDatabaseReference.child(currentUser.getUid()).removeValue();
     }
 
     @Override

@@ -105,7 +105,10 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
                     String pairUpId = finalCurrentUser.getUserId() + tripEntryUser[0].getUserId();
 
-                    PairUp pairUp = new PairUp(pairUpId, finalCurrentUser.getUserId(), tripEntryUser[0].getUserId(), new ArrayList<>());
+                    String[] timeParts = tripEntry.getTime().split(":");
+                    String expiryDate = tripEntry.getDate() + "/" + timeParts[0] + "/" + timeParts[1];
+
+                    PairUp pairUp = new PairUp(pairUpId, finalCurrentUser.getUserId(), tripEntryUser[0].getUserId(), expiryDate, new ArrayList<>());
                     pairUp.getMessages().add("def@ult");
 
                     isAlreadyInList = UtilityMethods.addPairUpInList(currentUserPairUps, pairUp);

@@ -279,7 +279,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
         ArrayList<Message> dummyMessages = new ArrayList<>();
         dummyMessages.add(dummyMessage);
 
-        PairUp dummyPairUp = new PairUp("dummydummy", "dummy", "dummy", dummyUserIdList);
+        PairUp dummyPairUp = new PairUp("dummydummy", "dummy", "dummy", "dummy", dummyUserIdList);
         ArrayList<PairUp> dummyPairUps = new ArrayList<>();
         dummyPairUps.add(dummyPairUp);
 
@@ -309,6 +309,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
             finish();
             startActivity(new Intent(getApplicationContext(), SplashActivity.class));
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
     }
 }
