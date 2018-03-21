@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import garbagecollectors.com.unipool.AppStatus;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.TripEntry;
 import garbagecollectors.com.unipool.UtilityMethods;
@@ -98,6 +99,8 @@ public class RequestActivity extends BaseActivity
 			requestsProgressBar = findViewById(R.id.requests_progressBar);
 			requestsProgressBar.setVisibility(View.INVISIBLE);
 
+			appStatus = new AppStatus(getApplicationContext());
+			appStatus.run();
 
 		}
 		catch (NullPointerException nlp)

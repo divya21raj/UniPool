@@ -207,11 +207,17 @@ public class UtilityMethods
 
         while (iterator.hasNext())
         {
-            if (iterator.next().getEntry_id().equals(entryId))
+            try
             {
-                iterator.remove();
-                break;
+                if (iterator.next().getEntry_id().equals(entryId))
+                {
+                    iterator.remove();
+                    break;
+                }
+
             }
+            catch (NullPointerException ignored)
+            {}
         }
 
         return list;

@@ -123,6 +123,13 @@ public class AboutActivity extends AppCompatActivity
 				finish();
 				startActivity(new Intent(this, RequestActivity.class));
 				break;
+
+			case R.id.nav_chat:
+				finish();
+				Intent chatIntent = new Intent(this, RequestActivity.class);
+				chatIntent.putExtra("openingTab", 2);
+				startActivity(chatIntent);
+				break;
 		}
 	}
 

@@ -4,6 +4,16 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single"
+        android:id="@+id/chat_group_drawer">
+
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_chat"
+            android:title="Chat" />
+
+    </group>
+
+    <group android:checkableBehavior="single"
         android:id="@+id/main_group_drawer">
 
         <item

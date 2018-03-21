@@ -76,9 +76,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             super.onCreate(savedInstanceState);
             setContentView(getContentViewId());
 
-            appStatus = new AppStatus(getApplicationContext());
-            appStatus.run();
-
             mAuth = FirebaseAuth.getInstance();
             currentUser = mAuth.getCurrentUser();
 
@@ -358,6 +355,13 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             case R.id.nav_requests:
                 finish();
                 startActivity(new Intent(this, RequestActivity.class));
+                break;
+
+            case R.id.nav_chat:
+                finish();
+                Intent chatIntent = new Intent(this, RequestActivity.class);
+                chatIntent.putExtra("openingTab", 2);
+                startActivity(chatIntent);
                 break;
 		}
 	}

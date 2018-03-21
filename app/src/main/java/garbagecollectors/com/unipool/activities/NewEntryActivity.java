@@ -38,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import garbagecollectors.com.unipool.AppStatus;
 import garbagecollectors.com.unipool.DatePickerFragment;
 import garbagecollectors.com.unipool.GenLocation;
 import garbagecollectors.com.unipool.R;
@@ -129,6 +130,9 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+
+        appStatus = new AppStatus(getApplicationContext());
+        appStatus.run();
     }
 
     @Override
@@ -293,14 +297,17 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 break;
 
             case 2:
-                Toast.makeText(this, "The devs are still working on time travel...",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "The developers are still working on time travel...",
+                        Toast.LENGTH_LONG).show();
                 break;
 
             case 3:
                 Toast.makeText(this, "Fill in all the details!", Toast.LENGTH_SHORT).show();
                 break;
 
+            case 4:
+                Toast.makeText(this, "Planning way too ahead of time, eh?", Toast.LENGTH_LONG).show();
+                break;
         }
     }
 
@@ -312,8 +319,13 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         Date currentTime = new Date();
         Date inputTime = null;
 
+        int diffInDays = 0;
+
         if (date != null)
+        {
             inputTime = parser.parse(date + "." + time);
+            diffInDays = (int) ((inputTime.getTime() - currentTime.getTime()) / (1000 * 60 * 60 * 24));
+        }
 
         if ((time.isEmpty() || source == null || destination == null ||
                 findSource.getText().toString().isEmpty()|| findDestination.getText().toString().isEmpty()))
@@ -328,6 +340,9 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
 
         else if (inputTime.before(currentTime))
             flag = 2;
+
+        else if(diffInDays > 21)
+            flag = 4;
 
         return flag;
     }
