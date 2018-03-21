@@ -149,7 +149,7 @@ public class HomeActivityTEA extends TripEntryAdapter
                 task3.addOnSuccessListener(aVoid1 ->
                 {
                     UtilityMethods.removeFromList(BaseActivity.getTripEntryList(), tripEntry.getEntry_id());
-                    UtilityMethods.removeFromList(BaseActivity.getFinalCurrentUser().getUserTripEntries(), tripEntry.getEntry_id());
+                    BaseActivity.getFinalCurrentUser().getUserTripEntries().remove(tripEntry.getEntry_id());
 
                     progressDialog.dismiss();
                 });

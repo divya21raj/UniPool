@@ -3,8 +3,10 @@ package garbagecollectors.com.unipool.activities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -75,6 +77,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        startIntro();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -96,6 +100,41 @@ public class LoginActivity extends Activity implements View.OnClickListener
         findViewById(R.id.sign_in_button).setOnClickListener(this);
 
         appStatus = new AppStatus(this);
+    }
+
+    private void startIntro()
+    {
+        //  Declare a new thread to do a preference check
+        Thread t = new Thread(() ->
+        {
+            //  Initialize SharedPreferences
+            SharedPreferences getPrefs = PreferenceManager
+                    .getDefaultSharedPreferences(getBaseContext());
+
+            //  Create a new boolean and preference and set it to true
+            boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+
+            //  If the activity has never started before...
+            if (true) {
+
+                //  Launch app intro
+                final Intent i = new Intent(LoginActivity.this, IntroActivity.class);
+
+                runOnUiThread(() -> startActivity(i));
+
+                //  Make a new preferences editor
+                SharedPreferences.Editor e = getPrefs.edit();
+
+                //  Edit preference to make it false because we don't want this to run again
+                e.putBoolean("firstStart", false);
+
+                //  Apply changes
+                e.apply();
+            }
+        });
+
+        // Start the thread
+        t.start();
     }
 
     @Override
@@ -159,7 +198,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Ok", Toast.LENGTH_SHORT).show();
             updateUI(null);
         }
     }
@@ -262,8 +301,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
         TripEntry dummyTripEntry = new TripEntry("dummy", "0", "DummyUser", "12:00",
                                                     "1/11/12", dummyGenLocation, dummyGenLocation, dummyLambdaMap);
 
-        ArrayList<TripEntry> dummyUserEntries = new ArrayList<>();
-        dummyUserEntries.add(dummyTripEntry);
+        HashMap<String, TripEntry> dummyUserEntries = new HashMap<>();
+        dummyUserEntries.put("dummy", dummyTripEntry);
 
         ArrayList<TripEntry> dummyRequestSent = new ArrayList<>();
         dummyRequestSent.add(dummyTripEntry);
@@ -280,8 +319,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
         dummyMessages.add(dummyMessage);
 
         PairUp dummyPairUp = new PairUp("dummydummy", "dummy", "dummy", "dummy", dummyUserIdList);
-        ArrayList<PairUp> dummyPairUps = new ArrayList<>();
-        dummyPairUps.add(dummyPairUp);
+        HashMap<String, PairUp> dummyPairUps = new HashMap<>();
+        dummyPairUps.put("dummy", dummyPairUp);
 
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
@@ -301,6 +340,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
         if(currentUser != null)
         {
             String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
             userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
 
             userDatabaseReference.child("deviceToken").setValue(deviceToken);

@@ -9,7 +9,7 @@ public class User
     private String name;
     private String photoUrl;
 
-    private ArrayList<TripEntry> userTripEntries =new ArrayList<>();
+    private HashMap<String, TripEntry> userTripEntries =new HashMap<>();
 
     private ArrayList<TripEntry> requestSent;
     private HashMap<String, ArrayList<String>> requestsReceived;
@@ -20,9 +20,9 @@ public class User
 
     private boolean isOnline;
 
-    private ArrayList<PairUp> pairUps;
+    private HashMap<String, PairUp> pairUps;
 
-    public User(String userId, String name, String photoUrl, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, boolean isOnline, ArrayList<PairUp> pairUps)
+    public User(String userId, String name, String photoUrl, HashMap<String, TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, boolean isOnline, HashMap<String, PairUp> pairUps)
     {
         this.userId = userId;
         this.name = name;
@@ -73,17 +73,17 @@ public class User
         this.requestsReceived = requestsReceived;
     }
 
-    public ArrayList<TripEntry> getUserTripEntries()
+    public HashMap<String, TripEntry> getUserTripEntries()
     {
         return userTripEntries;
     }
 
-    public ArrayList<PairUp> getPairUps()
+    public HashMap<String, PairUp> getPairUps()
     {
         return pairUps;
     }
 
-    public void setPairUps(ArrayList<PairUp> pairUps)
+    public void setPairUps(HashMap<String, PairUp> pairUps)
     {
         this.pairUps = pairUps;
     }

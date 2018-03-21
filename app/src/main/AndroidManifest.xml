@@ -16,6 +16,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB8Ik3P9bFz_prcjauv0oGMM_4gQmK2U_I" />
 
+        <activity
+            android:name=".activities.IntroActivity"
+            android:theme="@style/AppThemeNoActionBar"
+            android:label="Intro" />
+
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

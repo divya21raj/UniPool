@@ -279,7 +279,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 TripEntry tripEntry = new TripEntry(name, entryId, currentUser.getUid(),
                                                         time, date, source, destination, null);
 
-                finalCurrentUser.getUserTripEntries().add(tripEntry);
+                finalCurrentUser.getUserTripEntries().put(tripEntry.getEntry_id(), tripEntry);
 
                 entryDatabaseReference.child(entryId).setValue(tripEntry);
 

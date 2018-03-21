@@ -54,7 +54,7 @@ public class UtilityMethods
         return userTask;
     }
 
-    public static boolean addRequestInList(ArrayList<TripEntry> requestSent, ArrayList<PairUp> pairUps, TripEntry tripEntry)
+    public static boolean addRequestInList(ArrayList<TripEntry> requestSent, HashMap<String, PairUp> pairUps, TripEntry tripEntry)
     {
         boolean flag = false;
 
@@ -72,8 +72,9 @@ public class UtilityMethods
 
         if(!flag)
         {
-            for(PairUp pairUp: pairUps)
+            for(Map.Entry<String, PairUp> entry: pairUps.entrySet())
             {
+                PairUp pairUp = entry.getValue();
                 if(pairUp.getPairUpId().contains(tripEntry.getUser_id()))
                 {
                     flag = true;
@@ -271,12 +272,13 @@ public class UtilityMethods
             map.remove(keyToBeRemoved);
     }
 
-    public static boolean addPairUpInList(ArrayList<PairUp> pairUps, PairUp pairUp)
+    public static boolean addPairUpInMap(HashMap<String, PairUp> pairUps, PairUp pairUp)
     {
         boolean flag = false;
 
-        for (PairUp pu: pairUps)
+        for (Map.Entry<String, PairUp> entry: pairUps.entrySet())
         {
+            PairUp pu = entry.getValue();
             if (pu.getPairUpId().contains(pairUp.getRequesterId()) && pu.getPairUpId().contains((pairUp.getCreatorId())))
             {
                 flag = true;
@@ -286,7 +288,7 @@ public class UtilityMethods
 
         if(!flag)
         {
-            pairUps.add(pairUp);
+            pairUps.put(pairUp.getPairUpId(), pairUp);
         }
 
         return flag;
@@ -394,12 +396,13 @@ public class UtilityMethods
     public static List<Message> getMessageList(HashMap<String, ArrayList<Message>> messages, String userId)
     {
         ArrayList<Message> personalMessageList;
-        ArrayList<PairUp> pairUpList = BaseActivity.getFinalCurrentUser().getPairUps();
+        HashMap<String, PairUp> pairUpList = BaseActivity.getFinalCurrentUser().getPairUps();
 
         String pairUpId = null;
 
-        for(PairUp pairUp: pairUpList)
+        for(Map.Entry<String, PairUp> entry: pairUpList.entrySet())
         {
+            PairUp pairUp = entry.getValue();
             if(pairUp.getCreatorId().equals(userId)||pairUp.getRequesterId().equals(userId))
             {
                 pairUpId = pairUp.getPairUpId();
@@ -421,12 +424,13 @@ public class UtilityMethods
         return personalMessageList;
     }
 
-    public static PairUp getPairUp(User user, ArrayList<PairUp> pairUps)
+    public static PairUp getPairUp(User user, HashMap<String, PairUp> pairUps)
     {
         PairUp pairUp = null;
 
-        for (PairUp up: pairUps)
+        for (Map.Entry<String, PairUp> entry: pairUps.entrySet())
         {
+            PairUp up = entry.getValue();
             if(up.getRequesterId().equals(user.getUserId()) || up.getCreatorId().equals(user.getUserId()))
             {
                 pairUp = up;
@@ -488,4 +492,5 @@ public class UtilityMethods
 
         return flag;
     }
+
 }

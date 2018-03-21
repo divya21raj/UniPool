@@ -55,14 +55,12 @@ exports.deleteExpired  = functions.database.ref('/deleteExpired/{user_id}')
 						var userEntryRef = db.ref(`users/${childData.user_id}/userTripEntries`);
 						userEntryRef.once('value', function(userEntrySnap)
 						{
-							var k = 0;
 							userEntrySnap.forEach(function(userEntryChildSnap)
 							{
-								k = userEntryChildSnap.key;
 								if(userEntryChildSnap.val().entry_id === childKey)
 								{
 									console.log(`DELETE USERENTRY ${childKey}`);
-									userEntryRef.child(k).remove();
+									userEntryRef.child(userEntryChildSnap.key).remove();
 								}
 							});
 						});
@@ -104,14 +102,12 @@ exports.deleteExpired  = functions.database.ref('/deleteExpired/{user_id}')
 					var creatorPuRef = db.ref(`users/${creatorId}/pairUps`);
 					creatorPuRef.once('value', function(creatorPuSnap)
 					{
-						var i =0;
 						creatorPuSnap.forEach(function(creatorPuChildSnap)
 						{
-							i = creatorPuChildSnap.key;
 							if(creatorPuChildSnap.val().pairUpId === puKey)
 							{
 								console.log(`${puKey} to be removed from ${creatorId}`);
-								creatorPuRef.child(i).remove();
+								creatorPuRef.child(creatorPuChildSnap.key).remove();
 							}
 						});
 					});
@@ -121,14 +117,12 @@ exports.deleteExpired  = functions.database.ref('/deleteExpired/{user_id}')
 					var requesterPuRef = db.ref(`users/${requesterId}/pairUps`);
 					requesterPuRef.once('value', function(requesterPuSnap)
 					{
-						var j =0;
 						requesterPuSnap.forEach(function(requesterPuChildSnap)
 						{
-							j = requesterPuChildSnap.key;
 							if(requesterPuChildSnap.val().pairUpId === puKey)
 							{
 								console.log(`${puKey} to be removed from ${requesterId}`);
-								requesterPuRef.child(j).remove();
+								requesterPuRef.child(requesterPuChildSnap.key).remove();
 							}
 						});
 					});
