@@ -38,7 +38,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import garbagecollectors.com.unipool.AppStatus;
 import garbagecollectors.com.unipool.DatePickerFragment;
 import garbagecollectors.com.unipool.GenLocation;
 import garbagecollectors.com.unipool.R;
@@ -131,8 +130,6 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        appStatus = new AppStatus(getApplicationContext());
-        appStatus.run();
     }
 
     @Override

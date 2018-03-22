@@ -65,7 +65,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
     protected static ArrayList<User> chatList;
 
-    protected static HashMap<String, ArrayList<Message>> messages = new HashMap<>();   //Key - PairUpID, Value- List of messages in that pairUp
+    protected static HashMap<String, HashMap<String, Message>> messages = new HashMap<>();   //Key - PairUpID, Value- List of messages in that pairUp
 
     protected static Message defaultMessage = new Message("def@ult", "", "", "", "", 1l);
 
@@ -93,9 +93,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
                     assert message != null;
                     if (!(message.getMessageId().equals("def@ult")))
-                    {
                         UtilityMethods.putMessageInMap(messages, message);
-                    }
                 }
             });
 
@@ -445,7 +443,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         return chatList;
     }
 
-    public static HashMap<String, ArrayList<Message>> getMessages()
+    public static HashMap<String, HashMap<String, Message>> getMessages()
     {
         return messages;
     }

@@ -17,15 +17,24 @@ public class IntroActivity extends AppIntro
 
 		// Note here that we DO NOT use setContentView();
 
-		String uri = "@drawable/home_ss";
-		int imageResource = getResources().getIdentifier(uri, null, getPackageName());
-		String description = "This is where you'll find other people's entries. You can search for the entry you want to join. " +
+		String uriHome = "@drawable/home_ss";
+		String uriRequests = "@drawable/requests_ss";
+		String uriChat = "@drawable/chat_ss";
+
+		int imageResourceHome = getResources().getIdentifier(uriHome, null, getPackageName());
+		int imageResourceRequests = getResources().getIdentifier(uriRequests, null, getPackageName());
+		int imageResourceChat = getResources().getIdentifier(uriChat, null, getPackageName());
+
+		String descriptionHome = "This is where you'll find other people's entries. You can search for the entry you want to join. " +
 								"If you don't find it, you can create your own new one, so that other people can join you.";
+		String descriptionRequests = "Here you'll see the received and sent requests. You can accept any request you wish.";
+		String descriptionChat = "When you accept someone's request, he/she will show up in your chat.";
 
 		// Instead of fragments, you can also use our default slide
 		// Just set a title, description, background and image. AppIntro will do the rest.
-		addSlide(AppIntroFragment.newInstance("Home Screen", description, imageResource,Color.parseColor("#3F51B5") ));
-
+		addSlide(AppIntroFragment.newInstance("Home Screen", descriptionHome, imageResourceHome,Color.parseColor("#3F51B5") ));
+		addSlide(AppIntroFragment.newInstance("Requests Screen", descriptionRequests, imageResourceRequests,Color.parseColor("#3F51B5") ));
+		addSlide(AppIntroFragment.newInstance("Chat Screen", descriptionChat, imageResourceChat,Color.parseColor("#3F51B5") ));
 	}
 
 	@Override

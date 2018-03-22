@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.adapters.TripEntryAdapter;
@@ -354,43 +355,12 @@ public class UtilityMethods
         return formattedTime;
     }
 
-    public static void putMessageInMap(HashMap<String, ArrayList<Message>> messages, Message targetMessage)
+    public static void putMessageInMap(HashMap<String, HashMap<String, Message>> messages, Message targetMessage)
     {
-        boolean flag1 = false, flag2 = false;
+        HashMap<String, Message> mapMessage = new HashMap<>();
+        mapMessage.put(targetMessage.getMessageId(), targetMessage);
 
-        if(messages == null)
-            messages = new HashMap<>();
-
-        for (Map.Entry<String, ArrayList<Message>> entry : messages.entrySet())
-        {
-            if (entry.getKey().equals(targetMessage.getPairUpId()))
-            {
-                for (Message message: entry.getValue())
-                {
-                    if (message.getMessageId().equals(targetMessage.getMessageId()))
-                    {
-                        flag1 = true;
-                        break;
-                    }
-                }
-
-                if(!flag1)
-                {
-                    entry.getValue().add(targetMessage);
-                    flag2 = true;
-                    break;
-                }
-            }
-        }
-
-        if(!flag1 && !flag2)
-        {
-            ArrayList<Message> messageList = new ArrayList<>();
-            messageList.add(targetMessage);
-
-            messages.put(targetMessage.getPairUpId(), messageList);
-        }
-
+        messages.put(targetMessage.getPairUpId(), mapMessage);
     }
 
     public static List<Message> getMessageList(HashMap<String, ArrayList<Message>> messages, String userId)
@@ -493,4 +463,24 @@ public class UtilityMethods
         return flag;
     }
 
+    public static TreeMap<Long, Message> getPersonalMessageMap(HashMap<String, HashMap<String, Message>> messages, String userId)
+    {
+        TreeMap<Long, Message> messageMap = new TreeMap<>();
+
+        for (Map.Entry<String, HashMap<String, Message>> entry: messages.entrySet())
+        {
+            if(entry.getKey().contains(userId))
+            {
+                HashMap<String, Message> messagesHashMap = entry.getValue();
+                for(Map.Entry<String, Message> e: messagesHashMap.entrySet())
+                {
+                    Message message = e.getValue();
+                    messageMap.put(message.getCreatedAtTime(), message);
+                }
+                break;
+            }
+        }
+
+        return messageMap;
+    }
 }
