@@ -20,7 +20,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import garbagecollectors.com.unipool.AppStatus;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.TripEntry;
 import garbagecollectors.com.unipool.User;
@@ -59,10 +58,6 @@ public class SplashActivity extends AppCompatActivity
         loadingAnimation = (AnimationDrawable) splashLogo.getBackground();
 
         loadingAnimation.start();
-
-        AppStatus appStatus = new AppStatus(this);
-
-        appStatus.run();
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();

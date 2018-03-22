@@ -144,12 +144,12 @@ public class HomeActivityTEA extends TripEntryAdapter
                     i[0]++;
                 }
 
-                Task<Void> task3 = userDatabaseReference.child("userTripEntries").child(i[0].toString()).removeValue();
+                Task<Void> task3 = userDatabaseReference.child("userTripEntries").child(tripEntry.getEntry_id()).removeValue();
 
                 task3.addOnSuccessListener(aVoid1 ->
                 {
                     UtilityMethods.removeFromList(BaseActivity.getTripEntryList(), tripEntry.getEntry_id());
-                    UtilityMethods.removeFromList(BaseActivity.getFinalCurrentUser().getUserTripEntries(), tripEntry.getEntry_id());
+                    BaseActivity.getFinalCurrentUser().getUserTripEntries().remove(tripEntry.getEntry_id());
 
                     progressDialog.dismiss();
                 });

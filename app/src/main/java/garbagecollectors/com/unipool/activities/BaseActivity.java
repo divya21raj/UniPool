@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -64,7 +65,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     protected static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
     protected static ArrayList<User> chatList;
 
-    protected static HashMap<String, ArrayList<Message>> messages = new HashMap<>();   //Key - PairUpID, Value- List of messages in that pairUp
+    protected static HashMap<String, HashMap<String, Message>> messages = new HashMap<>();   //Key - PairUpID, Value- List of messages in that pairUp
 
     protected static Message defaultMessage = new Message("def@ult", "", "", "", "", 1l);
 
@@ -92,9 +93,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
                     assert message != null;
                     if (!(message.getMessageId().equals("def@ult")))
-                    {
                         UtilityMethods.putMessageInMap(messages, message);
-                    }
                 }
             });
 
@@ -150,8 +149,15 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 {
                     // This method is called once with the initial value and again
                     // whenever data at this location is updated.
-                    finalCurrentUser = dataSnapshot.getValue(User.class);
-                    UtilityMethods.populateChatList(dataSnapshot);
+                    try
+                    {
+                        finalCurrentUser = dataSnapshot.getValue(User.class);
+                        UtilityMethods.populateChatList(dataSnapshot);
+                    }
+                    catch (DatabaseException dbe)
+                    {
+                        Toast.makeText(getApplicationContext(), "Some problems, mind restarting the app?", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
@@ -437,7 +443,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         return chatList;
     }
 
-    public static HashMap<String, ArrayList<Message>> getMessages()
+    public static HashMap<String, HashMap<String, Message>> getMessages()
     {
         return messages;
     }

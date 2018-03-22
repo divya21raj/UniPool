@@ -78,7 +78,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
             User finalCurrentUser = BaseActivity.getFinalCurrentUser();
 
-            ArrayList<PairUp> currentUserPairUps = finalCurrentUser.getPairUps();
+            HashMap<String, PairUp> currentUserPairUps = finalCurrentUser.getPairUps();
 
             HashMap<String, ArrayList<String>> finalCurrentUserReceivedRequests = finalCurrentUser.getRequestsReceived();
 
@@ -95,7 +95,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
                     tripEntryUser[0] = snapshot.getValue(User.class);
 
-                    ArrayList<PairUp> tripEntryUserPairUps = null;
+                    HashMap<String, PairUp> tripEntryUserPairUps = null;
                     if (tripEntryUser[0] != null)
                         tripEntryUserPairUps = tripEntryUser[0].getPairUps();
                     else
@@ -111,11 +111,11 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                     PairUp pairUp = new PairUp(pairUpId, finalCurrentUser.getUserId(), tripEntryUser[0].getUserId(), expiryDate, new ArrayList<>());
                     pairUp.getMessages().add("def@ult");
 
-                    isAlreadyInList = UtilityMethods.addPairUpInList(currentUserPairUps, pairUp);
+                    isAlreadyInList = UtilityMethods.addPairUpInMap(currentUserPairUps, pairUp);
 
                     if(!isAlreadyInList)
                     {
-                        UtilityMethods.addPairUpInList(tripEntryUserPairUps, pairUp);
+                        UtilityMethods.addPairUpInMap(tripEntryUserPairUps, pairUp);
 
                         UtilityMethods.removeFromMap(finalCurrentUserReceivedRequests, tripEntry.getEntry_id(), tripEntryUser[0].getUserId());
                         UtilityMethods.removeFromList(tripEntryUserSentRequests, tripEntry.getEntry_id());

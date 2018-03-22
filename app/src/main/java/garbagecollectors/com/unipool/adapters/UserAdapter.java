@@ -2,6 +2,7 @@ package garbagecollectors.com.unipool.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>
 	}
 
 	@Override
-	public MyHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
 	{
 		View v = LayoutInflater.from(context).inflate(R.layout.item_user, parent, false);
 		// set the view's size, margins, padding and layout parameters...
@@ -38,15 +39,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>
 	}
 
 	@Override
-	public void onBindViewHolder(MyHolder holder, int position)
+	public void onBindViewHolder(@NonNull MyHolder holder, int position)
 	{
 		User user = userList.get(position);
 		UtilityMethods.fillUserHolder(holder, user);
 
 		holder.itemView.setOnClickListener(view ->
 		{
+			//TreeMap<Long, Message> messageMap = UtilityMethods.getPersonalMessageMap(BaseActivity.getMessages(), user.getUserId());
+
 			MessageListActivity.setChatUser(user);
-			MessageListActivity.setPersonalMessageList(UtilityMethods.getMessageList(BaseActivity.getMessages(), user.getUserId()));
+			//MessageListActivity.setPersonalMessageMap(messageMap);
 			MessageListActivity.setPairUp(UtilityMethods.getPairUp(user, BaseActivity.getFinalCurrentUser().getPairUps()));
 
 			context.startActivity(new Intent(context, MessageListActivity.class));
@@ -65,7 +68,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>
 		public TextView email;
 		public ImageView photo;
 
-		public MyHolder(View itemView)
+		MyHolder(View itemView)
 		{
 			super(itemView);
 

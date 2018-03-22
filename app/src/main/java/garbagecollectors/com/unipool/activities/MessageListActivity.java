@@ -20,9 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.TreeMap;
 
-import garbagecollectors.com.unipool.AppStatus;
 import garbagecollectors.com.unipool.Message;
 import garbagecollectors.com.unipool.PairUp;
 import garbagecollectors.com.unipool.R;
@@ -39,7 +38,7 @@ public class MessageListActivity extends AppCompatActivity
 	EditText messageArea;
 	ScrollView scrollView;
 
-	private static List<Message> personalMessageList;
+	private static TreeMap<Long, Message> personalMessageMap;   //key = CreatedItTime
 	private static User chatUser;
 
 	private static PairUp pairUp;
@@ -50,19 +49,18 @@ public class MessageListActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_message_list);
 
-		AppStatus appStatus = new AppStatus(this);
-		appStatus.run();
-
 		messagesLayout = findViewById(R.id.layout1);
 		sendButton = findViewById(R.id.sendButton);
 		messageArea = findViewById(R.id.message_edit_text);
 		scrollView = findViewById(R.id.scrollView);
 
 		setTitle(chatUser.getName());
+		personalMessageMap = new TreeMap<>();
 
-		for (Message message : personalMessageList)
-			showMessage(message);
-
+/*		for(Map.Entry<Long, Message> entry: personalMessageMap.entrySet())
+		{
+			showMessage(entry.getValue());
+		}*/
 		setScrollViewToBottom();
 
 		DatabaseReference userMessageDatabaseReference = FirebaseDatabase.getInstance().
@@ -75,21 +73,23 @@ public class MessageListActivity extends AppCompatActivity
 			{
 				Message message = dataSnapshot.getValue(Message.class);
 
-				//Toast.makeText(getApplicationContext(), "Got it in ML activity", Toast.LENGTH_SHORT).show();
-
 				if (message != null)
 				{
+					messageArea.setHint("Fetching messages....");
 					UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);
 
-					//Toast.makeText(getApplicationContext(), "Is receiver", Toast.LENGTH_SHORT).show();
 					if (!message.getMessageId().equals("def@ult") && (message.getSenderId().equals(chatUser.getUserId())
 							|| message.getReceiverId().equals(chatUser.getUserId())))
 					{
-						if(!(UtilityMethods.putMessageInList(message, personalMessageList)))
+						if(!personalMessageMap.containsKey(message.getCreatedAtTime()))
+						{
+							personalMessageMap.put(message.getCreatedAtTime(), message);
 							showMessage(message);
+						}
 					}
 				}
 
+				messageArea.setHint("Write a message...");
 			}
 
 			@Override
@@ -136,7 +136,7 @@ public class MessageListActivity extends AppCompatActivity
 				notificationDatabaseReference.child(chatUser.getUserId()).push().setValue(notificationObject);
 
 				messageArea.setText("");
-				personalMessageList.add(message);
+				personalMessageMap.put(message.getCreatedAtTime(), message);
 				showMessage(message);
 			}
 		});
@@ -213,14 +213,14 @@ public class MessageListActivity extends AppCompatActivity
 		MessageListActivity.chatUser = chatUser;
 	}
 
-	public static void setPersonalMessageList(List<Message> personalMessageList)
+	public static TreeMap<Long, Message> getPersonalMessageMap()
 	{
-		MessageListActivity.personalMessageList = personalMessageList;
+		return personalMessageMap;
 	}
 
-	public static List<Message> getPersonalMessageList()
+	public static void setPersonalMessageMap(TreeMap<Long, Message> personalMessageMap)
 	{
-		return personalMessageList;
+		MessageListActivity.personalMessageMap = personalMessageMap;
 	}
 
 	public static User getChatUser()

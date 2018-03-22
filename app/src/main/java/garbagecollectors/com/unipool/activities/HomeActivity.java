@@ -12,7 +12,6 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 
-import garbagecollectors.com.unipool.AppStatus;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.adapters.HomeActivityTEA;
 
@@ -61,8 +60,6 @@ public class HomeActivity extends BaseActivity
 	    recycle.setItemAnimator( new DefaultItemAnimator());
 	    recycle.setAdapter(recyclerAdapter);
 
-	    appStatus = new AppStatus(getApplicationContext());
-	    appStatus.run();
     }
 
 	@Override
