@@ -11,9 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.TreeMap;
 
-import garbagecollectors.com.unipool.Message;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.UtilityMethods;
@@ -48,10 +46,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>
 
 		holder.itemView.setOnClickListener(view ->
 		{
-			TreeMap<Long, Message> messageMap = UtilityMethods.getPersonalMessageMap(BaseActivity.getMessages(), user.getUserId());
+			//TreeMap<Long, Message> messageMap = UtilityMethods.getPersonalMessageMap(BaseActivity.getMessages(), user.getUserId());
 
 			MessageListActivity.setChatUser(user);
-			MessageListActivity.setPersonalMessageMap(messageMap);
+			//MessageListActivity.setPersonalMessageMap(messageMap);
 			MessageListActivity.setPairUp(UtilityMethods.getPairUp(user, BaseActivity.getFinalCurrentUser().getPairUps()));
 
 			context.startActivity(new Intent(context, MessageListActivity.class));

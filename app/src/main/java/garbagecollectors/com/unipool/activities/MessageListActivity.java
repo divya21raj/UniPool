@@ -73,13 +73,11 @@ public class MessageListActivity extends AppCompatActivity
 			{
 				Message message = dataSnapshot.getValue(Message.class);
 
-				//Toast.makeText(getApplicationContext(), "Got it in ML activity", Toast.LENGTH_SHORT).show();
-
 				if (message != null)
 				{
+					messageArea.setHint("Fetching messages....");
 					UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);
 
-					//Toast.makeText(getApplicationContext(), "Is receiver", Toast.LENGTH_SHORT).show();
 					if (!message.getMessageId().equals("def@ult") && (message.getSenderId().equals(chatUser.getUserId())
 							|| message.getReceiverId().equals(chatUser.getUserId())))
 					{
@@ -91,6 +89,7 @@ public class MessageListActivity extends AppCompatActivity
 					}
 				}
 
+				messageArea.setHint("Write a message...");
 			}
 
 			@Override
