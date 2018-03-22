@@ -167,7 +167,7 @@ public class RequestActivity extends BaseActivity
 			DataSnapshot receivedRequestsData = receivedRequestsDBTask.getResult();
 
 			for (DataSnapshot ds : sentRequestsData.getChildren())
-				finalCurrentUser.getRequestSent().add(ds.getValue(TripEntry.class));
+				finalCurrentUser.getRequestSent().put(ds.getValue(TripEntry.class).getEntry_id(), ds.getValue(TripEntry.class));
 
 			ArrayList<String> userIdList = new ArrayList<>();
 

@@ -27,7 +27,6 @@ import garbagecollectors.com.unipool.TripEntry;
 import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.BaseActivity;
-import garbagecollectors.com.unipool.activities.RequestActivity.ChatFragment;
 import garbagecollectors.com.unipool.activities.RequestActivity.ReceivedRequestsFragment;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
 
@@ -101,7 +100,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                     else
                         Toast.makeText(context, "Problems! Please try again...", Toast.LENGTH_LONG);
 
-                    ArrayList<TripEntry> tripEntryUserSentRequests = tripEntryUser[0].getRequestSent();
+                    HashMap<String, TripEntry> tripEntryUserSentRequests = tripEntryUser[0].getRequestSent();
 
                     String pairUpId = finalCurrentUser.getUserId() + tripEntryUser[0].getUserId();
 
@@ -118,14 +117,14 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                         UtilityMethods.addPairUpInMap(tripEntryUserPairUps, pairUp);
 
                         UtilityMethods.removeFromMap(finalCurrentUserReceivedRequests, tripEntry.getEntry_id(), tripEntryUser[0].getUserId());
-                        UtilityMethods.removeFromList(tripEntryUserSentRequests, tripEntry.getEntry_id());
+                        if (tripEntryUserPairUps != null)
+                        {
+                            tripEntryUserPairUps.remove(tripEntry.getEntry_id());
+                        }
 
                         finalCurrentUser.setRequestsReceived(finalCurrentUserReceivedRequests);
                         finalCurrentUser.setPairUps(currentUserPairUps);
                         BaseActivity.setFinalCurrentUser(finalCurrentUser);
-
-                        BaseActivity.getChatList().add(tripEntryUser[0]);
-                        ChatFragment.recycleAdapter.notifyDataSetChanged();
 
                         HashMap<String, String> notificationObject = new HashMap<>();
                         notificationObject.put("from", finalCurrentUser.getUserId());
@@ -144,7 +143,10 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                         Task<Void> allTask = Tasks.whenAll(task1, task2, task3, task4, task5, task6);
                         allTask.addOnSuccessListener(bVoid ->
                         {
-                            BaseActivity.getChatList().add(tripEntryUser[0]);
+                            tripEntry.setEntry_id("dummyId");
+                            userDatabaseReference.child((tripEntryUser[0]).getUserId()).child("requestSent").child("dummyId").setValue(tripEntry);
+
+                            BaseActivity.getChatMap().put(tripEntryUser[0].getUserId(), tripEntryUser[0]);
                             requestsProgressDialog.dismiss();
                             RequestActivity.refreshRequests(context);
                         });

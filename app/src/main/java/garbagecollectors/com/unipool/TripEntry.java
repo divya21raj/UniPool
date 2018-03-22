@@ -45,6 +45,11 @@ public class TripEntry
         return entry_id;
     }
 
+    public void setEntry_id(String entry_id)
+    {
+        this.entry_id = entry_id;
+    }
+
     public String getName()
     {
         return name;

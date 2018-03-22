@@ -296,14 +296,14 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         GenLocation dummyGenLocation = new GenLocation("dummy", "dummy", 0d, 0d);
 
-        TripEntry dummyTripEntry = new TripEntry("dummy", "0", "DummyUser", "12:00",
+        TripEntry dummyTripEntry = new TripEntry("dummy", "dummyId", "DummyUser", "12:00",
                                                     "1/11/12", dummyGenLocation, dummyGenLocation, dummyLambdaMap);
 
         HashMap<String, TripEntry> dummyUserEntries = new HashMap<>();
         dummyUserEntries.put("dummy", dummyTripEntry);
 
-        ArrayList<TripEntry> dummyRequestSent = new ArrayList<>();
-        dummyRequestSent.add(dummyTripEntry);
+        HashMap<String, TripEntry> dummyRequestSent = new HashMap<>();
+        dummyRequestSent.put(dummyTripEntry.getEntry_id(), dummyTripEntry);
 
         ArrayList<String> dummyUserIdList = new ArrayList<>();
         dummyUserIdList.add("dummy");

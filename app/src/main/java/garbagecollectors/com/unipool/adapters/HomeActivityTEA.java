@@ -206,7 +206,7 @@ public class HomeActivityTEA extends TripEntryAdapter
                 DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
                 DatabaseReference notificationDatabaseReference = BaseActivity.getNotificationDatabaseReference();
 
-                ArrayList<TripEntry> requestSent = user.getRequestSent();
+                HashMap<String, TripEntry> requestSent = user.getRequestSent();
                 HashMap<String, ArrayList<String>> requestsReceived = tripEntryUser[0].getRequestsReceived();
 
                 isAlreadyRequested = addRequestInList(requestSent, user.getPairUps(), tripEntry);

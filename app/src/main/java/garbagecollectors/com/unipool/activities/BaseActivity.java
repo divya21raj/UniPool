@@ -36,7 +36,10 @@ import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.TripEntry;
 import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.UtilityMethods;
+import garbagecollectors.com.unipool.activities.RequestActivity.ChatFragment;
+import garbagecollectors.com.unipool.activities.RequestActivity.ReceivedRequestsFragment;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
+import garbagecollectors.com.unipool.activities.RequestActivity.SentRequestsFragment;
 
 import static garbagecollectors.com.unipool.activities.SplashActivity.MessageDBTask;
 
@@ -63,7 +66,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public static User finalCurrentUser;
 
     protected static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
-    protected static ArrayList<User> chatList;
+    protected static HashMap<String, User> chatMap; //key = UserId
 
     protected static HashMap<String, HashMap<String, Message>> messages = new HashMap<>();   //Key - PairUpID, Value- List of messages in that pairUp
 
@@ -122,9 +125,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 public void onChildRemoved(DataSnapshot dataSnapshot)
                 {
                     TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                    UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
+                    if (tripEntry != null)
+                    {
+                        UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
+                        HomeActivity.updateRecycleAdapter();
+                    }
 
-                    HomeActivity.updateRecycleAdapter();
                 }
 
                 @Override
@@ -152,11 +158,14 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                     try
                     {
                         finalCurrentUser = dataSnapshot.getValue(User.class);
-                        UtilityMethods.populateChatList(dataSnapshot);
+                        UtilityMethods.populateChatMap(dataSnapshot);
+                        ReceivedRequestsFragment.refreshRecycler();
+                        SentRequestsFragment.refreshRecycler();
+                        ChatFragment.refreshRecycler();
                     }
                     catch (DatabaseException dbe)
                     {
-                        Toast.makeText(getApplicationContext(), "Some problems, mind restarting the app?", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Some problems, mind restarting the app?", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -438,9 +447,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         return entryDatabaseReference;
     }
 
-    public static ArrayList<User> getChatList()
+    public static HashMap<String, User> getChatMap()
     {
-        return chatList;
+        return chatMap;
     }
 
     public static HashMap<String, HashMap<String, Message>> getMessages()
@@ -448,9 +457,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         return messages;
     }
 
-    public static void setChatList(ArrayList<User> chatList)
+    public static void setChatMap(HashMap<String, User> chatMap)
     {
-        BaseActivity.chatList = chatList;
+        BaseActivity.chatMap = chatMap;
     }
 
     public static Message getDefaultMessage()

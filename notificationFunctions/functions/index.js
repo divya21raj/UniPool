@@ -65,6 +65,21 @@ exports.deleteExpired  = functions.database.ref('/deleteExpired/{user_id}')
 							});
 						});
 
+						//remove requestReceived for user
+						var userReceivedReqRef = db.ref(`users/${childData.user_id}/requestsReceived`);
+						userReceivedReqRef.child(childKey).remove();
+
+						//remove sentRequest for other users
+						userRef.once('value', function(userSnap)
+						{
+							userSnap.forEach(function(userChildSnap)
+							{
+								console.log(`Deleting for ${userChildSnap.key}...`);
+								var userSentReqRef = db.ref(`users/${userChildSnap.key}/requestSent`);
+								console.log(`${userSentReqRef}`);
+								userSentReqRef.child(childKey).remove();
+							});
+						});
 						//main date checking if ends
 					}
 

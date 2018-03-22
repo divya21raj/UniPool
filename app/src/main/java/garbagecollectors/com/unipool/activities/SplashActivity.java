@@ -115,7 +115,7 @@ public class SplashActivity extends AppCompatActivity
             if (!(LoginActivity.userNewOnDatabase))
                 BaseActivity.setFinalCurrentUser(userData.getValue(User.class));
 
-            Task chatListTask = UtilityMethods.populateChatList(userData);
+            Task chatListTask = UtilityMethods.populateChatMap(userData);
 
             messageDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
             {

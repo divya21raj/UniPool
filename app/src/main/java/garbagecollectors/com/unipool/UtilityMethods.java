@@ -55,21 +55,15 @@ public class UtilityMethods
         return userTask;
     }
 
-    public static boolean addRequestInList(ArrayList<TripEntry> requestSent, HashMap<String, PairUp> pairUps, TripEntry tripEntry)
+    public static boolean addRequestInList(HashMap<String, TripEntry> requestSent, HashMap<String, PairUp> pairUps, TripEntry tripEntry)
     {
         boolean flag = false;
 
         if(requestSent == null)
-            requestSent = new ArrayList<>();
+            requestSent = new HashMap<>();
 
-        for(TripEntry e: requestSent)
-        {
-            if(e.getEntry_id().equals(tripEntry.getEntry_id()))
-            {
-                flag = true;
-                break;
-            }
-        }
+        if(requestSent.containsKey(tripEntry.getEntry_id()))
+            flag = true;
 
         if(!flag)
         {
@@ -85,7 +79,7 @@ public class UtilityMethods
         }
 
         if(!flag)
-            requestSent.add(tripEntry);
+            requestSent.put(tripEntry.getEntry_id(), tripEntry);
 
         return flag;
     }
@@ -306,7 +300,7 @@ public class UtilityMethods
         return time;
     }
 
-    public static Task populateChatList(DataSnapshot userData)
+    public static Task populateChatMap(DataSnapshot userData)
     {
         final String[] userId = new String[1];
 
@@ -317,7 +311,7 @@ public class UtilityMethods
 
         Task task = accessUserDatabase("users");
 
-        ArrayList<User> finalChatList = new ArrayList<>();
+        HashMap<String, User> finalChatMap = new HashMap<>();
 
         task.addOnCompleteListener(aTask ->
         {
@@ -333,11 +327,15 @@ public class UtilityMethods
                     else
                         userId[0] = pairUp.getCreatorId();
 
-                    finalChatList.add(snapshot.child(userId[0]).getValue(User.class));
+                    User user = snapshot.child(userId[0]).getValue(User.class);
+                    if (user != null)
+                    {
+                        finalChatMap.put(user.getUserId(), user);
+                    }
                 }
             }
 
-            BaseActivity.setChatList(finalChatList);
+            BaseActivity.setChatMap(finalChatMap);
         });
 
         return task;

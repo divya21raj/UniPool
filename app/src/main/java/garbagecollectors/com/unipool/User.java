@@ -11,7 +11,7 @@ public class User
 
     private HashMap<String, TripEntry> userTripEntries =new HashMap<>();
 
-    private ArrayList<TripEntry> requestSent;
+    private HashMap<String, TripEntry> requestSent;  //key = tripEntryId
     private HashMap<String, ArrayList<String>> requestsReceived;
     //Key is the entryId of entry requested, Value is list of userIDs who've requested that entry
     //We have Map because we're taking TripEntry object of the entry that we have made (that the other person has clicked on)
@@ -22,7 +22,7 @@ public class User
 
     private HashMap<String, PairUp> pairUps;
 
-    public User(String userId, String name, String photoUrl, HashMap<String, TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, boolean isOnline, HashMap<String, PairUp> pairUps)
+    public User(String userId, String name, String photoUrl, HashMap<String, TripEntry> userTripEntries, HashMap<String, TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, boolean isOnline, HashMap<String, PairUp> pairUps)
     {
         this.userId = userId;
         this.name = name;
@@ -53,12 +53,12 @@ public class User
         this.name = name;
     }
 
-    public ArrayList<TripEntry> getRequestSent()
+    public HashMap<String, TripEntry> getRequestSent()
     {
         return requestSent;
     }
 
-    public void setRequestSent(ArrayList<TripEntry> requestSent)
+    public void setRequestSent(HashMap<String, TripEntry> requestSent)
     {
         this.requestSent = requestSent;
     }
