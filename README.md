@@ -1,5 +1,5 @@
 
-# Cabpool Application 
+# UniPool
 
 ## Introduction
 This project is being made for the course CSD207 under the guidance of Professor Anuradha Ravi in the semester of Monsoon 2017.
@@ -15,7 +15,7 @@ Cabpooling is a huge concern in an isolated, residential university like Shiv Na
 4. It is not easy to keep a track of people interested in your offer unless they message you on Whatsapp or call.
 5. Privacy is a huge concern, as you do not want to share your number out there in the public.
 
-In such a scenario, there is a need for such an app which will be secure, and easy to use at the same time. Cabpool Application does the exact same thing.
+In such a scenario, there is a need for such an app which will be secure, and easy to use at the same time. UniPool does the exact same thing.
 
 **The algorithm for sorting and filtering entries can be found [here](https://www.dropbox.com/sh/1aopsud1zbvs75u/AAAJ2PW5lYD140iJdiskG5JMa?dl=0)**
 

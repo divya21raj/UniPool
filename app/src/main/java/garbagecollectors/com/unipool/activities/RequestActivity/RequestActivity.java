@@ -185,6 +185,7 @@ public class RequestActivity extends BaseActivity
 			{
 				ReceivedRequestsFragment.refreshRecycler();
 				SentRequestsFragment.refreshRecycler();
+				ChatFragment.refreshRecycler();
 
 				requestsProgressBar.setVisibility(View.INVISIBLE);
 			});

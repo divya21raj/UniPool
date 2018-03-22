@@ -168,18 +168,22 @@ public class MessageListActivity extends AppCompatActivity
 	{
 		if(message.getSenderId().equals(BaseActivity.getFinalCurrentUser().getUserId()))
 		{
-			addMessageBox(message.getMessage(), 1);
+			addMessageBox(message.getMessage(), message.getCreatedAtTime(), 1);
 		}
 		else if(message.getSenderId().equals(chatUser.getUserId()))
 		{
-			addMessageBox(message.getMessage(), 2);
+			addMessageBox(message.getMessage(), message.getCreatedAtTime(), 2);
 		}
 	}
 
-	public void addMessageBox(String message, int type)
+	public void addMessageBox(String message, Long createdAtTime, int type)
 	{
-		TextView textView = new TextView(MessageListActivity.this);
-		textView.setText(message);
+		TextView messageView = new TextView(MessageListActivity.this);
+		messageView.setText(message);
+
+		TextView timeView = new TextView(MessageListActivity.this);
+		timeView.setTextSize(10);
+		timeView.setText(UtilityMethods.formatDateTime(createdAtTime));
 
 		LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
 																		ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -188,16 +192,23 @@ public class MessageListActivity extends AppCompatActivity
 		if(type == 1)
 		{
 			lp2.gravity = Gravity.RIGHT;
-			textView.setBackgroundResource(R.drawable.bubble_in);
+			messageView.setBackgroundResource(R.drawable.bubble_in);
+			timeView.setTextColor(getResources().getColor(R.color.colorPrimary));
+			timeView.setPadding(0,0, 5, 0);
 		}
 		else
 		{
 			lp2.gravity = Gravity.LEFT;
-			textView.setBackgroundResource(R.drawable.bubble_out);
+			timeView.setPadding(5,0, 0, 0);
+			timeView.setTextColor(getResources().getColor(R.color.orange));
+			messageView.setBackgroundResource(R.drawable.bubble_out);
 		}
 
-		textView.setLayoutParams(lp2);
-		messagesLayout.addView(textView);
+		messageView.setLayoutParams(lp2);
+		timeView.setLayoutParams(lp2);
+
+		messagesLayout.addView(messageView);
+		messagesLayout.addView(timeView);
 
 		//scrollView.fullScroll(View.FOCUS_DOWN);
 		setScrollViewToBottom();
@@ -233,8 +244,4 @@ public class MessageListActivity extends AppCompatActivity
 		return pairUp;
 	}
 
-	public static void refresh()
-	{
-
-	}
 }

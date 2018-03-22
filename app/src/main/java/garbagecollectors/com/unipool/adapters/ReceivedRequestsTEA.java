@@ -144,6 +144,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                         Task<Void> allTask = Tasks.whenAll(task1, task2, task3, task4, task5, task6);
                         allTask.addOnSuccessListener(bVoid ->
                         {
+                            BaseActivity.getChatList().add(tripEntryUser[0]);
                             requestsProgressDialog.dismiss();
                             RequestActivity.refreshRequests(context);
                         });
