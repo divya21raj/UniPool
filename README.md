@@ -17,7 +17,11 @@ Cabpooling is a huge concern in an isolated, residential university like Shiv Na
 
 In such a scenario, there is a need for such an app which will be secure, and easy to use at the same time. Cabpool Application does the exact same thing.
 
-**The algorithm for sorting and filtering entries can be found [here](https://www.dropbox.com/sh/1aopsud1zbvs75u/AAAJ2PW5lYD140iJdiskG5JMa?dl=0)**
+**The algorithm for sorting and filtering entries can be found [here](https://www.dropbox.com/s/ed4oc9l1tmvzl09/Sorting_Algorithm.pdf?dl=0)**
+
+**The algorithm for end-to-end encryption of messages can be found [here](https://www.dropbox.com/s/h2967njbvqtfd1q/Encryption%20Algorithm.pdf?dl=0)**
+
+
 
 ## Contributors 
  
