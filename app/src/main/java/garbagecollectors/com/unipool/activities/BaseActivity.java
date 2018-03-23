@@ -72,6 +72,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     protected static Message defaultMessage = new Message("def@ult", "", "", "", "", 1l);
 
+    private static ArrayList<String> chatUserNotifs;  //userIds who have unseen messages
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -177,45 +179,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                         Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-                /*userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
-                {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
-                    {
-                        Toast.makeText(getApplicationContext(), "Got it in Base activity", Toast.LENGTH_SHORT).show();
-
-                        Message message = dataSnapshot.getValue(Message.class);
-                        UtilityMethods.putMessageInMap(messages, message);
-
-                        //notify
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s)
-                    {
-                        //not happening
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot)
-                    {
-                        //not happening
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s)
-                    {
-                        //IDK
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError)
-                    {
-                        // Failed to read value
-                        Log.w("userDB", "Failed to read UserMessages.", databaseError.toException());
-                    }
-                });*/
 
                 bottomNavigationView = findViewById(R.id.bottom_navigation);
                 bottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -466,5 +429,16 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     {
         return defaultMessage;
     }
+
+    public static ArrayList<String> getChatUserNotifs()
+    {
+        return chatUserNotifs;
+    }
+
+    public static void setChatUserNotifs(ArrayList<String> chatUserNotifs)
+    {
+        BaseActivity.chatUserNotifs = chatUserNotifs;
+    }
+
 
 }

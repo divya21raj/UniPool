@@ -156,6 +156,13 @@ public class MessageListActivity extends AppCompatActivity
 
 	}
 
+	@Override
+	public void onBackPressed()
+	{
+		super.onBackPressed();
+		chatUser.setName("asdsafasde");
+	}
+
 	private void setScrollViewToBottom()
 	{
 		View lastChild = scrollView.getChildAt(scrollView.getChildCount() - 1);

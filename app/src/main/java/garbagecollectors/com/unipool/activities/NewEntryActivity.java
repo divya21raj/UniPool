@@ -305,6 +305,9 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
             case 4:
                 Toast.makeText(this, "Planning way too ahead of time, eh?", Toast.LENGTH_LONG).show();
                 break;
+
+            case 5:
+                Toast.makeText(this, "You already have 4 entries, give others a chance too...", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -340,6 +343,9 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
 
         else if(diffInDays > 21)
             flag = 4;
+
+        else if(finalCurrentUser.getUserTripEntries().size() > 4)
+            flag = 5;
 
         return flag;
     }
@@ -401,34 +407,44 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         final Place[] place = new Place[1];
         final LatLng[] latLng = new LatLng[1];
 
-        @SuppressLint("MissingPermission") PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi.
-                getCurrentPlace(mGoogleApiClient, null);
+
+        @SuppressLint("MissingPermission")
+        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi.getCurrentPlace(mGoogleApiClient, null);
         result.setResultCallback(likelyPlaces ->
         {
-            PlaceLikelihood placeLikelihood = likelyPlaces.get( 0 );
-            place[0] = placeLikelihood.getPlace();
-            latLng[0] = place[0].getLatLng();
-
-            if(currentLocationView.getTag().equals("gct_source"))
+            try
             {
-                source = new GenLocation(place[0].getName().toString(), place[0].getAddress().toString(),
-                                            latLng[0].latitude, latLng[0].longitude);
-                sourceSet = (place[0].getName() + ",\n" +
-                        place[0].getAddress() + "\n" + place[0].getPhoneNumber());//check
-                findSource.setText(sourceSet);
 
+                PlaceLikelihood placeLikelihood = likelyPlaces.get(0);
+                place[0] = placeLikelihood.getPlace();
+                latLng[0] = place[0].getLatLng();
+
+                if (currentLocationView.getTag().equals("gct_source"))
+                {
+                    source = new GenLocation(place[0].getName().toString(), place[0].getAddress().toString(),
+                            latLng[0].latitude, latLng[0].longitude);
+                    sourceSet = (place[0].getName() + ",\n" +
+                            place[0].getAddress() + "\n" + place[0].getPhoneNumber());//check
+                    findSource.setText(sourceSet);
+
+                } else if (currentLocationView.getTag().equals("gct_destination"))
+                {
+                    destination = new GenLocation(place[0].getName().toString(), place[0].getAddress().toString(),
+                            latLng[0].latitude, latLng[0].longitude);
+                    destinationSet = (place[0].getName() + ",\n" +
+                            place[0].getAddress() + "\n" + place[0].getPhoneNumber());//check
+                    findDestination.setText(destinationSet);
+                }
+
+                likelyPlaces.release();
             }
-
-            else if(currentLocationView.getTag().equals("gct_destination"))
+            catch (IllegalStateException ils)
             {
-                destination = new GenLocation(place[0].getName().toString(), place[0].getAddress().toString(),
-                                                latLng[0].latitude, latLng[0].longitude);
-                destinationSet = (place[0].getName() + ",\n" +
-                        place[0].getAddress() + "\n" + place[0].getPhoneNumber());//check
-                findDestination.setText(destinationSet);
+                Toast.makeText(getApplicationContext(), "Turn on 'Location' option on your phone to use this feature...",
+                        Toast.LENGTH_LONG).show();
+                findSource.setText("Source");
+                findDestination.setText("Destination");
             }
-
-            likelyPlaces.release();
         });
 
     }
@@ -440,12 +456,12 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         switch (requestCode)
         {
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
-                {
+            {
                 // If request is cancelled, the result arrays are empty.
-                    if (grantResults.length > 0
-                            && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    {
-                        // permission was granted, yay! Do the
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    // permission was granted, yay! Do the
                         // contacts-related task you need to do.
                         getCurrentPlace();
                     }

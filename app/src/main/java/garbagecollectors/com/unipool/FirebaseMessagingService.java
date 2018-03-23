@@ -8,6 +8,8 @@ import android.support.v4.app.NotificationManagerCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
 
+import garbagecollectors.com.unipool.activities.MessageListActivity;
+
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService
 {
 	@Override
@@ -38,6 +40,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 			resultIntent.putExtra("openingTab", 2);
 		else if(notificationBody.contains("sent"))
 			resultIntent.putExtra("openingTab", 1);
+		else if(notificationBody.contains("message"))
+			resultIntent.putExtra("openingTab", 2);
 
 		PendingIntent resultPendingIntent =
 				PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -48,11 +52,14 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 		int notificationId = (int) System.currentTimeMillis();
 		NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
-		if(!notificationBody.contains("messages"))
+		String name = "sdcsdfiwfef9";
+		if(MessageListActivity.getChatUser() != null)
+			name = MessageListActivity.getChatUser().getName();
+
+		if(!notificationBody.contains(name) || (notificationBody.contains("request")))
 		{
 			// Builds notification and issues it
 			notificationManager.notify(notificationId, mBuilder.build());
 		}
-
 	}
 }
