@@ -26,6 +26,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 				.setSmallIcon(R.mipmap.ic_launcher)
 				.setContentTitle(notificationTitle)
 				.setContentText(notificationBody)
+				.setAutoCancel(true)
 				.setPriority(NotificationCompat.PRIORITY_DEFAULT)
 				.setSound(sound);
 

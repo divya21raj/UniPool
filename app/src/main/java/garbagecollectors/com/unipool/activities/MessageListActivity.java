@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -43,6 +44,8 @@ public class MessageListActivity extends AppCompatActivity
 
 	private static PairUp pairUp;
 
+	private ArrayList<String> messagesOnScreen;  //list of messageIds displayed
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -57,7 +60,9 @@ public class MessageListActivity extends AppCompatActivity
 		setTitle(chatUser.getName());
 		personalMessageMap = new TreeMap<>();
 
-/*		for(Map.Entry<Long, Message> entry: personalMessageMap.entrySet())
+		messagesOnScreen = new ArrayList<>();
+
+        /*for(Map.Entry<Long, Message> entry: personalMessageMap.entrySet())
 		{
 			showMessage(entry.getValue());
 		}*/
@@ -81,9 +86,10 @@ public class MessageListActivity extends AppCompatActivity
 					if (!message.getMessageId().equals("def@ult") && (message.getSenderId().equals(chatUser.getUserId())
 							|| message.getReceiverId().equals(chatUser.getUserId())))
 					{
-						if(!personalMessageMap.containsKey(message.getCreatedAtTime()))
+						personalMessageMap.containsKey(message.getCreatedAtTime());
+
+						if(!messagesOnScreen.contains(message.getMessageId()))
 						{
-							personalMessageMap.put(message.getCreatedAtTime(), message);
 							showMessage(message);
 						}
 					}
@@ -94,25 +100,22 @@ public class MessageListActivity extends AppCompatActivity
 
 			@Override
 			public void onChildChanged(DataSnapshot dataSnapshot, String s)
-			{
-			}
+			{}
 
 			@Override
 			public void onChildRemoved(DataSnapshot dataSnapshot)
-			{
-			}
+			{}
 
 			@Override
 			public void onChildMoved(DataSnapshot dataSnapshot, String s)
-			{
-			}
+			{}
 
 			@Override
 			public void onCancelled(DatabaseError databaseError)
 			{
 				// Failed to read value
 				Log.w("Hello", "Failed to read value.", databaseError.toException());
-				Toast.makeText(getApplicationContext(), "Network Issues! Try again...", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Problems! Couldn't fetch messages...", Toast.LENGTH_LONG).show();
 			}
 		});
 
@@ -166,6 +169,8 @@ public class MessageListActivity extends AppCompatActivity
 
 	private void showMessage(Message message)
 	{
+		messagesOnScreen.add(message.getMessageId());
+
 		if(message.getSenderId().equals(BaseActivity.getFinalCurrentUser().getUserId()))
 		{
 			addMessageBox(message.getMessage(), message.getCreatedAtTime(), 1);

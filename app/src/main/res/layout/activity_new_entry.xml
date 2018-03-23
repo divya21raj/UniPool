@@ -112,7 +112,7 @@
                     android:textColor="@color/grey"
                     android:textSize="18sp"
                     android:layout_marginTop="25dp"
-                    android:layout_marginLeft="90dp"/>
+                    android:layout_marginLeft="83dp"/>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -130,7 +130,7 @@
                         android:clickable="true"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:hint="HH:mm AM"
+                        android:hint="Time"
                         android:layout_marginStart="60dp" />
                 </RelativeLayout>
             </LinearLayout>
@@ -169,7 +169,7 @@
                     android:textColor="@color/grey"
                     android:textSize="18sp"
                     android:layout_marginTop="25dp"
-                    android:layout_marginLeft="90dp"/>
+                    android:layout_marginLeft="80dp"/>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -187,7 +187,7 @@
                         android:clickable="true"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:hint="dd/M/YYYY"
+                        android:hint="Date"
                         android:layout_marginStart="60dp" />
                 </RelativeLayout>
             </LinearLayout>

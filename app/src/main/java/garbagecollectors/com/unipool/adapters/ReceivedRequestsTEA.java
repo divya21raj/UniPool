@@ -2,8 +2,10 @@
 
 package garbagecollectors.com.unipool.adapters;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -117,10 +119,8 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                         UtilityMethods.addPairUpInMap(tripEntryUserPairUps, pairUp);
 
                         UtilityMethods.removeFromMap(finalCurrentUserReceivedRequests, tripEntry.getEntry_id(), tripEntryUser[0].getUserId());
-                        if (tripEntryUserPairUps != null)
-                        {
-                            tripEntryUserPairUps.remove(tripEntry.getEntry_id());
-                        }
+                        tripEntryUserSentRequests.remove(tripEntry.getEntry_id());
+
 
                         finalCurrentUser.setRequestsReceived(finalCurrentUserReceivedRequests);
                         finalCurrentUser.setPairUps(currentUserPairUps);
@@ -148,7 +148,15 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
                             BaseActivity.getChatMap().put(tripEntryUser[0].getUserId(), tripEntryUser[0]);
                             requestsProgressDialog.dismiss();
-                            RequestActivity.refreshRequests(context);
+                            //RequestActivity.refreshRequests(context);
+
+                            Intent intent = new Intent(context, RequestActivity.class);
+                            intent.putExtra("openingTab", 2);
+
+                            ((Activity)context).finish();
+
+                            context.startActivity(intent);
+                            ((Activity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         });
 
                         allTask.addOnFailureListener(e ->

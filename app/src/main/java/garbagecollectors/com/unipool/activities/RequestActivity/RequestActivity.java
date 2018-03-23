@@ -207,6 +207,11 @@ public class RequestActivity extends BaseActivity
 		viewPager.setCurrentItem(tabIndex);
 	}
 
+	public static void restartActivityWithChat()
+	{
+
+	}
+
 	class ViewPagerAdapter extends FragmentPagerAdapter
 	{
 		private final List<Fragment> mFragmentList = new ArrayList<>();
