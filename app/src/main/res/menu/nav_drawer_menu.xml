@@ -8,7 +8,7 @@
 
         <item
             android:id="@+id/nav_chat"
-            android:icon="@drawable/ic_chat"
+            android:icon="@drawable/ic_chat_bubble_outline_black_24px"
             android:title="Chat" />
 
     </group>
@@ -18,17 +18,17 @@
 
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_home_black_24dp"
+            android:icon="@drawable/ic_home_black_24px"
             android:title="Home" />
 
         <item
             android:id="@+id/nav_newEntry"
-            android:icon="@drawable/ic_drive_eta"
+            android:icon="@drawable/ic_directions_car_black_24px"
             android:title="New Entry" />
 
         <item
             android:id="@+id/nav_requests"
-            android:icon="@drawable/ic_people"
+            android:icon="@drawable/ic_people_black_24px"
             android:title="Requests" />
 
     </group>
@@ -38,12 +38,12 @@
 
         <item
             android:id="@+id/nav_about"
-            android:icon="@drawable/ic_about"
+            android:icon="@drawable/ic_info_outline_black_24px"
             android:title="About" />
 
         <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_logout"
+            android:icon="@drawable/ic_log_out_black_24px"
             android:title="Logout" />
 
     </group>

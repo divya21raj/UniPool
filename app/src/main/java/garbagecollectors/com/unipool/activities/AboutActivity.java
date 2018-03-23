@@ -34,7 +34,7 @@ public class AboutActivity extends AppCompatActivity
 		final ActionBar actionBar = getSupportActionBar();
 		if(actionBar != null)
 		{
-			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_24dp);
+			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
 			actionBar.setDisplayHomeAsUpEnabled(true);
 		}
 
