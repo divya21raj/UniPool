@@ -2,22 +2,24 @@
 # UniPool
 
 ## Introduction
-This project is being made for the course CSD207 under the guidance of Professor Anuradha Ravi in the semester of Monsoon 2017.
+A cab-pooling solution for univesities.
 
 **The Latest APK of the app can be found [here](https://drive.google.com/open?id=1GlWsl18QL_FKUPz0u2B4vVFZ97shXbbv)**
 -Don't forget to sign out and sign back in everytime you install the app...
 
 ## About the Project
-Cabpooling is a huge concern in an isolated, residential university like Shiv Nadar University. It has become a part of the process while planning to go anywhere. Although Gmail is an easy platform for cabpool requests, it is not convenient at all because of the following reasons,
-1. Important messages might get lost in a flood of cabpool mails.
-2. It is essentially a spam message for people who do not want to cabpool.
-3. You require the mailing list to send cabpool requests, or reply all to an existing thread which is a slow process.
+Cab-pooling is a huge concern in an isolated, residential university like Shiv Nadar University. It has become a part of the process while planning to go anywhere. Although Gmail is an easy platform for cab-pool requests, it is not convenient at all because of the following reasons,
+1. Important messages might get lost in a flood of cab-pool mails.
+2. It is essentially a spam message for people who do not want to cab-pool.
+3. You require the mailing list to send cab-pool requests, or reply all to an existing thread which is a slow process.
 4. It is not easy to keep a track of people interested in your offer unless they message you on Whatsapp or call.
 5. Privacy is a huge concern, as you do not want to share your number out there in the public.
 
 In such a scenario, there is a need for such an app which will be secure, and easy to use at the same time. UniPool does the exact same thing.
 
-**The algorithm for sorting and filtering entries can be found [here](https://www.dropbox.com/sh/1aopsud1zbvs75u/AAAJ2PW5lYD140iJdiskG5JMa?dl=0)**
+**The algorithm for sorting and filtering entries can be found [here](https://www.dropbox.com/s/ed4oc9l1tmvzl09/Sorting_Algorithm.pdf?dl=0)**
+
+**The algorithm for end-to-end encryption of messages can be found [here](https://www.dropbox.com/s/h2967njbvqtfd1q/Encryption%20Algorithm.pdf?dl=0)**
 
 ## Contributors 
  
@@ -36,9 +38,6 @@ To contribute, follow these guidelines,
 1. Fork the repository.
 2. Make your commits with concise and proper description.
 3. Make pull request.
-
-## Deadline
-Tentative Date for Presentation: Friday, November 24th, 2017
 
 ## Acknowledgments 
 * Anuradha Ravi - Assistant Professor
