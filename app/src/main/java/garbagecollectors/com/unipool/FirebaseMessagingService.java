@@ -53,8 +53,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 		NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
 		String name = "sdcsdfiwfef9";
-		if(MessageListActivity.getChatUser() != null)
-			name = MessageListActivity.getChatUser().getName();
+		if(MessageListActivity.getName() != null)
+			name = MessageListActivity.getName();
 
 		if(!notificationBody.contains(name) || (notificationBody.contains("request")))
 		{

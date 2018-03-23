@@ -17,26 +17,36 @@ public class IntroActivity extends AppIntro
 
 		// Note here that we DO NOT use setContentView();
 
+		String uriWelcome = "@drawable/logo";
 		String uriHome = "@drawable/home_ss";
 		String uriRequests = "@drawable/requests_ss";
 		String uriChat = "@drawable/chat_ss";
+		String uriNewEntry = "@drawable/new_entry_ss";
 
 		String colorString = "#2467b3";
 
+		int imageResourceWelcome = getResources().getIdentifier(uriWelcome, null, getPackageName());
 		int imageResourceHome = getResources().getIdentifier(uriHome, null, getPackageName());
 		int imageResourceRequests = getResources().getIdentifier(uriRequests, null, getPackageName());
 		int imageResourceChat = getResources().getIdentifier(uriChat, null, getPackageName());
+		int imageResourceNewEntry = getResources().getIdentifier(uriNewEntry, null, getPackageName());
 
-		String descriptionHome = "This is where you'll find other people's entries. You can search for the entry you want to join. " +
-				"If you don't find it, you can create your own new one, so that other people can join you.";
-		String descriptionRequests = "Here you'll see the received and sent requests. You can accept any request you wish.";
-		String descriptionChat = "When you accept someone's request, he/she will show up in your chat.";
+		String descriptionWelcome = "Thanks for downloading! Let's see how stuff works here...";
+		String descriptionHome = "This is where you search for your desired entry and send  a request to join them";
+		String descriptionNewEntry = "If you don't find a desired entry on the home screen, you can create your own here, " +
+										"and wait for someone to join you";
+		String descriptionRequests = "Here you'll see the requests you've sent and received";
+		String descriptionChat = "When you accept someone's request, or someone else does yours, he/she will show up here";
+		String descriptionDone = "You're all set!";
 
 		// Instead of fragments, you can also use our default slide
-		// Just set a title, description, background and image. AppIntro will do the rest.
-		addSlide(AppIntroFragment.newInstance("Home Screen", descriptionHome, imageResourceHome,Color.parseColor(colorString) ));
-		addSlide(AppIntroFragment.newInstance("Requests Screen", descriptionRequests, imageResourceRequests,Color.parseColor(colorString) ));
-		addSlide(AppIntroFragment.newInstance("Chat Screen", descriptionChat, imageResourceChat,Color.parseColor(colorString) ));
+		// Just set a titleString, description, background and image. AppIntro will do the rest.
+		addSlide(AppIntroFragment.newInstance("Welcome!", descriptionWelcome, imageResourceWelcome,Color.parseColor(colorString) ));
+		addSlide(AppIntroFragment.newInstance("Home", descriptionHome, imageResourceHome,Color.parseColor(colorString) ));
+		addSlide(AppIntroFragment.newInstance("New Entry", descriptionNewEntry, imageResourceNewEntry,Color.parseColor(colorString) ));
+		addSlide(AppIntroFragment.newInstance("Requests", descriptionRequests, imageResourceRequests,Color.parseColor(colorString)));
+		addSlide(AppIntroFragment.newInstance("Chat", descriptionChat, imageResourceChat,Color.parseColor(colorString) ));
+		addSlide(AppIntroFragment.newInstance("Done!", descriptionDone, imageResourceWelcome,Color.parseColor(colorString) ));
 	}
 
 	@Override

@@ -115,7 +115,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
             boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
 
             //  If the activity has never started before...
-            if (isFirstStart) {
+            if (true) {
 
                 //  Launch app intro
                 final Intent i = new Intent(LoginActivity.this, IntroActivity.class);

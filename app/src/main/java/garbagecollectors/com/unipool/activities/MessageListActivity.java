@@ -45,6 +45,7 @@ public class MessageListActivity extends AppCompatActivity
 	private static PairUp pairUp;
 
 	private ArrayList<String> messagesOnScreen;  //list of messageIds displayed
+	private static String name;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -57,15 +58,10 @@ public class MessageListActivity extends AppCompatActivity
 		messageArea = findViewById(R.id.message_edit_text);
 		scrollView = findViewById(R.id.scrollView);
 
-		setTitle(chatUser.getName());
 		personalMessageMap = new TreeMap<>();
 
 		messagesOnScreen = new ArrayList<>();
 
-        /*for(Map.Entry<Long, Message> entry: personalMessageMap.entrySet())
-		{
-			showMessage(entry.getValue());
-		}*/
 		setScrollViewToBottom();
 
 		DatabaseReference userMessageDatabaseReference = FirebaseDatabase.getInstance().
@@ -157,10 +153,18 @@ public class MessageListActivity extends AppCompatActivity
 	}
 
 	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		setTitle(chatUser.getName());
+		setName(chatUser.getName());
+	}
+
+	@Override
 	public void onBackPressed()
 	{
 		super.onBackPressed();
-		chatUser.setName("asdsafasde");
+		setName("asdsafasde");
 	}
 
 	private void setScrollViewToBottom()
@@ -226,6 +230,8 @@ public class MessageListActivity extends AppCompatActivity
 		setScrollViewToBottom();
 	}
 
+
+
 	public static void setPairUp(PairUp pairUp)
 	{
 		MessageListActivity.pairUp = pairUp;
@@ -234,6 +240,16 @@ public class MessageListActivity extends AppCompatActivity
 	public static void setChatUser(User chatUser)
 	{
 		MessageListActivity.chatUser = chatUser;
+	}
+
+	public static String getName()
+	{
+		return name;
+	}
+
+	public static void setName(String name)
+	{
+		MessageListActivity.name = name;
 	}
 
 	public static TreeMap<Long, Message> getPersonalMessageMap()
