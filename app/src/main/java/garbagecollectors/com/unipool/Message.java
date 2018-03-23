@@ -51,4 +51,14 @@ public class Message
     {
         return receiverId;
     }
+
+    public Long getCreatedAtTime()
+    {
+        return createdAtTime;
+    }
+
+    public void setCreatedAtTime(Long createdAtTime)
+    {
+        this.createdAtTime = createdAtTime;
+    }
 }

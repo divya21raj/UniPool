@@ -4,6 +4,7 @@ package garbagecollectors.com.unipool.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,6 @@ import garbagecollectors.com.unipool.TripEntry;
 import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.BaseActivity;
-import garbagecollectors.com.unipool.activities.RequestActivity.ChatFragment;
 import garbagecollectors.com.unipool.activities.RequestActivity.ReceivedRequestsFragment;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
 
@@ -38,14 +38,8 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
     private List<TripEntry> list;
     private Context context;
     private boolean isAlreadyInList = false;
-    private boolean requestSent = false;
 
     private ProgressDialog requestsProgressDialog;
-
-    public ReceivedRequestsTEA(Context context)
-    {
-        super(context);
-    }
 
     public ReceivedRequestsTEA(List<TripEntry> list, Context context)
     {
@@ -65,7 +59,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MyHolder holder, int position)
+    public void onBindViewHolder(@NonNull MyHolder holder, int position)
     {
         requestsProgressDialog = new ProgressDialog(context);
         requestsProgressDialog.setMessage("Please wait...");
@@ -73,7 +67,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
         MessageDBTask.addOnCompleteListener(o -> requestsProgressDialog.dismiss());
 
-        holder.itemView.setOnClickListener(view ->
+        holder.requestButton.setOnClickListener(view ->
         {
             DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
             DatabaseReference pairUpDatabaseReference = BaseActivity.getPairUpDatabaseReference();
@@ -83,7 +77,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
             User finalCurrentUser = BaseActivity.getFinalCurrentUser();
 
-            ArrayList<PairUp> currentUserPairUps = finalCurrentUser.getPairUps();
+            HashMap<String, PairUp> currentUserPairUps = finalCurrentUser.getPairUps();
 
             HashMap<String, ArrayList<String>> finalCurrentUserReceivedRequests = finalCurrentUser.getRequestsReceived();
 
@@ -100,29 +94,37 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
                     tripEntryUser[0] = snapshot.getValue(User.class);
 
-                    ArrayList<PairUp> tripEntryUserPairUps = tripEntryUser[0].getPairUps();
-                    ArrayList<TripEntry> tripEntryUserSentRequests = tripEntryUser[0].getRequestSent();
+                    HashMap<String, PairUp> tripEntryUserPairUps = null;
+                    if (tripEntryUser[0] != null)
+                        tripEntryUserPairUps = tripEntryUser[0].getPairUps();
+                    else
+                        Toast.makeText(context, "Problems! Please try again...", Toast.LENGTH_LONG);
+
+                    HashMap<String, TripEntry> tripEntryUserSentRequests = tripEntryUser[0].getRequestSent();
 
                     String pairUpId = finalCurrentUser.getUserId() + tripEntryUser[0].getUserId();
 
-                    PairUp pairUp = new PairUp(pairUpId, finalCurrentUser.getUserId(), tripEntryUser[0].getUserId(), new ArrayList<>());
+                    String[] timeParts = tripEntry.getTime().split(":");
+                    String expiryDate = tripEntry.getDate() + "/" + timeParts[0] + "/" + timeParts[1];
+
+                    PairUp pairUp = new PairUp(pairUpId, finalCurrentUser.getUserId(), tripEntryUser[0].getUserId(), expiryDate, new ArrayList<>());
                     pairUp.getMessages().add("def@ult");
 
-                    isAlreadyInList = UtilityMethods.addPairUpInList(currentUserPairUps, pairUp);
+                    isAlreadyInList = UtilityMethods.addPairUpInMap(currentUserPairUps, pairUp);
 
                     if(!isAlreadyInList)
                     {
-                        UtilityMethods.addPairUpInList(tripEntryUserPairUps, pairUp);
+                        UtilityMethods.addPairUpInMap(tripEntryUserPairUps, pairUp);
 
                         UtilityMethods.removeFromMap(finalCurrentUserReceivedRequests, tripEntry.getEntry_id(), tripEntryUser[0].getUserId());
-                        UtilityMethods.removeFromList(tripEntryUserSentRequests, tripEntry.getEntry_id());
+                        if (tripEntryUserPairUps != null)
+                        {
+                            tripEntryUserPairUps.remove(tripEntry.getEntry_id());
+                        }
 
                         finalCurrentUser.setRequestsReceived(finalCurrentUserReceivedRequests);
                         finalCurrentUser.setPairUps(currentUserPairUps);
                         BaseActivity.setFinalCurrentUser(finalCurrentUser);
-
-                        BaseActivity.getChatList().add(tripEntryUser[0]);
-                        ChatFragment.recycleAdapter.notifyDataSetChanged();
 
                         HashMap<String, String> notificationObject = new HashMap<>();
                         notificationObject.put("from", finalCurrentUser.getUserId());
@@ -141,6 +143,10 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                         Task<Void> allTask = Tasks.whenAll(task1, task2, task3, task4, task5, task6);
                         allTask.addOnSuccessListener(bVoid ->
                         {
+                            tripEntry.setEntry_id("dummyId");
+                            userDatabaseReference.child((tripEntryUser[0]).getUserId()).child("requestSent").child("dummyId").setValue(tripEntry);
+
+                            BaseActivity.getChatMap().put(tripEntryUser[0].getUserId(), tripEntryUser[0]);
                             requestsProgressDialog.dismiss();
                             RequestActivity.refreshRequests(context);
                         });

@@ -6,5 +6,13 @@
     <string name="title_requests">Requests</string>
     <string name="placeholder">placeholder</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="divya_raj">Divya Raj</string>
+    <string name="abhishek_srivastava">Abhishek Srivastava</string>
+    <string name="simran_srivastava">Simran Srivastava</string>
+    <string name="rohan_datta">Rohan Datta</string>
+    <string name="atishay_jain">Atishay Jain</string>
+    <string name="saurabh_gangadharan">Saurabh Gangadharan</string>
+    <string name="Three_Dots">⋮</string>
+    <string name="currentLoc">Getting your current location...</string>
+
 </resources>

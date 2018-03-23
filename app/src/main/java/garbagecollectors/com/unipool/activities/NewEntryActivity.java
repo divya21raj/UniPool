@@ -10,11 +10,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
@@ -53,7 +50,6 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
 
     GenLocation source, destination;
     String time, sourceSet, destinationSet;
-    String AM_PM;
 
     EditText findSource, findDestination, setTime, setDate;
     Button buttonFinalSave;
@@ -75,15 +71,15 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
         {
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.new_entry_layout);
+        drawerLayout = findViewById(R.id.new_entry_layout);
 
         navDrawerStateListener();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_drawer);
+        navigationView = findViewById(R.id.nav_drawer);
         navigationView.setNavigationItemSelectedListener(menuItem ->
         {
             dealWithSelectedMenuItem(menuItem);
@@ -92,7 +88,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
             return true;
         });
 
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         source = null;
@@ -100,10 +96,10 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
 
         time = "";
 
-        findSource = (EditText) findViewById(R.id.findSourceEditText);
-        findDestination = (EditText) findViewById(R.id.findDestinationEditText);
-        setTime = (EditText) findViewById(R.id.setTimeEditText);
-        setDate = (EditText) findViewById(R.id.setDateEditText);
+        findSource = findViewById(R.id.findSourceEditText);
+        findDestination = findViewById(R.id.findDestinationEditText);
+        setTime = findViewById(R.id.setTimeEditText);
+        setDate = findViewById(R.id.setDateEditText);
 
         setTime.setOnClickListener(view -> openTimePickerDialog(false));
 
@@ -113,7 +109,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
             newFragment.show(getFragmentManager(), "Date Picker");
         });
 
-        buttonFinalSave = (Button) findViewById(R.id.finalSave);
+        buttonFinalSave = findViewById(R.id.finalSave);
         buttonFinalSave.setOnClickListener(v ->
         {
             try
@@ -133,6 +129,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+
     }
 
     @Override
@@ -186,12 +183,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 minOfDay = "0" + minOfDay;
             }
 
-            if (hourOfDay < 12)
-                AM_PM = "AM";
-            else
-                AM_PM = "PM";
-
-            time = HourOfDay + ":" + minOfDay + " " + AM_PM;
+            time = HourOfDay + ":" + minOfDay;
 
             setTime.setText(time);
         }
@@ -255,6 +247,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         } else if (resultCode == RESULT_CANCELED)
         {
             // The user canceled the operation.
+            //Toast.makeText(getApplicationContext(), "Cancelled...", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -278,11 +271,12 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
             case 0:
                 String entryId = entryDatabaseReference.push().getKey();
                 String name = currentUser.getDisplayName();
+                System.currentTimeMillis();
 
                 TripEntry tripEntry = new TripEntry(name, entryId, currentUser.getUid(),
                                                         time, date, source, destination, null);
 
-                finalCurrentUser.getUserTripEntries().add(tripEntry);
+                finalCurrentUser.getUserTripEntries().put(tripEntry.getEntry_id(), tripEntry);
 
                 entryDatabaseReference.child(entryId).setValue(tripEntry);
 
@@ -300,14 +294,17 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 break;
 
             case 2:
-                Toast.makeText(this, "The devs are still working on time travel...",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "The developers are still working on time travel...",
+                        Toast.LENGTH_LONG).show();
                 break;
 
             case 3:
                 Toast.makeText(this, "Fill in all the details!", Toast.LENGTH_SHORT).show();
                 break;
 
+            case 4:
+                Toast.makeText(this, "Planning way too ahead of time, eh?", Toast.LENGTH_LONG).show();
+                break;
         }
     }
 
@@ -319,8 +316,13 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         Date currentTime = new Date();
         Date inputTime = null;
 
+        int diffInDays = 0;
+
         if (date != null)
+        {
             inputTime = parser.parse(date + "." + time);
+            diffInDays = (int) ((inputTime.getTime() - currentTime.getTime()) / (1000 * 60 * 60 * 24));
+        }
 
         if ((time.isEmpty() || source == null || destination == null ||
                 findSource.getText().toString().isEmpty()|| findDestination.getText().toString().isEmpty()))
@@ -335,6 +337,9 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
 
         else if (inputTime.before(currentTime))
             flag = 2;
+
+        else if(diffInDays > 21)
+            flag = 4;
 
         return flag;
     }
@@ -355,6 +360,12 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
     {
         currentLocationView = view;
 
+        if(currentLocationView.getTag().equals("gct_source"))
+            findSource.setText(R.string.currentLoc);
+
+        else if(currentLocationView.getTag().equals("gct_destination"))
+            findDestination.setText(R.string.currentLoc);
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED)
@@ -367,6 +378,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
+                Toast.makeText(this, "The app doesn't have permission to access your location", Toast.LENGTH_LONG).show();
             }
             else
             {
@@ -439,11 +451,12 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                     }
                     else
                     {
+                        Toast.makeText(getApplicationContext(), "You have to accept that to get current location",
+                                                Toast.LENGTH_SHORT).show();
                         // permission denied, boo! Disable the
                         // functionality that depends on this permission.
                     }
 
-                    return;
                 }
 
             // other 'case' lines to check for other

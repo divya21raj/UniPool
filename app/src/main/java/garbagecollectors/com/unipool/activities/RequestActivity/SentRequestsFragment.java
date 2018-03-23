@@ -10,11 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.TripEntry;
 import garbagecollectors.com.unipool.User;
-import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.adapters.SentRequestsTEA;
 
 public class SentRequestsFragment extends Fragment
@@ -23,7 +24,7 @@ public class SentRequestsFragment extends Fragment
     static SentRequestsTEA recyclerAdapter;
 
     static User finalCurrentUser;
-    static ArrayList<TripEntry> sentRequests;
+    static HashMap<String, TripEntry> sentRequests;
 
     public SentRequestsFragment()
     {  }
@@ -46,13 +47,18 @@ public class SentRequestsFragment extends Fragment
 
         sentRequests = finalCurrentUser.getRequestSent();
 
-        recycle = (RecyclerView) view.findViewById(R.id.recycle_requests);
+        recycle = view.findViewById(R.id.recycle_requests);
 
         if(sentRequests.size() >= 1)
         {
-            sentRequests = UtilityMethods.removeFromList(sentRequests, "0");
+            ArrayList<TripEntry> sentRequestsList = new ArrayList<>();
+            for(Map.Entry<String, TripEntry> entry: sentRequests.entrySet())
+            {
+                if(!entry.getKey().equals("dummyId"))
+                    sentRequestsList.add(entry.getValue());
+            }
 
-            recyclerAdapter = new SentRequestsTEA(sentRequests,getContext());
+            recyclerAdapter = new SentRequestsTEA(sentRequestsList,getContext());
 
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
 
@@ -67,13 +73,21 @@ public class SentRequestsFragment extends Fragment
 
     public static void refreshRecycler()
     {
-        finalCurrentUser = RequestActivity.getFinalCurrentUser();
+        try
+        {
+            finalCurrentUser = RequestActivity.getFinalCurrentUser();
 
-        sentRequests = finalCurrentUser.getRequestSent();
+            sentRequests = finalCurrentUser.getRequestSent();
 
-        sentRequests = UtilityMethods.removeFromList(sentRequests, "0");
+            ArrayList<TripEntry> sentRequestsList = new ArrayList<>();
+            for(Map.Entry<String, TripEntry> entry: sentRequests.entrySet())
+            {
+                if(!entry.getKey().equals("dummyId"))
+                    sentRequestsList.add(entry.getValue());
+            }
 
-        if(recyclerAdapter != null)
             recyclerAdapter.notifyDataSetChanged();
+
+        }catch (NullPointerException ignored){}
     }
 }

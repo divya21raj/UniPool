@@ -3,8 +3,10 @@ package garbagecollectors.com.unipool.activities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -32,6 +34,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import garbagecollectors.com.unipool.AppStatus;
 import garbagecollectors.com.unipool.GenLocation;
 import garbagecollectors.com.unipool.Message;
 import garbagecollectors.com.unipool.PairUp;
@@ -55,6 +58,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
     protected static DatabaseReference userDatabaseReference;
     protected static DatabaseReference messageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages");
 
+    private static DatabaseReference expiryDatabaseReference = FirebaseDatabase.getInstance().getReference("deleteExpired");
+
+
     Message defaultMessage = BaseActivity.getDefaultMessage();
 
     private ProgressDialog progressDialog;
@@ -66,9 +72,13 @@ public class LoginActivity extends Activity implements View.OnClickListener
     TaskCompletionSource<DataSnapshot> userDBSource = new TaskCompletionSource();
     Task userDBTask = userDBSource.getTask();
 
+    AppStatus appStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        startIntro();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -85,9 +95,46 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         progressDialog = new ProgressDialog(this);
 
-        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
+
+        appStatus = new AppStatus(this);
+    }
+
+    private void startIntro()
+    {
+        //  Declare a new thread to do a preference check
+        Thread t = new Thread(() ->
+        {
+            //  Initialize SharedPreferences
+            SharedPreferences getPrefs = PreferenceManager
+                    .getDefaultSharedPreferences(getBaseContext());
+
+            //  Create a new boolean and preference and set it to true
+            boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+
+            //  If the activity has never started before...
+            if (isFirstStart) {
+
+                //  Launch app intro
+                final Intent i = new Intent(LoginActivity.this, IntroActivity.class);
+
+                runOnUiThread(() -> startActivity(i));
+
+                //  Make a new preferences editor
+                SharedPreferences.Editor e = getPrefs.edit();
+
+                //  Edit preference to make it false because we don't want this to run again
+                e.putBoolean("firstStart", false);
+
+                //  Apply changes
+                e.apply();
+            }
+        });
+
+        // Start the thread
+        t.start();
     }
 
     @Override
@@ -113,7 +160,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void signIn()
     {
-        progressDialog.setMessage("Please Wait!");
+        progressDialog.setMessage("Please wait...");
         progressDialog.show();
 
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -149,6 +196,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            Toast.makeText(getApplicationContext(), "Ok", Toast.LENGTH_SHORT).show();
             updateUI(null);
         }
     }
@@ -175,6 +223,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
                         } catch (ParseException e)
                         {
                             e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
                         }
                     }
                     else
@@ -186,7 +235,6 @@ public class LoginActivity extends Activity implements View.OnClickListener
                         updateUI(null);
                     }
 
-                    // ...
                 });
     }
 
@@ -208,7 +256,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
             public void onCancelled(DatabaseError databaseError)
             {
                 userDBSource.setException(databaseError.toException());
-                Toast.makeText(getApplicationContext(), "Couldn't make it!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Couldn't make it, try again...", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -222,16 +270,17 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
                 userDatabaseReference.setValue(finalCurrentUser);
 
-                messageDatabaseReference.child(finalCurrentUser.getUserId()).child(defaultMessage.getMessageId()).setValue(defaultMessage);
+                messageDatabaseReference.child(finalCurrentUser.getUserId()).child(defaultMessage.getMessageId()).
+                                                                            setValue(defaultMessage);
 
-                Toast.makeText(getApplicationContext(), "User added to database!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "User added to database!", Toast.LENGTH_SHORT).show();
 
                 updateUI(user);
             }
 
             else
             {
-                Toast.makeText(getApplicationContext(), "User already there, no need to add!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "User already there, no need to add!", Toast.LENGTH_SHORT).show();
                 userNewOnDatabase = false;
 
                 updateUI(user);
@@ -247,13 +296,14 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         GenLocation dummyGenLocation = new GenLocation("dummy", "dummy", 0d, 0d);
 
-        TripEntry dummyTripEntry = new TripEntry("dummy", "0", "DummyUser", "12:00", "1/11/12", dummyGenLocation, dummyGenLocation, dummyLambdaMap);
+        TripEntry dummyTripEntry = new TripEntry("dummy", "dummyId", "DummyUser", "12:00",
+                                                    "1/11/12", dummyGenLocation, dummyGenLocation, dummyLambdaMap);
 
-        ArrayList<TripEntry> dummyUserEntries = new ArrayList<>();
-        dummyUserEntries.add(dummyTripEntry);
+        HashMap<String, TripEntry> dummyUserEntries = new HashMap<>();
+        dummyUserEntries.put("dummy", dummyTripEntry);
 
-        ArrayList<TripEntry> dummyRequestSent = new ArrayList<>();
-        dummyRequestSent.add(dummyTripEntry);
+        HashMap<String, TripEntry> dummyRequestSent = new HashMap<>();
+        dummyRequestSent.put(dummyTripEntry.getEntry_id(), dummyTripEntry);
 
         ArrayList<String> dummyUserIdList = new ArrayList<>();
         dummyUserIdList.add("dummy");
@@ -261,13 +311,14 @@ public class LoginActivity extends Activity implements View.OnClickListener
         HashMap<String, ArrayList<String>> dummyRequestReceived = new HashMap<>();
         dummyRequestReceived.put("dummy", dummyUserIdList);
 
-        Message dummyMessage = new Message("dummy", "", "", "dummy", "dummy", 1L);
+        Message dummyMessage = new Message("dummy", "", "", "dummy",
+                                                    "dummy", 1L);
         ArrayList<Message> dummyMessages = new ArrayList<>();
         dummyMessages.add(dummyMessage);
 
-        PairUp dummyPairUp = new PairUp("dummydummy", "dummy", "dummy", dummyUserIdList);
-        ArrayList<PairUp> dummyPairUps = new ArrayList<>();
-        dummyPairUps.add(dummyPairUp);
+        PairUp dummyPairUp = new PairUp("dummydummy", "dummy", "dummy", "dummy", dummyUserIdList);
+        HashMap<String, PairUp> dummyPairUps = new HashMap<>();
+        dummyPairUps.put("dummy", dummyPairUp);
 
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
@@ -277,7 +328,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
             url = photoUrl.toString();
 
         finalCurrentUser = new User(user.getUid(), user.getDisplayName(), url,
-                                    dummyUserEntries, dummyRequestSent, dummyRequestReceived, deviceToken, dummyPairUps);
+                                    dummyUserEntries, dummyRequestSent, dummyRequestReceived, deviceToken, true, dummyPairUps);
     }
 
     private void updateUI(FirebaseUser currentUser)
@@ -286,8 +337,17 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         if(currentUser != null)
         {
+            String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+            userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
+
+            userDatabaseReference.child("deviceToken").setValue(deviceToken);
+
+            expiryDatabaseReference.child(currentUser.getUid()).setValue(true);
+
             finish();
             startActivity(new Intent(getApplicationContext(), SplashActivity.class));
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
     }
 }

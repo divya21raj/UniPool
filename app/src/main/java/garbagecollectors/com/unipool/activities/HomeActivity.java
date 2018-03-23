@@ -1,13 +1,16 @@
 package garbagecollectors.com.unipool.activities;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.adapters.HomeActivityTEA;
@@ -23,18 +26,20 @@ public class HomeActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        final ActionBar actionBar = getSupportActionBar();
+	    handleIntent(getIntent());
+
+	    final ActionBar actionBar = getSupportActionBar();
         if(actionBar != null)
         {
-        	actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_24dp);
+        	actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
         	actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-	    drawerLayout = (DrawerLayout) findViewById(R.id.home_layout);
+	    drawerLayout = findViewById(R.id.home_layout);
 
         navDrawerStateListener();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_drawer);
+        navigationView = findViewById(R.id.nav_drawer);
 	    navigationView.setNavigationItemSelectedListener(menuItem ->
 	    {
 		    dealWithSelectedMenuItem(menuItem);
@@ -43,10 +48,10 @@ public class HomeActivity extends BaseActivity
 		    return true;
 	    });
 
-	    bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+	    bottomNavigationView = findViewById(R.id.bottom_navigation);
 	    bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-	    recycle = (RecyclerView) findViewById(R.id.recycle);
+	    recycle = findViewById(R.id.recycle);
 
 	    recyclerAdapter = new HomeActivityTEA(tripEntryList,HomeActivity.this);
 	    RecyclerView.LayoutManager layoutManager = new GridLayoutManager(HomeActivity.this,1);
@@ -56,6 +61,60 @@ public class HomeActivity extends BaseActivity
 	    recycle.setAdapter(recyclerAdapter);
 
     }
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.options_menu, menu);
+
+		// Associate searchable configuration with the SearchView
+		SearchManager searchManager =
+				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		SearchView searchView =
+				(SearchView) menu.findItem(R.id.search).getActionView();
+
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+		{
+			@Override
+			public boolean onQueryTextSubmit(String query)
+			{
+				recyclerAdapter.filter(query);
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText)
+			{
+				recyclerAdapter.filter(newText);
+				return true;
+			}
+		});
+
+		if (searchManager != null)
+		{
+			searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		}
+
+		return true;
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent)
+	{
+		handleIntent(intent);
+	}
+
+	private void handleIntent(Intent intent)
+	{
+
+		if (Intent.ACTION_SEARCH.equals(intent.getAction()))
+		{
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			//use the query to search your data somehow
+			recyclerAdapter.filter(query);
+		}
+	}
 
 	@Override
     protected int getNavigationMenuItemId()

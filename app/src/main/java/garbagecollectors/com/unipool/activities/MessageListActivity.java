@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -19,7 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.TreeMap;
 
 import garbagecollectors.com.unipool.Message;
 import garbagecollectors.com.unipool.PairUp;
@@ -37,7 +38,7 @@ public class MessageListActivity extends AppCompatActivity
 	EditText messageArea;
 	ScrollView scrollView;
 
-	private static List<Message> personalMessageList;
+	private static TreeMap<Long, Message> personalMessageMap;   //key = CreatedItTime
 	private static User chatUser;
 
 	private static PairUp pairUp;
@@ -48,20 +49,22 @@ public class MessageListActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_message_list);
 
-		messagesLayout = (LinearLayout) findViewById(R.id.layout1);
-		sendButton = (ImageView)findViewById(R.id.sendButton);
-		messageArea = (EditText)findViewById(R.id.message_edit_text);
-		scrollView = (ScrollView)findViewById(R.id.scrollView);
+		messagesLayout = findViewById(R.id.layout1);
+		sendButton = findViewById(R.id.sendButton);
+		messageArea = findViewById(R.id.message_edit_text);
+		scrollView = findViewById(R.id.scrollView);
 
 		setTitle(chatUser.getName());
+		personalMessageMap = new TreeMap<>();
 
-		for(Message message: personalMessageList)
-			showMessage(message);
-
+/*		for(Map.Entry<Long, Message> entry: personalMessageMap.entrySet())
+		{
+			showMessage(entry.getValue());
+		}*/
 		setScrollViewToBottom();
 
 		DatabaseReference userMessageDatabaseReference = FirebaseDatabase.getInstance().
-								getReference("messages/" + BaseActivity.getFinalCurrentUser().getUserId());
+				getReference("messages/" + BaseActivity.getFinalCurrentUser().getUserId());
 
 		userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
 		{
@@ -70,39 +73,46 @@ public class MessageListActivity extends AppCompatActivity
 			{
 				Message message = dataSnapshot.getValue(Message.class);
 
-				//Toast.makeText(getApplicationContext(), "Got it in ML activity", Toast.LENGTH_SHORT).show();
-
-				if(message != null)
+				if (message != null)
 				{
+					messageArea.setHint("Fetching messages....");
 					UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);
 
-					//Toast.makeText(getApplicationContext(), "Is receiver", Toast.LENGTH_SHORT).show();
-					if (!message.getMessageId().equals("def@ult"))
+					if (!message.getMessageId().equals("def@ult") && (message.getSenderId().equals(chatUser.getUserId())
+							|| message.getReceiverId().equals(chatUser.getUserId())))
 					{
-						UtilityMethods.putMessageInList(message, personalMessageList);
-						showMessage(message);
+						if(!personalMessageMap.containsKey(message.getCreatedAtTime()))
+						{
+							personalMessageMap.put(message.getCreatedAtTime(), message);
+							showMessage(message);
+						}
 					}
 				}
 
+				messageArea.setHint("Write a message...");
 			}
 
-		@Override
-		public void onChildChanged(DataSnapshot dataSnapshot, String s)
-		{}
+			@Override
+			public void onChildChanged(DataSnapshot dataSnapshot, String s)
+			{
+			}
 
 			@Override
 			public void onChildRemoved(DataSnapshot dataSnapshot)
-			{}
+			{
+			}
 
 			@Override
 			public void onChildMoved(DataSnapshot dataSnapshot, String s)
-			{}
+			{
+			}
 
 			@Override
 			public void onCancelled(DatabaseError databaseError)
 			{
 				// Failed to read value
 				Log.w("Hello", "Failed to read value.", databaseError.toException());
+				Toast.makeText(getApplicationContext(), "Network Issues! Try again...", Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -110,7 +120,7 @@ public class MessageListActivity extends AppCompatActivity
 		{
 			String typedMessage = messageArea.getText().toString();
 
-			if(!typedMessage.isEmpty())
+			if (!typedMessage.isEmpty())
 			{
 				Message message = new Message("", pairUp.getPairUpId(), typedMessage,
 						BaseActivity.getFinalCurrentUser().getUserId(), chatUser.getUserId(), UtilityMethods.getCurrentTime());
@@ -126,6 +136,8 @@ public class MessageListActivity extends AppCompatActivity
 				notificationDatabaseReference.child(chatUser.getUserId()).push().setValue(notificationObject);
 
 				messageArea.setText("");
+				personalMessageMap.put(message.getCreatedAtTime(), message);
+				showMessage(message);
 			}
 		});
 
@@ -138,6 +150,7 @@ public class MessageListActivity extends AppCompatActivity
 			if (heightDiff > UtilityMethods.dpToPx(MessageListActivity.this, 200))
 				setScrollViewToBottom();
 		});
+
 	}
 
 	private void setScrollViewToBottom()
@@ -155,18 +168,22 @@ public class MessageListActivity extends AppCompatActivity
 	{
 		if(message.getSenderId().equals(BaseActivity.getFinalCurrentUser().getUserId()))
 		{
-			addMessageBox(message.getMessage(), 1);
+			addMessageBox(message.getMessage(), message.getCreatedAtTime(), 1);
 		}
 		else if(message.getSenderId().equals(chatUser.getUserId()))
 		{
-			addMessageBox(message.getMessage(), 2);
+			addMessageBox(message.getMessage(), message.getCreatedAtTime(), 2);
 		}
 	}
 
-	public void addMessageBox(String message, int type)
+	public void addMessageBox(String message, Long createdAtTime, int type)
 	{
-		TextView textView = new TextView(MessageListActivity.this);
-		textView.setText(message);
+		TextView messageView = new TextView(MessageListActivity.this);
+		messageView.setText(message);
+
+		TextView timeView = new TextView(MessageListActivity.this);
+		timeView.setTextSize(10);
+		timeView.setText(UtilityMethods.formatDateTime(createdAtTime));
 
 		LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
 																		ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -175,16 +192,23 @@ public class MessageListActivity extends AppCompatActivity
 		if(type == 1)
 		{
 			lp2.gravity = Gravity.RIGHT;
-			textView.setBackgroundResource(R.drawable.bubble_in);
+			messageView.setBackgroundResource(R.drawable.bubble_in);
+			timeView.setTextColor(getResources().getColor(R.color.colorPrimary));
+			timeView.setPadding(0,0, 5, 0);
 		}
 		else
 		{
 			lp2.gravity = Gravity.LEFT;
-			textView.setBackgroundResource(R.drawable.bubble_out);
+			timeView.setPadding(5,0, 0, 0);
+			timeView.setTextColor(getResources().getColor(R.color.orange));
+			messageView.setBackgroundResource(R.drawable.bubble_out);
 		}
 
-		textView.setLayoutParams(lp2);
-		messagesLayout.addView(textView);
+		messageView.setLayoutParams(lp2);
+		timeView.setLayoutParams(lp2);
+
+		messagesLayout.addView(messageView);
+		messagesLayout.addView(timeView);
 
 		//scrollView.fullScroll(View.FOCUS_DOWN);
 		setScrollViewToBottom();
@@ -200,14 +224,14 @@ public class MessageListActivity extends AppCompatActivity
 		MessageListActivity.chatUser = chatUser;
 	}
 
-	public static void setPersonalMessageList(List<Message> personalMessageList)
+	public static TreeMap<Long, Message> getPersonalMessageMap()
 	{
-		MessageListActivity.personalMessageList = personalMessageList;
+		return personalMessageMap;
 	}
 
-	public static List<Message> getPersonalMessageList()
+	public static void setPersonalMessageMap(TreeMap<Long, Message> personalMessageMap)
 	{
-		return personalMessageList;
+		MessageListActivity.personalMessageMap = personalMessageMap;
 	}
 
 	public static User getChatUser()
@@ -220,8 +244,4 @@ public class MessageListActivity extends AppCompatActivity
 		return pairUp;
 	}
 
-	public static void refresh()
-	{
-
-	}
 }

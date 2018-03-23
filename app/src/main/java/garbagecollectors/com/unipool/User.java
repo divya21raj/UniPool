@@ -9,18 +9,20 @@ public class User
     private String name;
     private String photoUrl;
 
-    private ArrayList<TripEntry> userTripEntries =new ArrayList<>();
+    private HashMap<String, TripEntry> userTripEntries =new HashMap<>();
 
-    private ArrayList<TripEntry> requestSent;
+    private HashMap<String, TripEntry> requestSent;  //key = tripEntryId
     private HashMap<String, ArrayList<String>> requestsReceived;
     //Key is the entryId of entry requested, Value is list of userIDs who've requested that entry
     //We have Map because we're taking TripEntry object of the entry that we have made (that the other person has clicked on)
 
     private String deviceToken;
 
-    private ArrayList<PairUp> pairUps;
+    private boolean isOnline;
 
-    public User(String userId, String name, String photoUrl, ArrayList<TripEntry> userTripEntries, ArrayList<TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, ArrayList<PairUp> pairUps)
+    private HashMap<String, PairUp> pairUps;
+
+    public User(String userId, String name, String photoUrl, HashMap<String, TripEntry> userTripEntries, HashMap<String, TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, boolean isOnline, HashMap<String, PairUp> pairUps)
     {
         this.userId = userId;
         this.name = name;
@@ -29,6 +31,7 @@ public class User
         this.requestSent = requestSent;
         this.requestsReceived = requestsReceived;
         this.deviceToken = deviceToken;
+        this.isOnline = isOnline;
         this.pairUps = pairUps;
     }
 
@@ -50,12 +53,12 @@ public class User
         this.name = name;
     }
 
-    public ArrayList<TripEntry> getRequestSent()
+    public HashMap<String, TripEntry> getRequestSent()
     {
         return requestSent;
     }
 
-    public void setRequestSent(ArrayList<TripEntry> requestSent)
+    public void setRequestSent(HashMap<String, TripEntry> requestSent)
     {
         this.requestSent = requestSent;
     }
@@ -70,17 +73,17 @@ public class User
         this.requestsReceived = requestsReceived;
     }
 
-    public ArrayList<TripEntry> getUserTripEntries()
+    public HashMap<String, TripEntry> getUserTripEntries()
     {
         return userTripEntries;
     }
 
-    public ArrayList<PairUp> getPairUps()
+    public HashMap<String, PairUp> getPairUps()
     {
         return pairUps;
     }
 
-    public void setPairUps(ArrayList<PairUp> pairUps)
+    public void setPairUps(HashMap<String, PairUp> pairUps)
     {
         this.pairUps = pairUps;
     }
@@ -103,5 +106,15 @@ public class User
     public void setPhotoUrl(String photoUrl)
     {
         this.photoUrl = photoUrl;
+    }
+
+    public boolean isOnline()
+    {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online)
+    {
+        isOnline = online;
     }
 }

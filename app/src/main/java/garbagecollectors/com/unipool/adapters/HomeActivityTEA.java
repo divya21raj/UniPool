@@ -4,16 +4,20 @@ package garbagecollectors.com.unipool.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,29 +36,27 @@ import static garbagecollectors.com.unipool.UtilityMethods.putInMap;
 public class HomeActivityTEA extends TripEntryAdapter
 {
     private List<TripEntry> list;
-    private List<TripEntry> listCopy;
+    private List<TripEntry> listCopy = new ArrayList<>();
     private Context context;
 
     private boolean isRequestAlreadyInMap;
     private Boolean isAlreadyRequested;
 
-    ProgressDialog progressDialog;
+    private AlertDialog.Builder alertDialogBuilder;
 
-    public HomeActivityTEA(Context context)
-    {
-        super(context);
-    }
+    private ProgressDialog progressDialog;
 
     public HomeActivityTEA(List<TripEntry> list, Context context)
     {
         this.list = list;
         this.context = context;
+        listCopy.addAll(list);
+
+        alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setTitle("Confirm");
+        alertDialogBuilder.setMessage("Send request?");
     }
 
-    public HomeActivityTEA()
-    {
-        listCopy.addAll(list);
-    }
     // Create new views (invoked by the layout manager)
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType)
@@ -71,7 +73,112 @@ public class HomeActivityTEA extends TripEntryAdapter
     {
         UtilityMethods.fillTripEntryHolder(holder, list.get(position));
 
-        holder.itemView.setOnClickListener(view ->
+        holder.requestButton.setOnClickListener(view ->
+                sendRequest(view, position));
+
+        holder.itemView.setOnLongClickListener(v ->
+        {
+            if(list.get(position).getUser_id().equals(BaseActivity.getFinalCurrentUser().getUserId()))
+            {
+                deleteEntry(v, position);
+            }
+
+            else
+                sendRequest(v, position);
+
+            return true;
+        });
+
+
+    }
+
+    private void deleteEntry(View view, int position)
+    {
+        final Integer[] i = {0};
+
+        TaskCompletionSource<DataSnapshot> userDBSource = new TaskCompletionSource<>();
+        Task userDBTask = userDBSource.getTask();
+
+        alertDialogBuilder.setMessage("Delete this entry?");
+
+        alertDialogBuilder.setPositiveButton("YES", (dialog, which) ->
+        {
+            progressDialog = new ProgressDialog(view.getContext());
+            progressDialog.setMessage("Please wait...");
+            progressDialog.show();
+
+            TripEntry tripEntry = list.get(position);
+
+            DatabaseReference entryDatabaseReference = BaseActivity.getEntryDatabaseReference();
+            DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
+
+            Task<Void> task1 = entryDatabaseReference.child(tripEntry.getEntry_id()).removeValue();
+
+            userDatabaseReference.child("userTripEntries").addListenerForSingleValueEvent(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    userDBSource.setResult(dataSnapshot);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+                    userDBSource.setException(databaseError.toException());
+                    Toast.makeText(context, "Network error! Please try again...", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            Task<Void> allTasks = Tasks.whenAll(task1, userDBTask);
+            allTasks.addOnSuccessListener(aVoid ->
+            {
+                DataSnapshot userTripEntryData = (DataSnapshot) userDBTask.getResult();
+
+                for (DataSnapshot dataSnapshot : userTripEntryData.getChildren())
+                {
+                    TripEntry userTripEntry = dataSnapshot.getValue(TripEntry.class);
+                    if (userTripEntry != null && userTripEntry.getEntry_id().equals(tripEntry.getEntry_id()))
+                        break;
+
+                    i[0]++;
+                }
+
+                Task<Void> task3 = userDatabaseReference.child("userTripEntries").child(tripEntry.getEntry_id()).removeValue();
+
+                task3.addOnSuccessListener(aVoid1 ->
+                {
+                    UtilityMethods.removeFromList(BaseActivity.getTripEntryList(), tripEntry.getEntry_id());
+                    BaseActivity.getFinalCurrentUser().getUserTripEntries().remove(tripEntry.getEntry_id());
+
+                    progressDialog.dismiss();
+                });
+
+                task3.addOnFailureListener(e ->
+                {
+                    progressDialog.dismiss();
+                    Toast.makeText(view.getContext(), "Network error! Please try again...", Toast.LENGTH_LONG).show();
+                });
+            });
+
+            allTasks.addOnFailureListener(e ->
+            {
+                progressDialog.dismiss();
+                Toast.makeText(view.getContext(), "Network error! Please try again...", Toast.LENGTH_LONG).show();
+            });
+        });
+
+        alertDialogBuilder.setNegativeButton("NO", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    private void sendRequest(View view, int position)
+    {
+        alertDialogBuilder.setMessage("Send request to " + list.get(position).getName() + " ?");
+
+        alertDialogBuilder.setPositiveButton("YES", (dialog, which) ->
         {
             progressDialog = new ProgressDialog(view.getContext());
             progressDialog.setMessage("Please wait...");
@@ -99,7 +206,7 @@ public class HomeActivityTEA extends TripEntryAdapter
                 DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
                 DatabaseReference notificationDatabaseReference = BaseActivity.getNotificationDatabaseReference();
 
-                ArrayList<TripEntry> requestSent = user.getRequestSent();
+                HashMap<String, TripEntry> requestSent = user.getRequestSent();
                 HashMap<String, ArrayList<String>> requestsReceived = tripEntryUser[0].getRequestsReceived();
 
                 isAlreadyRequested = addRequestInList(requestSent, user.getPairUps(), tripEntry);
@@ -128,6 +235,7 @@ public class HomeActivityTEA extends TripEntryAdapter
                     allTask.addOnSuccessListener(bVoid ->
                     {
                         progressDialog.dismiss();
+                        BaseActivity.setFinalCurrentUser(user);
                         Toast.makeText(view.getContext(), "Request Sent!", Toast.LENGTH_LONG).show();
                     });
 
@@ -147,6 +255,40 @@ public class HomeActivityTEA extends TripEntryAdapter
 
             });
         });
+
+        alertDialogBuilder.setNegativeButton("NO", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    public void filter(String text)
+    {
+        list.clear();
+
+        if(text.isEmpty())
+            list.addAll(listCopy);
+
+        else
+        {
+            text = text.toLowerCase();
+
+            for(TripEntry tripEntry: listCopy)
+            {
+                String name = tripEntry.getName().toLowerCase();
+                String destination = tripEntry.getDestination().getName().toLowerCase();
+                String source = tripEntry.getSource().getName().toLowerCase();
+
+                String time = tripEntry.getTime();
+                String date = tripEntry.getDate();
+
+                if(name.contains(text) ||destination.contains(text) || source.contains(text)
+                            || time.contains(text) || date.contains(text))
+                    list.add(tripEntry);
+            }
+        }
+
+        notifyDataSetChanged();
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -167,25 +309,5 @@ public class HomeActivityTEA extends TripEntryAdapter
         return arr;
     }
 
-    public void filter(String text)
-    {
-        list.clear();
-        if(text.isEmpty())
-        {
-            list.addAll(listCopy);
-        }
-        else
-        {
-            text = text.toLowerCase();
-            for(TripEntry trip : listCopy)
-            {
-                if((trip.getSource().toString().toLowerCase().contains(text))||(trip.getDestination().toString().toLowerCase().contains(text)))
-                {
-                    list.add(trip);
-                }
-            }
-        }
-        notifyDataSetChanged();
-    }
 }
 

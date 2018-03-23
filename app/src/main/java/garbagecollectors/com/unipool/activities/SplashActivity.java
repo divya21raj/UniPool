@@ -1,8 +1,10 @@
 package garbagecollectors.com.unipool.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
@@ -43,11 +45,19 @@ public class SplashActivity extends AppCompatActivity
     private static TaskCompletionSource<DataSnapshot> MessageDBSource = new TaskCompletionSource<>();
     public static Task MessageDBTask = MessageDBSource.getTask();
 
+    AnimationDrawable loadingAnimation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        ImageView splashLogo = findViewById(R.id.splashLogo);
+        splashLogo.setBackgroundResource(R.drawable.loading_animation);
+        loadingAnimation = (AnimationDrawable) splashLogo.getBackground();
+
+        loadingAnimation.start();
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -65,10 +75,12 @@ public class SplashActivity extends AppCompatActivity
             {
                 UserDBSource.setResult(dataSnapshot);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError)
             {
                 UserDBSource.setException(databaseError.toException());
+                Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -79,10 +91,12 @@ public class SplashActivity extends AppCompatActivity
             {
                 EntryDBSource.setResult(dataSnapshot);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError)
             {
                 EntryDBSource.setException(databaseError.toException());
+                Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -92,18 +106,18 @@ public class SplashActivity extends AppCompatActivity
             DataSnapshot userData = (DataSnapshot) UserDBTask.getResult();
             DataSnapshot entryData = (DataSnapshot) EntryDBTask.getResult();
 
-            for(DataSnapshot dataSnapshot :entryData.getChildren())
+            for (DataSnapshot dataSnapshot : entryData.getChildren())
             {
                 TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
                 UtilityMethods.updateTripList(tripEntryList, tripEntry);
             }
 
-            if(!(LoginActivity.userNewOnDatabase))
+            if (!(LoginActivity.userNewOnDatabase))
                 BaseActivity.setFinalCurrentUser(userData.getValue(User.class));
 
-			Task chatListTask = UtilityMethods.populateChatList(userData);
+            Task chatListTask = UtilityMethods.populateChatMap(userData);
 
-			messageDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+            messageDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
             {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot)
@@ -111,8 +125,7 @@ public class SplashActivity extends AppCompatActivity
                     try
                     {
                         MessageDBSource.setResult(dataSnapshot);
-                    }
-                    catch (IllegalStateException ignored)
+                    } catch (IllegalStateException ignored)
                     {}
                 }
 
@@ -120,6 +133,7 @@ public class SplashActivity extends AppCompatActivity
                 public void onCancelled(DatabaseError databaseError)
                 {
                     MessageDBSource.setException(databaseError.toException());
+                    Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -133,7 +147,7 @@ public class SplashActivity extends AppCompatActivity
         allTask.addOnFailureListener(e ->
         {
             // apologize profusely to the user!
-            Toast.makeText(this, "FAIL", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
         });
     }
 

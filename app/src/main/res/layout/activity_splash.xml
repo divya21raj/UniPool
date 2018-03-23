@@ -9,8 +9,9 @@
     android:theme="@style/AppThemeNoActionBar">
 
    <ImageView
-       android:layout_width="224dp"
-       android:layout_height="224dp"
+       android:layout_width="300dp"
+       android:id="@+id/splashLogo"
+       android:layout_height="300dp"
        android:background="@drawable/logo"
        android:layout_centerHorizontal="true"
        android:layout_centerVertical="true"/>

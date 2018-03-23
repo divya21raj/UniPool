@@ -5,25 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="garbagecollectors.com.unipool.activities.LoginActivity"
-    android:background="@color/viewBg">
+    android:background="@color/colorPrimary">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
-        android:elevation="10dp"
-        android:text="UniPool"
-        android:textColor="@color/colorPrimary"
-        android:textSize="25sp" />
+   <ImageView
+       android:id="@+id/loginLogo"
+       android:layout_width="300dp"
+       android:layout_height="300dp"
+       android:background="@drawable/logo"
+       android:layout_centerHorizontal="true"
+       android:layout_marginTop="50dp"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
+        android:layout_below="@id/loginLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onClick"
-        android:layout_marginTop="216dp"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
 
 

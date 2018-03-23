@@ -9,7 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import garbagecollectors.com.unipool.R;
+import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.adapters.UserAdapter;
 
@@ -38,9 +42,13 @@ public class ChatFragment extends Fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        recycle = (RecyclerView) view.findViewById(R.id.recycle_users);
+        recycle = view.findViewById(R.id.recycle_users);
 
-        recycleAdapter = new UserAdapter(BaseActivity.getChatList(), getContext());
+        ArrayList<User> chatList = new ArrayList<>();
+        for(Map.Entry<String, User> entry: BaseActivity.getChatMap().entrySet())
+            chatList.add(entry.getValue());
+
+        recycleAdapter = new UserAdapter(chatList, getContext());
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
 

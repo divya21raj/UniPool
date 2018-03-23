@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.adapters.TripEntryAdapter;
@@ -54,37 +55,31 @@ public class UtilityMethods
         return userTask;
     }
 
-    public static boolean addRequestInList(ArrayList<TripEntry> requestSent, ArrayList<PairUp> pairUps, TripEntry tripEntry)
+    public static boolean addRequestInList(HashMap<String, TripEntry> requestSent, HashMap<String, PairUp> pairUps, TripEntry tripEntry)
     {
         boolean flag = false;
 
         if(requestSent == null)
-            requestSent = new ArrayList<>();
+            requestSent = new HashMap<>();
 
-        for(TripEntry e: requestSent)
-        {
-            if(e.getEntry_id().equals(tripEntry.getEntry_id()))
-            {
-                flag = true;
-                break;
-            }
-        }
+        if(requestSent.containsKey(tripEntry.getEntry_id()))
+            flag = true;
 
         if(!flag)
         {
-            for(PairUp pairUp: pairUps)
+            for(Map.Entry<String, PairUp> entry: pairUps.entrySet())
             {
+                PairUp pairUp = entry.getValue();
                 if(pairUp.getPairUpId().contains(tripEntry.getUser_id()))
                 {
                     flag = true;
                     break;
                 }
-
             }
         }
 
         if(!flag)
-            requestSent.add(tripEntry);
+            requestSent.put(tripEntry.getEntry_id(), tripEntry);
 
         return flag;
     }
@@ -202,17 +197,23 @@ public class UtilityMethods
         return tripEntry;
     }
 
-    public static ArrayList<TripEntry> removeFromList(ArrayList<TripEntry> list, String id)
+    public static ArrayList<TripEntry> removeFromList(ArrayList<TripEntry> list, String entryId)
     {
         Iterator<TripEntry> iterator = list.iterator();
 
         while (iterator.hasNext())
         {
-            if (iterator.next().getEntry_id().equals(id))
+            try
             {
-                iterator.remove();
-                break;
+                if (iterator.next().getEntry_id().equals(entryId))
+                {
+                    iterator.remove();
+                    break;
+                }
+
             }
+            catch (NullPointerException ignored)
+            {}
         }
 
         return list;
@@ -230,7 +231,7 @@ public class UtilityMethods
     public static void fillUserHolder(UserAdapter.MyHolder holder, User user)
     {
         holder.name.setText(user.getName());
-        holder.email.setText("email");
+        holder.email.setText("");
         Picasso.get().load(user.getPhotoUrl()).into(holder.photo);
     }
 
@@ -266,12 +267,13 @@ public class UtilityMethods
             map.remove(keyToBeRemoved);
     }
 
-    public static boolean addPairUpInList(ArrayList<PairUp> pairUps, PairUp pairUp)
+    public static boolean addPairUpInMap(HashMap<String, PairUp> pairUps, PairUp pairUp)
     {
         boolean flag = false;
 
-        for (PairUp pu: pairUps)
+        for (Map.Entry<String, PairUp> entry: pairUps.entrySet())
         {
+            PairUp pu = entry.getValue();
             if (pu.getPairUpId().contains(pairUp.getRequesterId()) && pu.getPairUpId().contains((pairUp.getCreatorId())))
             {
                 flag = true;
@@ -281,7 +283,7 @@ public class UtilityMethods
 
         if(!flag)
         {
-            pairUps.add(pairUp);
+            pairUps.put(pairUp.getPairUpId(), pairUp);
         }
 
         return flag;
@@ -298,7 +300,7 @@ public class UtilityMethods
         return time;
     }
 
-    public static Task populateChatList(DataSnapshot userData)
+    public static Task populateChatMap(DataSnapshot userData)
     {
         final String[] userId = new String[1];
 
@@ -309,7 +311,7 @@ public class UtilityMethods
 
         Task task = accessUserDatabase("users");
 
-        ArrayList<User> finalChatList = new ArrayList<>();
+        HashMap<String, User> finalChatMap = new HashMap<>();
 
         task.addOnCompleteListener(aTask ->
         {
@@ -325,11 +327,15 @@ public class UtilityMethods
                     else
                         userId[0] = pairUp.getCreatorId();
 
-                    finalChatList.add(snapshot.child(userId[0]).getValue(User.class));
+                    User user = snapshot.child(userId[0]).getValue(User.class);
+                    if (user != null)
+                    {
+                        finalChatMap.put(user.getUserId(), user);
+                    }
                 }
             }
 
-            BaseActivity.setChatList(finalChatList);
+            BaseActivity.setChatMap(finalChatMap);
         });
 
         return task;
@@ -347,62 +353,35 @@ public class UtilityMethods
         return formattedTime;
     }
 
-    public static void putMessageInMap(HashMap<String, ArrayList<Message>> messages, Message targetMessage)
+    public static void putMessageInMap(HashMap<String, HashMap<String, Message>> messages, Message targetMessage)
     {
-        boolean flag1 = false, flag2 = false;
+        HashMap<String, Message> mapMessage = new HashMap<>();
+        mapMessage.put(targetMessage.getMessageId(), targetMessage);
 
-        if(messages == null)
-            messages = new HashMap<>();
-
-        for (Map.Entry<String, ArrayList<Message>> entry : messages.entrySet())
-        {
-            if (entry.getKey().equals(targetMessage.getPairUpId()))
-            {
-                for (Message message: entry.getValue())
-                {
-                    if (message.getMessageId().equals(targetMessage.getMessageId()))
-                    {
-                        flag1 = true;
-                        break;
-                    }
-                }
-
-                if(!flag1)
-                {
-                    entry.getValue().add(targetMessage);
-                    flag2 = true;
-                    break;
-                }
-            }
-        }
-
-        if(!flag1 && !flag2)
-        {
-            ArrayList<Message> messageList = new ArrayList<>();
-            messageList.add(targetMessage);
-
-            messages.put(targetMessage.getPairUpId(), messageList);
-        }
-
+        messages.put(targetMessage.getPairUpId(), mapMessage);
     }
 
     public static List<Message> getMessageList(HashMap<String, ArrayList<Message>> messages, String userId)
     {
         ArrayList<Message> personalMessageList;
-        ArrayList<PairUp> pairUpList = BaseActivity.getFinalCurrentUser().getPairUps();
+        HashMap<String, PairUp> pairUpList = BaseActivity.getFinalCurrentUser().getPairUps();
 
         String pairUpId = null;
 
-        for(PairUp pairUp: pairUpList)
+        for(Map.Entry<String, PairUp> entry: pairUpList.entrySet())
         {
+            PairUp pairUp = entry.getValue();
             if(pairUp.getCreatorId().equals(userId)||pairUp.getRequesterId().equals(userId))
+            {
                 pairUpId = pairUp.getPairUpId();
+                break;
+            }
         }
 
         List messageList = messages.get(pairUpId);
 
         if(messageList != null)
-        personalMessageList = new ArrayList<>(messages.get(pairUpId));
+            personalMessageList = new ArrayList<>(messages.get(pairUpId));
 
         else
         {
@@ -413,12 +392,13 @@ public class UtilityMethods
         return personalMessageList;
     }
 
-    public static PairUp getPairUp(User user, ArrayList<PairUp> pairUps)
+    public static PairUp getPairUp(User user, HashMap<String, PairUp> pairUps)
     {
         PairUp pairUp = null;
 
-        for (PairUp up: pairUps)
+        for (Map.Entry<String, PairUp> entry: pairUps.entrySet())
         {
+            PairUp up = entry.getValue();
             if(up.getRequesterId().equals(user.getUserId()) || up.getCreatorId().equals(user.getUserId()))
             {
                 pairUp = up;
@@ -462,7 +442,7 @@ public class UtilityMethods
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
     }
 
-    public static void putMessageInList(Message message, List<Message> personalMessageList)
+    public static boolean putMessageInList(Message message, List<Message> personalMessageList)
     {
         boolean flag = false;
 
@@ -477,5 +457,28 @@ public class UtilityMethods
 
         if(!flag)
             personalMessageList.add(message);
+
+        return flag;
+    }
+
+    public static TreeMap<Long, Message> getPersonalMessageMap(HashMap<String, HashMap<String, Message>> messages, String userId)
+    {
+        TreeMap<Long, Message> messageMap = new TreeMap<>();
+
+        for (Map.Entry<String, HashMap<String, Message>> entry: messages.entrySet())
+        {
+            if(entry.getKey().contains(userId))
+            {
+                HashMap<String, Message> messagesHashMap = entry.getValue();
+                for(Map.Entry<String, Message> e: messagesHashMap.entrySet())
+                {
+                    Message message = e.getValue();
+                    messageMap.put(message.getCreatedAtTime(), message);
+                }
+                break;
+            }
+        }
+
+        return messageMap;
     }
 }

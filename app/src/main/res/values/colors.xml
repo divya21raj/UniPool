@@ -15,4 +15,6 @@
     <color name="colorTextSecondary">#8CFFFFFF</color>
 
     <color name="grey">#d8666262</color>
+
+    <color name="orange">#f99d4c</color>
 </resources>

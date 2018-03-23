@@ -1,6 +1,7 @@
-package garbagecollectors.com.unipool.activities.SettingsActivity;
+package garbagecollectors.com.unipool.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,16 +16,12 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.activities.BaseActivity;
-import garbagecollectors.com.unipool.activities.HomeActivity;
-import garbagecollectors.com.unipool.activities.LoginActivity;
-import garbagecollectors.com.unipool.activities.NewEntryActivity;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
 
 import static garbagecollectors.com.unipool.activities.BaseActivity.currentUser;
 import static garbagecollectors.com.unipool.activities.BaseActivity.finalCurrentUser;
 
-public class SettingsActivity extends AppCompatActivity
+public class AboutActivity extends AppCompatActivity
 {
 	DrawerLayout drawerLayout;
 
@@ -32,18 +29,18 @@ public class SettingsActivity extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_settings);
+		setContentView(R.layout.activity_about);
 
 		final ActionBar actionBar = getSupportActionBar();
 		if(actionBar != null)
 		{
-			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_24dp);
+			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
 			actionBar.setDisplayHomeAsUpEnabled(true);
 		}
 
-		drawerLayout = (DrawerLayout) findViewById(R.id.settings_layout);
+		drawerLayout = findViewById(R.id.about_layout);
 
-		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_drawer);
+		NavigationView navigationView = findViewById(R.id.nav_drawer);
 		navigationView.setNavigationItemSelectedListener(menuItem ->
 		{
 			dealWithSelectedMenuItem(menuItem);
@@ -90,13 +87,13 @@ public class SettingsActivity extends AppCompatActivity
 
 	private void setNavHeaderStuff()
 	{
-		TextView userNameOnHeader = (TextView) findViewById(R.id.header_username);
+		TextView userNameOnHeader = findViewById(R.id.header_username);
 		userNameOnHeader.setText(finalCurrentUser.getName());
 
-		TextView emailOnHeader = (TextView) findViewById(R.id.header_email);
+		TextView emailOnHeader = findViewById(R.id.header_email);
 		emailOnHeader.setText(currentUser.getEmail());
 
-		ImageView userImageOnHeader = (ImageView) findViewById(R.id.header_userImage);
+		ImageView userImageOnHeader = findViewById(R.id.header_userImage);
 		Picasso.get().load(currentUser.getPhotoUrl()).into(userImageOnHeader);
 	}
 
@@ -104,7 +101,7 @@ public class SettingsActivity extends AppCompatActivity
 	{
 		switch (menuItem.getItemId())
 		{
-			case R.id.nav_settings:
+			case R.id.nav_about:
 				break;
 
 			case R.id.nav_logout:
@@ -126,6 +123,60 @@ public class SettingsActivity extends AppCompatActivity
 				finish();
 				startActivity(new Intent(this, RequestActivity.class));
 				break;
+
+			case R.id.nav_chat:
+				finish();
+				Intent chatIntent = new Intent(this, RequestActivity.class);
+				chatIntent.putExtra("openingTab", 2);
+				startActivity(chatIntent);
+				break;
 		}
+	}
+
+	public void onClickAbout(View view)
+	{
+		Uri dr = Uri.parse("http://www.github.com/divya21raj");
+		Uri as = Uri.parse("http://www.github.com/srivastavabhi");
+		Uri ss = Uri.parse("http://www.github.com/ss616");
+		Uri rd = Uri.parse("http://www.github.com/Rohan-Datta");
+		Uri aj = Uri.parse("http://www.github.com/atishayjain708");
+		Uri sg = Uri.parse("https://www.instagram.com/saurabh_ganga/");
+		Uri github = Uri.parse("http://www.github.com/divya21raj/UniPool");
+
+		Uri url = null;
+
+		switch (view.getId())
+		{
+			case R.id.drView:
+				url = dr;
+				break;
+
+			case R.id.asView:
+				url = as;
+				break;
+
+			case R.id.ssView:
+				url = ss;
+				break;
+
+			case R.id.rdView:
+				url = rd;
+				break;
+
+			case R.id.ajView:
+				url = aj;
+				break;
+
+			case R.id.sgView:
+				url = sg;
+				break;
+
+			case R.id.githubView:
+				url = github;
+				break;
+		}
+
+		Intent intent = new Intent(Intent.ACTION_VIEW, url);
+		startActivity(intent);
 	}
 }

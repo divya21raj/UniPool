@@ -14,12 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -28,13 +30,16 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import garbagecollectors.com.unipool.AppStatus;
 import garbagecollectors.com.unipool.Message;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.TripEntry;
 import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.UtilityMethods;
+import garbagecollectors.com.unipool.activities.RequestActivity.ChatFragment;
+import garbagecollectors.com.unipool.activities.RequestActivity.ReceivedRequestsFragment;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
-import garbagecollectors.com.unipool.activities.SettingsActivity.SettingsActivity;
+import garbagecollectors.com.unipool.activities.RequestActivity.SentRequestsFragment;
 
 import static garbagecollectors.com.unipool.activities.SplashActivity.MessageDBTask;
 
@@ -48,18 +53,22 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public static FirebaseAuth mAuth;
     public static FirebaseUser currentUser;
 
+    protected static AppStatus appStatus;
+
     protected static DatabaseReference userDatabaseReference;
     protected static DatabaseReference userMessageDatabaseReference;
     protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     protected static DatabaseReference pairUpDatabaseReference = FirebaseDatabase.getInstance().getReference("pairUps");
     protected static DatabaseReference notificationDatabaseReference = FirebaseDatabase.getInstance().getReference("notifications");
 
+    private static DatabaseReference expiryDatabaseReference = FirebaseDatabase.getInstance().getReference("deleteExpired");
+
     public static User finalCurrentUser;
 
     protected static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
-    protected static ArrayList<User> chatList;
+    protected static HashMap<String, User> chatMap; //key = UserId
 
-    protected static HashMap<String, ArrayList<Message>> messages = new HashMap<>();   //Key - PairUpID, Value- List of messages in that pairUp
+    protected static HashMap<String, HashMap<String, Message>> messages = new HashMap<>();   //Key - PairUpID, Value- List of messages in that pairUp
 
     protected static Message defaultMessage = new Message("def@ult", "", "", "", "", 1l);
 
@@ -87,9 +96,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
                     assert message != null;
                     if (!(message.getMessageId().equals("def@ult")))
-                    {
                         UtilityMethods.putMessageInMap(messages, message);
-                    }
                 }
             });
 
@@ -118,9 +125,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 public void onChildRemoved(DataSnapshot dataSnapshot)
                 {
                     TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                    UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
+                    if (tripEntry != null)
+                    {
+                        UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
+                        HomeActivity.updateRecycleAdapter();
+                    }
 
-                    HomeActivity.updateRecycleAdapter();
                 }
 
                 @Override
@@ -134,6 +144,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 {
                     // Failed to read value
                     Log.w("Hello", "Failed to read value.", databaseError.toException());
+                    Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -144,72 +155,87 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 {
                     // This method is called once with the initial value and again
                     // whenever data at this location is updated.
-                    finalCurrentUser = dataSnapshot.getValue(User.class);
-                    UtilityMethods.populateChatList(dataSnapshot);
+                    try
+                    {
+                        finalCurrentUser = dataSnapshot.getValue(User.class);
+                        UtilityMethods.populateChatMap(dataSnapshot);
+                        ReceivedRequestsFragment.refreshRecycler();
+                        SentRequestsFragment.refreshRecycler();
+                        ChatFragment.refreshRecycler();
+                    }
+                    catch (DatabaseException dbe)
+                    {
+                        Toast.makeText(getApplicationContext(), "Some problems, mind restarting the app?", Toast.LENGTH_LONG).show();
+                    }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError error)
                 {
                     // Failed to read value
-                    Log.w("UserDB", "Failed to read userDB value.", error.toException());
-                }
-            });
+                        Log.w("UserDB", "Failed to read userDB value.", error.toException());
+                        Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-        /*userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
-        {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s)
-            {
-                Toast.makeText(getApplicationContext(), "Got it in Base activity", Toast.LENGTH_SHORT).show();
+                /*userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
+                {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
+                    {
+                        Toast.makeText(getApplicationContext(), "Got it in Base activity", Toast.LENGTH_SHORT).show();
 
-                Message message = dataSnapshot.getValue(Message.class);
-                UtilityMethods.putMessageInMap(messages, message);
+                        Message message = dataSnapshot.getValue(Message.class);
+                        UtilityMethods.putMessageInMap(messages, message);
 
-                //notify
-            }
+                        //notify
+                    }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s)
-            {
-                //not happening
-            }
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s)
+                    {
+                        //not happening
+                    }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot)
-            {
-                //not happening
-            }
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot)
+                    {
+                        //not happening
+                    }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s)
-            {
-                //IDK
-            }
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s)
+                    {
+                        //IDK
+                    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-                // Failed to read value
-                Log.w("userDB", "Failed to read UserMessages.", databaseError.toException());
-            }
-        });*/
+                    @Override
+                    public void onCancelled(DatabaseError databaseError)
+                    {
+                        // Failed to read value
+                        Log.w("userDB", "Failed to read UserMessages.", databaseError.toException());
+                    }
+                });*/
 
-            bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-            bottomNavigationView.setOnNavigationItemSelectedListener(this);
+                bottomNavigationView = findViewById(R.id.bottom_navigation);
+                bottomNavigationView.setOnNavigationItemSelectedListener(this);
         }
-        catch (NullPointerException nlp)
+
+        catch(NullPointerException nlp)
         {
             finish();
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         }
+
     }
 
-	@Override
+    @Override
     protected void onStart()
     {
         super.onStart();
         updateNavigationBarState();
+        finalCurrentUser.setOnline(true);
+        userDatabaseReference.child("isOnline").setValue("true");
     }
 
     // Remove inter-activity transition to avoid screen tossing on tapping bottom bottom_nav items
@@ -217,7 +243,17 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public void onPause()
     {
         super.onPause();
+
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        finalCurrentUser.setOnline(false);
+        userDatabaseReference.child("isOnline").setValue("false");
+        expiryDatabaseReference.child(currentUser.getUid()).removeValue();
     }
 
     @Override
@@ -311,8 +347,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 	{
 		switch (menuItem.getItemId())
 		{
-			case R.id.nav_settings:
-				startActivity(new Intent(this, SettingsActivity.class));
+			case R.id.nav_about:
+				startActivity(new Intent(this, AboutActivity.class));
 				break;
 
 			case R.id.nav_logout:
@@ -335,18 +371,25 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 finish();
                 startActivity(new Intent(this, RequestActivity.class));
                 break;
+
+            case R.id.nav_chat:
+                finish();
+                Intent chatIntent = new Intent(this, RequestActivity.class);
+                chatIntent.putExtra("openingTab", 2);
+                startActivity(chatIntent);
+                break;
 		}
 	}
 
 	protected void setNavHeaderStuff()
 	{
-		TextView userNameOnHeader = (TextView) findViewById(R.id.header_username);
+		TextView userNameOnHeader = findViewById(R.id.header_username);
 		userNameOnHeader.setText(finalCurrentUser.getName());
 
-		TextView emailOnHeader = (TextView) findViewById(R.id.header_email);
+		TextView emailOnHeader = findViewById(R.id.header_email);
 		emailOnHeader.setText(currentUser.getEmail());
 
-        ImageView userImageOnHeader = (ImageView) findViewById(R.id.header_userImage);
+        ImageView userImageOnHeader = findViewById(R.id.header_userImage);
         Picasso.get().load(currentUser.getPhotoUrl()).into(userImageOnHeader);
 	}
 
@@ -394,19 +437,29 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         return userMessageDatabaseReference;
     }
 
-    public static ArrayList<User> getChatList()
+    public static DatabaseReference getUserDatabaseReference()
     {
-        return chatList;
+        return userDatabaseReference;
     }
 
-    public static HashMap<String, ArrayList<Message>> getMessages()
+    public static DatabaseReference getEntryDatabaseReference()
+    {
+        return entryDatabaseReference;
+    }
+
+    public static HashMap<String, User> getChatMap()
+    {
+        return chatMap;
+    }
+
+    public static HashMap<String, HashMap<String, Message>> getMessages()
     {
         return messages;
     }
 
-    public static void setChatList(ArrayList<User> chatList)
+    public static void setChatMap(HashMap<String, User> chatMap)
     {
-        BaseActivity.chatList = chatList;
+        BaseActivity.chatMap = chatMap;
     }
 
     public static Message getDefaultMessage()

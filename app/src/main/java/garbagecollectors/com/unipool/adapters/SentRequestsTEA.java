@@ -18,11 +18,6 @@ public class SentRequestsTEA extends TripEntryAdapter
     private List<TripEntry> list;
     private Context context;
 
-    public SentRequestsTEA(Context context)
-    {
-        super(context);
-    }
-
     public SentRequestsTEA(List<TripEntry> list, Context context)
     {
         this.list = list;
@@ -51,6 +46,7 @@ public class SentRequestsTEA extends TripEntryAdapter
         TripEntry tripEntry = list.get(position);
 
         UtilityMethods.fillTripEntryHolder(holder, tripEntry);
+        holder.requestButton.setVisibility(View.INVISIBLE);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

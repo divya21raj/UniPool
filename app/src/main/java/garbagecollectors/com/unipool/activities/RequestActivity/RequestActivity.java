@@ -3,14 +3,11 @@ package garbagecollectors.com.unipool.activities.RequestActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,6 +48,7 @@ public class RequestActivity extends BaseActivity
 
 	static Task<DataSnapshot> sentRequestsDBTask;
 	static Task<DataSnapshot> receivedRequestsDBTask;
+	private int tabIndex;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -65,42 +63,39 @@ public class RequestActivity extends BaseActivity
 
 			receivedRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference(
 					"users/" + finalCurrentUser.getUserId() + "/requestsReceived");
+
 			final ActionBar actionBar = getSupportActionBar();
 			if(actionBar != null)
 			{
-				actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_24dp);
+				actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
 				actionBar.setDisplayHomeAsUpEnabled(true);
 			}
 
-			drawerLayout = (DrawerLayout) findViewById(R.id.requests_layout);
+			drawerLayout = findViewById(R.id.requests_layout);
 
 			navDrawerStateListener();
 
-			navigationView = (NavigationView) findViewById(R.id.nav_drawer);
+			navigationView = findViewById(R.id.nav_drawer);
 			navigationView.setNavigationItemSelectedListener(menuItem ->
-					{
+			{
 				dealWithSelectedMenuItem(menuItem);
-					drawerLayout.closeDrawers();
+				drawerLayout.closeDrawers();
 
-			return true;
-		});
+				return true;
+			});
 
-			bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+			tabIndex = getIntent().getIntExtra("openingTab", 0);
+
+			bottomNavigationView = findViewById(R.id.bottom_navigation);
 			bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-			viewPager = (ViewPager) findViewById(R.id.viewpager);
+			viewPager = findViewById(R.id.viewpager);
 			setupViewPager(viewPager);
 
-			tabLayout = (TabLayout) findViewById(R.id.tabs);
-			try
-			{
-				TabLayout.Tab tab = tabLayout.getTabAt(Integer.parseInt(getIntent().getStringExtra("openingTab")));
-				tab.select();
-			}catch (NumberFormatException nfe)
-			{/*whoops*/}
+			tabLayout = findViewById(R.id.tabs);
 			tabLayout.setupWithViewPager(viewPager);
 
-			requestsProgressBar = (ProgressBar) findViewById(R.id.requests_progressBar);
+			requestsProgressBar = findViewById(R.id.requests_progressBar);
 			requestsProgressBar.setVisibility(View.INVISIBLE);
 
 		}
@@ -156,6 +151,7 @@ public class RequestActivity extends BaseActivity
 			public void onCancelled(DatabaseError databaseError)
 			{
 				receivedRequestsSource.setException(databaseError.toException());
+				Toast.makeText(context, "Network Issues!", Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -171,7 +167,7 @@ public class RequestActivity extends BaseActivity
 			DataSnapshot receivedRequestsData = receivedRequestsDBTask.getResult();
 
 			for (DataSnapshot ds : sentRequestsData.getChildren())
-				finalCurrentUser.getRequestSent().add(ds.getValue(TripEntry.class));
+				finalCurrentUser.getRequestSent().put(ds.getValue(TripEntry.class).getEntry_id(), ds.getValue(TripEntry.class));
 
 			ArrayList<String> userIdList = new ArrayList<>();
 
@@ -189,9 +185,12 @@ public class RequestActivity extends BaseActivity
 			{
 				ReceivedRequestsFragment.refreshRecycler();
 				SentRequestsFragment.refreshRecycler();
+				ChatFragment.refreshRecycler();
 
 				requestsProgressBar.setVisibility(View.INVISIBLE);
 			});
+
+			task.addOnFailureListener(e -> Toast.makeText(context, "Network Issues!", Toast.LENGTH_SHORT).show());
 		});
 
 		allTask.addOnFailureListener(e ->
@@ -205,6 +204,7 @@ public class RequestActivity extends BaseActivity
 		adapter.addFragment(new ReceivedRequestsFragment(), "Received");
 		adapter.addFragment(new ChatFragment(), "Chat");
 		viewPager.setAdapter(adapter);
+		viewPager.setCurrentItem(tabIndex);
 	}
 
 	class ViewPagerAdapter extends FragmentPagerAdapter
