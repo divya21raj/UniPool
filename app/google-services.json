@@ -8,90 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:560852588496:android:7f0a586268b8fc20",
-        "android_client_info": {
-          "package_name": "garbagecollectors.com.unipool"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "560852588496-0jh11mk4hsm6u1fu82ot6jstrkhc98cj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "garbagecollectors.com.unipool",
-            "certificate_hash": "44687ed3ca95e6ef54b6737bb4744430b2fb8349"
-          }
-        },
-        {
-          "client_id": "560852588496-h2ri2ievh81ha4rmv6l79rhomo9v0gv7.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "garbagecollectors.com.unipool",
-            "certificate_hash": "ba715fde2f871d96af74913ad727fbfc36ec4f40"
-          }
-        },
-        {
-          "client_id": "560852588496-01jgci7tbcc1jkg4uu2obbd4fanj318r.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "garbagecollectors.com.unipool",
-            "certificate_hash": "0dafcd6797c10c49d9137322d0c1ad9abf040214"
-          }
-        },
-        {
-          "client_id": "560852588496-964sg4la0pr111uc9somotn444hmbbpr.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "garbagecollectors.com.unipool",
-            "certificate_hash": "9cdf311e1c16b9786405d84eba0fac231d3cded8"
-          }
-        },
-        {
-          "client_id": "560852588496-b6r1pudq3mv7gu6emsq0gvn6ljhnn63u.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "garbagecollectors.com.unipool",
-            "certificate_hash": "22bb7869c9e5ec47b5061c7002e1a6e0fcc2ab1a"
-          }
-        },
-        {
-          "client_id": "560852588496-0s3msr6b2m8chbs8aks12kuv8j2233f5.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "garbagecollectors.com.unipool",
-            "certificate_hash": "4f9e380dd6c2ed3f6b79a9f8f5daefa2f991a65a"
-          }
-        },
-        {
-          "client_id": "560852588496-baos0qb9om1qmvade33hbh1l2ic70l00.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAbviwwtxjwpZyiqvRzzulh6YycC11F1vQ"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "560852588496-baos0qb9om1qmvade33hbh1l2ic70l00.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:560852588496:android:89f8e8d4da5d79b1",
         "android_client_info": {
           "package_name": "garbagecollectors.com.unipool"
@@ -99,7 +15,31 @@
       },
       "oauth_client": [
         {
-          "client_id": "560852588496-tts03rda73lagfa4sennsqu99t3olqg1.apps.googleusercontent.com",
+          "client_id": "560852588496-b1f1kabpsacb0jkbffihjnuog61tnrbj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "garbagecollectors.com.unipool",
+            "certificate_hash": "5208f672deb3628f50944dd81214e2cd30aec671"
+          }
+        },
+        {
+          "client_id": "560852588496-knhbf5nf00hj2lbfohj79aljri1tl03c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "garbagecollectors.com.unipool",
+            "certificate_hash": "aeca9a6282a7bcad3217dd0fc06abf9ee1aba0a2"
+          }
+        },
+        {
+          "client_id": "560852588496-o75r1c8q96fj7fdj7n3tcoc8ksausjhj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "garbagecollectors.com.unipool",
+            "certificate_hash": "0dafcd6797c10c49d9137322d0c1ad9abf040214"
+          }
+        },
+        {
+          "client_id": "560852588496-tas76f0fcktm1b9bdijb40tu3s3l7gm3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "garbagecollectors.com.unipool",
