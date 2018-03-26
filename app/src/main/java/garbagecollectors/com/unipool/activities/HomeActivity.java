@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.adapters.HomeActivityTEA;
@@ -19,6 +21,8 @@ public class HomeActivity extends BaseActivity
 {
     RecyclerView recycle;
     static HomeActivityTEA recyclerAdapter;
+
+    static public RelativeLayout noEntryRelativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -36,6 +40,9 @@ public class HomeActivity extends BaseActivity
         }
 
 	    drawerLayout = findViewById(R.id.home_layout);
+
+        noEntryRelativeLayout = findViewById(R.id.no_entry_message);
+        noEntryRelativeLayout.setVisibility(View.INVISIBLE);
 
         navDrawerStateListener();
 
@@ -129,6 +136,12 @@ public class HomeActivity extends BaseActivity
 
     public static void updateRecycleAdapter()
     {
-        recyclerAdapter.notifyDataSetChanged();
+	    if(tripEntryList.isEmpty())
+		    noEntryRelativeLayout.setVisibility(View.VISIBLE);
+
+	    else
+	    	noEntryRelativeLayout.setVisibility(View.INVISIBLE);
+
+    	recyclerAdapter.notifyDataSetChanged();
     }
 }

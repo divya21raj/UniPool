@@ -21,6 +21,44 @@
 
         </android.support.v7.widget.RecyclerView>
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/no_entry_message"
+            android:paddingTop="80dp">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/sad_smiley"
+                android:background="@drawable/ic_negative_smiley"
+                android:layout_centerHorizontal="true"
+                android:alpha="0.4"
+                android:backgroundTint="@color/colorPrimary"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/such_empty"
+                android:layout_below="@id/sad_smiley"
+                android:paddingTop="18dp"
+                android:layout_centerHorizontal="true"
+                android:text="Such empty..."
+                android:textAlignment="center"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:textSize="14sp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/such_empty"
+                android:text="Maybe you can create a new entry?"/>
+
+        </RelativeLayout>
+
         <include
             android:id="@+id/bottom_navigation"
             layout="@layout/element_bottom_navigation"
