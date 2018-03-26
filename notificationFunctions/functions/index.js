@@ -112,6 +112,11 @@ exports.deleteExpired  = functions.database.ref('/deleteExpired/{user_id}')
 				console.log(`${ISTTime}`);
         console.log(`${puDateObj}`);
 
+				var currentDate = new Date();
+				var currentOffset = currentDate.getTimezoneOffset();
+				var ISTOffset = 330;   // IST offset UTC +5:30
+				var ISTTime = new Date(currentDate.getTime() + (ISTOffset + currentOffset)*60000);
+
 				if(ISTTime >= puDateObj)
 				{
 					console.log(`DELETE PAIRUP ${puKey}`);
