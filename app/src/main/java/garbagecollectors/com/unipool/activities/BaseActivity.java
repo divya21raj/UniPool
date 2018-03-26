@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +29,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import garbagecollectors.com.unipool.AppStatus;
+import de.hdodenhof.circleimageview.CircleImageView;
 import garbagecollectors.com.unipool.Message;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.TripEntry;
@@ -52,8 +51,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     public static FirebaseAuth mAuth;
     public static FirebaseUser currentUser;
-
-    protected static AppStatus appStatus;
 
     protected static DatabaseReference userDatabaseReference;
     protected static DatabaseReference userMessageDatabaseReference;
@@ -87,6 +84,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
             userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId());
             userMessageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + finalCurrentUser.getUserId());
+
+            entryDatabaseReference.keepSynced(true);
+            pairUpDatabaseReference.keepSynced(true);
+            userDatabaseReference.keepSynced(true);
+            userMessageDatabaseReference.keepSynced(true);
 
             MessageDBTask.addOnCompleteListener(task ->
             {
@@ -352,7 +354,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 		TextView emailOnHeader = findViewById(R.id.header_email);
 		emailOnHeader.setText(currentUser.getEmail());
 
-        ImageView userImageOnHeader = findViewById(R.id.header_userImage);
+        CircleImageView userImageOnHeader = findViewById(R.id.header_userImage);
         Picasso.get().load(currentUser.getPhotoUrl()).into(userImageOnHeader);
 	}
 

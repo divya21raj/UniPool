@@ -29,15 +29,17 @@
 
             <Button
                 android:id="@+id/requestButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/ic_request"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ic_group_add_black_24px"
+                android:backgroundTint="@color/colorPrimary"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:layout_alignParentEnd="true"
-                android:paddingStart="@dimen/activity_horizontal_margin" />
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="12dp"/>
 
             <TextView
                 android:id="@+id/vdate"

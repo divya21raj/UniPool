@@ -36,7 +36,7 @@ public class IntroActivity extends AppIntro
 		String descriptionNewEntry = "If you don't find a desired entry on the home screen, you can create your own here, " +
 										"and wait for someone to join you";
 		String descriptionRequests = "Here you'll see the requests you've sent and received";
-		String descriptionChat = "When you accept someone's request, or someone else does yours, he/she will show up here";
+		String descriptionChat = "When you accept someone's request, or someone else does yours, they will show up here";
 		String descriptionDone = "You're all set!";
 
 		// Instead of fragments, you can also use our default slide

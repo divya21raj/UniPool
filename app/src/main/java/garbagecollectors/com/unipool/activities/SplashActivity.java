@@ -3,6 +3,7 @@ package garbagecollectors.com.unipool.activities;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -36,6 +37,9 @@ public class SplashActivity extends AppCompatActivity
     FirebaseAuth mAuth;
     static FirebaseUser currentUser;
 
+    private TaskCompletionSource<Void> delaySource = new TaskCompletionSource<>();
+    private Task<Void> delayTask = delaySource.getTask();
+
     private TaskCompletionSource<DataSnapshot> UserDBSource = new TaskCompletionSource<>();
     private Task UserDBTask = UserDBSource.getTask();
 
@@ -67,6 +71,13 @@ public class SplashActivity extends AppCompatActivity
         userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
 
         messageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + currentUser.getUid());
+
+        userDatabaseReference.keepSynced(true);
+        messageDatabaseReference.keepSynced(true);
+        entryDatabaseReference.keepSynced(true);
+
+
+        new Handler().postDelayed(() -> delaySource.setResult(null), 2350);
 
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
@@ -100,7 +111,7 @@ public class SplashActivity extends AppCompatActivity
             }
         });
 
-        Task<Void> allTask = Tasks.whenAll(UserDBTask, EntryDBTask);
+        Task<Void> allTask = Tasks.whenAll(UserDBTask, EntryDBTask, delayTask);
         allTask.addOnSuccessListener(aVoid ->
         {
             DataSnapshot userData = (DataSnapshot) UserDBTask.getResult();

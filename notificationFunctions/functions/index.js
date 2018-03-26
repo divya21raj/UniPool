@@ -101,7 +101,16 @@ exports.deleteExpired  = functions.database.ref('/deleteExpired/{user_id}')
 				console.log(`puDate is ${puDate}`);
 				var puDateParts = puDate.split("/");
 
-				var puDateObj = new Date(puDateParts[2], puDateParts[1] - 1, puDateParts[0], (puDateParts[3] + 4)%24, puDateParts[4], 0); //give them 4 hrs
+				var puDateObj = new Date(puDateParts[2], puDateParts[1] - 1,
+																	puDateParts[0], puDateParts[3], puDateParts[4], 0); //give them 4 hrs
+
+				var currentDate = new Date();
+				var currentOffset = currentDate.getTimezoneOffset();
+				var ISTOffset = 330;   // IST offset UTC +5:30
+				var ISTTime = new Date(currentDate.getTime() + (ISTOffset + currentOffset)*60000);
+
+				console.log(`${ISTTime}`);
+        console.log(`${puDateObj}`);
 
 				if(ISTTime >= puDateObj)
 				{
@@ -112,7 +121,7 @@ exports.deleteExpired  = functions.database.ref('/deleteExpired/{user_id}')
 
 					pairUpRef.child(puKey).remove();
 
-					//reomove pairUp from both users
+					//remove pairUp from both users
 					//removing from creator
 					var creatorPuRef = db.ref(`users/${creatorId}/pairUps`);
 					creatorPuRef.once('value', function(creatorPuSnap)

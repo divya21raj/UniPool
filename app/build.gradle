@@ -16,8 +16,8 @@ android {
         applicationId 'garbagecollectors.com.unipool'
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 3
-        versionName "1.03"
+        versionCode 4
+        versionName "1.04"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true //important
@@ -71,6 +71,8 @@ dependencies {
     compile 'com.github.QuadFlask:colorpicker:0.0.13'
 
     compile 'com.github.apl-devs:appintro:v4.2.3'
+
+    compile 'de.hdodenhof:circleimageview:2.2.0'
 
     implementation 'com.squareup.picasso:picasso:2.71828'
 

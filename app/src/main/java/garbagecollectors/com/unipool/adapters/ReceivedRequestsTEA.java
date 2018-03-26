@@ -107,6 +107,7 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
                     String pairUpId = finalCurrentUser.getUserId() + tripEntryUser[0].getUserId();
 
                     String[] timeParts = tripEntry.getTime().split(":");
+                    timeParts[0] = String.valueOf((Integer.parseInt(timeParts[0]) + 4)%24);  //give them 4 hours
                     String expiryDate = tripEntry.getDate() + "/" + timeParts[0] + "/" + timeParts[1];
 
                     PairUp pairUp = new PairUp(pairUpId, finalCurrentUser.getUserId(), tripEntryUser[0].getUserId(), expiryDate, new ArrayList<>());
