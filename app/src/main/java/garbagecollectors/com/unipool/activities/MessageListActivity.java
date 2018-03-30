@@ -67,8 +67,6 @@ public class MessageListActivity extends AppCompatActivity
 		DatabaseReference userMessageDatabaseReference = FirebaseDatabase.getInstance().
 				getReference("messages/" + BaseActivity.getFinalCurrentUser().getUserId());
 
-		userMessageDatabaseReference.keepSynced(true);
-
 		userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
 		{
 			@Override

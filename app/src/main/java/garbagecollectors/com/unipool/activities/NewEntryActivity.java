@@ -191,18 +191,27 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
 
     public void findSource(View view)
     {
+        showPlaceAutocomplete(1);
+    }
+
+    public void findDestination(View view)
+    {
+        showPlaceAutocomplete(2);
+    }
+
+    private void showPlaceAutocomplete(int i)
+    {
         try
         {
             Intent intent =
                     new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
                             .build(this);
-            startActivityForResult(intent, 1);
+            startActivityForResult(intent, i);
 
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e)
         {
             Toast.makeText(this, "Google Play Service Error!", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     // A place has been received; use requestCode to track the request.
@@ -248,19 +257,6 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         {
             // The user canceled the operation.
             //Toast.makeText(getApplicationContext(), "Cancelled...", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void findDestination(View view)
-    {
-        try
-        {
-            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
-                    .build(this);
-            startActivityForResult(intent, 2);
-        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e)
-        {
-            Toast.makeText(this, "Google Play Service Error!", Toast.LENGTH_SHORT).show();
         }
     }
 

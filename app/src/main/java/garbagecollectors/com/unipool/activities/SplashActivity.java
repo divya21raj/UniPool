@@ -72,11 +72,6 @@ public class SplashActivity extends AppCompatActivity
 
         messageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + currentUser.getUid());
 
-        userDatabaseReference.keepSynced(true);
-        messageDatabaseReference.keepSynced(true);
-        entryDatabaseReference.keepSynced(true);
-
-
         new Handler().postDelayed(() -> delaySource.setResult(null), 2350);
 
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()

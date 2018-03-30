@@ -85,11 +85,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId());
             userMessageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + finalCurrentUser.getUserId());
 
-            entryDatabaseReference.keepSynced(true);
-            pairUpDatabaseReference.keepSynced(true);
-            userDatabaseReference.keepSynced(true);
-            userMessageDatabaseReference.keepSynced(true);
-
             MessageDBTask.addOnCompleteListener(task ->
             {
                 DataSnapshot messageData = (DataSnapshot) MessageDBTask.getResult();

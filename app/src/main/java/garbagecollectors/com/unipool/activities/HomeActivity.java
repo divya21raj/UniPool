@@ -42,7 +42,6 @@ public class HomeActivity extends BaseActivity
 	    drawerLayout = findViewById(R.id.home_layout);
 
         noEntryRelativeLayout = findViewById(R.id.no_entry_message);
-        noEntryRelativeLayout.setVisibility(View.INVISIBLE);
 
         navDrawerStateListener();
 
@@ -59,6 +58,12 @@ public class HomeActivity extends BaseActivity
 	    bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
 	    recycle = findViewById(R.id.recycle);
+
+	    if(tripEntryList.isEmpty())
+	    	noEntryRelativeLayout.setVisibility(View.VISIBLE);
+
+	    else
+	    	noEntryRelativeLayout.setVisibility(View.INVISIBLE);
 
 	    recyclerAdapter = new HomeActivityTEA(tripEntryList,HomeActivity.this);
 	    RecyclerView.LayoutManager layoutManager = new GridLayoutManager(HomeActivity.this,1);
