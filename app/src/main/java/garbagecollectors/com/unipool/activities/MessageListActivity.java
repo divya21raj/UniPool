@@ -1,5 +1,6 @@
 package garbagecollectors.com.unipool.activities;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -39,7 +40,9 @@ public class MessageListActivity extends AppCompatActivity
 	EditText messageArea;
 	ScrollView scrollView;
 
-	private static TreeMap<Long, Message> personalMessageMap;   //key = CreatedItTime
+	ProgressDialog messageProgressDialog;
+
+	private static TreeMap<Long, Message> personalMessageMap;   //key = CreatedAtTime
 	private static User chatUser;
 
 	private static PairUp pairUp;
@@ -62,10 +65,16 @@ public class MessageListActivity extends AppCompatActivity
 
 		messagesOnScreen = new ArrayList<>();
 
+		messageProgressDialog = new ProgressDialog(this);
+		messageProgressDialog.setMessage("Fetching your messages...");
+		messageProgressDialog.show();
+
 		setScrollViewToBottom();
 
 		DatabaseReference userMessageDatabaseReference = FirebaseDatabase.getInstance().
 				getReference("messages/" + BaseActivity.getFinalCurrentUser().getUserId());
+
+		//load from local
 
 		userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
 		{
@@ -76,7 +85,6 @@ public class MessageListActivity extends AppCompatActivity
 
 				if (message != null)
 				{
-					messageArea.setHint("Fetching messages....");
 					UtilityMethods.putMessageInMap(BaseActivity.getMessages(), message);
 
 					if (!message.getMessageId().equals("def@ult") && (message.getSenderId().equals(chatUser.getUserId())
@@ -89,9 +97,11 @@ public class MessageListActivity extends AppCompatActivity
 							showMessage(message);
 						}
 					}
+
+					else if(message.getMessageId().equals("def@ult"))
+						messageProgressDialog.dismiss();
 				}
 
-				messageArea.setHint("Write a message...");
 			}
 
 			@Override
@@ -167,20 +177,11 @@ public class MessageListActivity extends AppCompatActivity
 		setName("asdsafasde");
 	}
 
-	private void setScrollViewToBottom()
-	{
-		View lastChild = scrollView.getChildAt(scrollView.getChildCount() - 1);
-		int bottom = lastChild.getBottom() + scrollView.getPaddingBottom();
-		int sy = scrollView.getScrollY();
-		int sh = scrollView.getHeight();
-		int delta = bottom - (sy + sh);
-
-		scrollView.smoothScrollBy(0, delta);
-	}
-
 	private void showMessage(Message message)
 	{
 		messagesOnScreen.add(message.getMessageId());
+
+		//messageProgressDialog.dismiss();
 
 		if(message.getSenderId().equals(BaseActivity.getFinalCurrentUser().getUserId()))
 		{
@@ -228,6 +229,17 @@ public class MessageListActivity extends AppCompatActivity
 
 		//scrollView.fullScroll(View.FOCUS_DOWN);
 		setScrollViewToBottom();
+	}
+
+	private void setScrollViewToBottom()
+	{
+		View lastChild = scrollView.getChildAt(scrollView.getChildCount() - 1);
+		int bottom = lastChild.getBottom() + scrollView.getPaddingBottom();
+		int sy = scrollView.getScrollY();
+		int sh = scrollView.getHeight();
+		int delta = bottom - (sy + sh);
+
+		scrollView.smoothScrollBy(0, delta);
 	}
 
 

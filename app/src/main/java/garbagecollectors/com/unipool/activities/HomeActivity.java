@@ -4,6 +4,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,7 +14,12 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.adapters.HomeActivityTEA;
@@ -24,7 +31,7 @@ public class HomeActivity extends BaseActivity
 
     static public RelativeLayout noEntryRelativeLayout;
 
-    @Override
+	@Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -42,6 +49,11 @@ public class HomeActivity extends BaseActivity
 	    drawerLayout = findViewById(R.id.home_layout);
 
         noEntryRelativeLayout = findViewById(R.id.no_entry_message);
+        noEntryRelativeLayout.setOnLongClickListener(v ->
+        {
+	        changeToSOLogo();
+	        return true;
+        });
 
         navDrawerStateListener();
 
@@ -73,6 +85,30 @@ public class HomeActivity extends BaseActivity
 	    recycle.setAdapter(recyclerAdapter);
 
     }
+
+	private void changeToSOLogo()
+	{
+		TaskCompletionSource<Void> timerSource = new TaskCompletionSource<>();
+		Task<Void> timerTask = timerSource.getTask();
+
+		Handler handler = new Handler();
+		handler.postDelayed(() -> timerSource.setResult(null), 3350);
+
+		ImageView mainImage = noEntryRelativeLayout.findViewById(R.id.sad_smiley);
+		TextView header = noEntryRelativeLayout.findViewById(R.id.such_empty);
+		TextView footer = noEntryRelativeLayout.findViewById(R.id.no_entry_description);
+
+		mainImage.setBackground(ContextCompat.getDrawable(HomeActivity.this, R.drawable.ic_so_icon));
+		header.setText("Is Bae");
+		footer.setText("");
+
+		timerTask.addOnCompleteListener(task ->
+		{
+			mainImage.setBackground(ContextCompat.getDrawable(HomeActivity.this, R.drawable.ic_negative_smiley));
+			header.setText("Such empty...");
+			footer.setText("Maybe you can create a new entry?");
+		});
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)

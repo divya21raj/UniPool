@@ -37,8 +37,8 @@ public class SplashActivity extends AppCompatActivity
     FirebaseAuth mAuth;
     static FirebaseUser currentUser;
 
-    private TaskCompletionSource<Void> delaySource = new TaskCompletionSource<>();
-    private Task<Void> delayTask = delaySource.getTask();
+    private TaskCompletionSource<Void> timerSource = new TaskCompletionSource<>();
+    private Task<Void> timerTask = timerSource.getTask();
 
     private TaskCompletionSource<DataSnapshot> UserDBSource = new TaskCompletionSource<>();
     private Task UserDBTask = UserDBSource.getTask();
@@ -72,7 +72,8 @@ public class SplashActivity extends AppCompatActivity
 
         messageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + currentUser.getUid());
 
-        new Handler().postDelayed(() -> delaySource.setResult(null), 2350);
+        Handler handler = new Handler();
+        handler.postDelayed(() -> timerSource.setResult(null), 12350);
 
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
@@ -106,9 +107,11 @@ public class SplashActivity extends AppCompatActivity
             }
         });
 
-        Task<Void> allTask = Tasks.whenAll(UserDBTask, EntryDBTask, delayTask);
+        Task<Void> allTask = Tasks.whenAll(UserDBTask, EntryDBTask);
         allTask.addOnSuccessListener(aVoid ->
         {
+            handler.removeCallbacksAndMessages(null);
+
             DataSnapshot userData = (DataSnapshot) UserDBTask.getResult();
             DataSnapshot entryData = (DataSnapshot) EntryDBTask.getResult();
 
@@ -154,6 +157,12 @@ public class SplashActivity extends AppCompatActivity
         {
             // apologize profusely to the user!
             Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
+        });
+
+        timerTask.addOnCompleteListener(task ->
+        {
+            if(timerTask.getResult() == null)
+                Toast.makeText(this, "Network not that good, I'm trying...", Toast.LENGTH_LONG).show();
         });
     }
 

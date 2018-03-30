@@ -203,7 +203,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public void onPause()
     {
         super.onPause();
-
         overridePendingTransition(0, 0);
     }
 
