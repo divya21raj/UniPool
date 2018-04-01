@@ -43,6 +43,7 @@ import garbagecollectors.com.unipool.DatePickerFragment;
 import garbagecollectors.com.unipool.GenLocation;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.TripEntry;
+import garbagecollectors.com.unipool.UtilityMethods;
 
 public class NewEntryActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener,
                                                               GoogleApiClient.ConnectionCallbacks
@@ -273,10 +274,10 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         {
             case 0:
                 String entryId = entryDatabaseReference.push().getKey();
-                String name = currentUser.getDisplayName();
+                String name = UtilityMethods.sanitizeName(finalCurrentUser.getName());
                 System.currentTimeMillis();
 
-                TripEntry tripEntry = new TripEntry(name, entryId, currentUser.getUid(),
+                TripEntry tripEntry = new TripEntry(name, entryId, finalCurrentUser.getUserId(),
                                                         time, date, source, destination, null);
 
                 finalCurrentUser.getUserTripEntries().put(tripEntry.getEntry_id(), tripEntry);
@@ -285,7 +286,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
 
                 userDatabaseReference.child("userTripEntries").setValue(finalCurrentUser.getUserTripEntries());
 
-                Toast.makeText(this, "TripEntry created!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Trip entry created!", Toast.LENGTH_SHORT).show();
 
                 finish();
                 startActivity(new Intent(this, HomeActivity.class));

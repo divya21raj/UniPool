@@ -230,7 +230,7 @@ public class UtilityMethods
 
     public static void fillUserHolder(UserAdapter.MyHolder holder, User user)
     {
-        holder.name.setText(user.getName());
+        holder.name.setText(UtilityMethods.sanitizeName(user.getName()));
         holder.email.setText("");
         Picasso.get().load(user.getPhotoUrl()).into(holder.photo);
     }
@@ -321,7 +321,7 @@ public class UtilityMethods
             {
                 if(!(pairUp.getCreatorId().equals("dummy")))
                 {
-                    if(pairUp.getCreatorId().equals(BaseActivity.getCurrentUser().getUid()))
+                    if(pairUp.getCreatorId().equals(BaseActivity.getFinalCurrentUser().getUserId()))
                         userId[0] = pairUp.getRequesterId();
 
                     else
@@ -480,5 +480,27 @@ public class UtilityMethods
         }
 
         return messageMap;
+    }
+
+    public static String sanitizeName(String name)
+    {
+        final String ACTIONABLE_DELIMITERS = " '-/"; // these cause the character following
+        // to be capitalized
+
+        StringBuilder sb = new StringBuilder();
+        boolean capNext = true;
+
+        for (char c : name.toCharArray())
+        {
+            if (capNext)
+                c = Character.toUpperCase(c);
+            else
+                c = Character.toLowerCase(c);
+
+            sb.append(c);
+            capNext = (ACTIONABLE_DELIMITERS.indexOf((int) c) >= 0); // explicit cast not needed
+        }
+
+        return sb.toString();
     }
 }

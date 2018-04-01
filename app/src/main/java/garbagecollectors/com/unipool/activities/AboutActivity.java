@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import garbagecollectors.com.unipool.R;
+import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
 
 import static garbagecollectors.com.unipool.activities.BaseActivity.currentUser;
@@ -88,13 +89,15 @@ public class AboutActivity extends AppCompatActivity
 	private void setNavHeaderStuff()
 	{
 		TextView userNameOnHeader = findViewById(R.id.header_username);
-		userNameOnHeader.setText(finalCurrentUser.getName());
+		userNameOnHeader.setText(UtilityMethods.sanitizeName(finalCurrentUser.getName()));
 
 		TextView emailOnHeader = findViewById(R.id.header_email);
-		emailOnHeader.setText(currentUser.getEmail());
+		if(currentUser != null)
+			emailOnHeader.setText(currentUser.getEmail());
+		else emailOnHeader.setText(":(");
 
 		ImageView userImageOnHeader = findViewById(R.id.header_userImage);
-		Picasso.get().load(currentUser.getPhotoUrl()).into(userImageOnHeader);
+		Picasso.get().load(finalCurrentUser.getPhotoUrl()).into(userImageOnHeader);
 	}
 
 	private void dealWithSelectedMenuItem(MenuItem menuItem)

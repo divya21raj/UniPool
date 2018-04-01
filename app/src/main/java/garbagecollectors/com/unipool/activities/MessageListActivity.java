@@ -166,7 +166,7 @@ public class MessageListActivity extends AppCompatActivity
 	protected void onStart()
 	{
 		super.onStart();
-		setTitle(chatUser.getName());
+		setTitle(UtilityMethods.sanitizeName(chatUser.getName()));
 		setName(chatUser.getName());
 	}
 

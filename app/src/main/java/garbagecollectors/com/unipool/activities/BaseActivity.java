@@ -156,11 +156,14 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                     // whenever data at this location is updated.
                     try
                     {
-                        finalCurrentUser = dataSnapshot.getValue(User.class);
-                        UtilityMethods.populateChatMap(dataSnapshot);
-                        ReceivedRequestsFragment.refreshRecycler();
-                        SentRequestsFragment.refreshRecycler();
-                        ChatFragment.refreshRecycler();
+                        if(dataSnapshot.getValue() != null)
+                        {
+                            finalCurrentUser = dataSnapshot.getValue(User.class);
+                            UtilityMethods.populateChatMap(dataSnapshot);
+                            ReceivedRequestsFragment.refreshRecycler();
+                            SentRequestsFragment.refreshRecycler();
+                            ChatFragment.refreshRecycler();
+                        }
                     }
                     catch (DatabaseException dbe)
                     {
@@ -212,7 +215,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         super.onBackPressed();
         finalCurrentUser.setOnline(false);
         userDatabaseReference.child("isOnline").setValue("false");
-        expiryDatabaseReference.child(currentUser.getUid()).removeValue();
+        expiryDatabaseReference.child(finalCurrentUser.getUserId()).removeValue();
     }
 
     @Override
@@ -343,13 +346,16 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 	protected void setNavHeaderStuff()
 	{
 		TextView userNameOnHeader = findViewById(R.id.header_username);
-		userNameOnHeader.setText(finalCurrentUser.getName());
+		userNameOnHeader.setText(UtilityMethods.sanitizeName(finalCurrentUser.getName()));
 
 		TextView emailOnHeader = findViewById(R.id.header_email);
-		emailOnHeader.setText(currentUser.getEmail());
+        if(currentUser != null)
+            emailOnHeader.setText(currentUser.getEmail());
+        else emailOnHeader.setText(":(");
+
 
         CircleImageView userImageOnHeader = findViewById(R.id.header_userImage);
-        Picasso.get().load(currentUser.getPhotoUrl()).into(userImageOnHeader);
+        Picasso.get().load(finalCurrentUser.getPhotoUrl()).into(userImageOnHeader);
 	}
 
     protected abstract int getContentViewId();
