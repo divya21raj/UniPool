@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 import garbagecollectors.com.unipool.activities.BaseActivity;
@@ -502,5 +503,16 @@ public class UtilityMethods
         }
 
         return sb.toString();
+    }
+
+    public static Double generateKey(Integer receivedKey)              //receivedKey = B
+    {
+        Integer secretNumber = new Random().nextInt(4) + 2;       //secretNumber = a
+
+        Double sentKey = (Math.pow(BaseActivity.getG(),secretNumber))%(BaseActivity.getP());   //sentKey = A
+
+        Double key = (Math.pow(receivedKey, secretNumber))%(BaseActivity.getP());               //Key = K
+
+        return key;
     }
 }

@@ -44,6 +44,8 @@ import static garbagecollectors.com.unipool.activities.SplashActivity.MessageDBT
 
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
+    public static Integer G = 13, P = 2647;
+
     protected BottomNavigationView bottomNavigationView;
 	protected NavigationView navigationView;
 
@@ -357,6 +359,15 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         CircleImageView userImageOnHeader = findViewById(R.id.header_userImage);
         Picasso.get().load(finalCurrentUser.getPhotoUrl()).into(userImageOnHeader);
 	}
+
+    public static Integer getG() {
+        return G;
+    }
+
+    public static Integer getP() {
+        return P;
+    }
+
 
     protected abstract int getContentViewId();
 
