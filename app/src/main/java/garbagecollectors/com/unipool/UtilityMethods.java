@@ -222,7 +222,7 @@ public class UtilityMethods
     public static void fillTripEntryHolder(TripEntryAdapter.MyHolder holder, TripEntry tripEntry)
     {
         holder.date.setText(tripEntry.getDate());
-        holder.name_user.setText(tripEntry.getName());
+        holder.name_user.setText(sanitizeName(tripEntry.getName()));
         holder.travel_time.setText(tripEntry.getTime());
         holder.source.setText("From " + tripEntry.getSource().getName());
         holder.destination.setText("to " + tripEntry.getDestination().getName());

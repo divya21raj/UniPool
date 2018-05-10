@@ -16,8 +16,8 @@ android {
         applicationId 'garbagecollectors.com.unipool'
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 8
-        versionName "1.08"
+        versionCode 9
+        versionName "1.09"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true //important

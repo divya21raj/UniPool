@@ -49,7 +49,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>
 			//TreeMap<Long, Message> messageMap = UtilityMethods.getPersonalMessageMap(BaseActivity.getMessages(), user.getUserId());
 
 			MessageListActivity.setChatUser(user);
-			MessageListActivity.setName(user.getName());
+			MessageListActivity.setName(UtilityMethods.sanitizeName(user.getName()));
 			//MessageListActivity.setPersonalMessageMap(messageMap);
 			MessageListActivity.setPairUp(UtilityMethods.getPairUp(user, BaseActivity.getFinalCurrentUser().getPairUps()));
 
