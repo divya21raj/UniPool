@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import garbagecollectors.com.unipool.PairUp;
+import garbagecollectors.com.unipool.Models.PairUp;
+import garbagecollectors.com.unipool.Models.TripEntry;
+import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.TripEntry;
-import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.activities.RequestActivity.ReceivedRequestsFragment;

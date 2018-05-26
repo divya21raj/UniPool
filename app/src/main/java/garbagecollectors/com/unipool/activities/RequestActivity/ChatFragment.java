@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Map;
 
+import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.adapters.UserAdapter;
 

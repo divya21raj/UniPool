@@ -40,9 +40,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 import garbagecollectors.com.unipool.DatePickerFragment;
-import garbagecollectors.com.unipool.GenLocation;
+import garbagecollectors.com.unipool.Models.GenLocation;
+import garbagecollectors.com.unipool.Models.TripEntry;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.TripEntry;
 import garbagecollectors.com.unipool.UtilityMethods;
 
 public class NewEntryActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener,

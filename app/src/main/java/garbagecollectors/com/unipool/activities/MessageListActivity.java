@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import garbagecollectors.com.unipool.Message;
-import garbagecollectors.com.unipool.PairUp;
+import garbagecollectors.com.unipool.Models.Message;
+import garbagecollectors.com.unipool.Models.PairUp;
+import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.UtilityMethods;
 
 import static garbagecollectors.com.unipool.activities.BaseActivity.notificationDatabaseReference;

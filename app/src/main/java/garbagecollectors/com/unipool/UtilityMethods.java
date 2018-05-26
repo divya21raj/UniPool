@@ -24,6 +24,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import garbagecollectors.com.unipool.Models.Message;
+import garbagecollectors.com.unipool.Models.PairUp;
+import garbagecollectors.com.unipool.Models.TripEntry;
+import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.adapters.TripEntryAdapter;
 import garbagecollectors.com.unipool.adapters.UserAdapter;

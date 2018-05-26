@@ -203,7 +203,7 @@
             android:layout_marginTop="120dp"
             android:layout_centerHorizontal="true"
             android:backgroundTint="@color/colorPrimary"
-            android:text="CREATE ENTRY"
+            android:text="@string/create_entry_button"
             android:textColor="@color/viewBg"/>
 
         <include
