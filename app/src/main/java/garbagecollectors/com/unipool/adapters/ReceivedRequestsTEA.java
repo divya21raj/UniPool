@@ -67,6 +67,9 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
         requestsProgressDialog.setMessage("Please wait...");
         requestsProgressDialog.show();
 
+        holder.cardArrow.setVisibility(View.GONE);
+        holder.messageCard.setVisibility(View.GONE);
+
         MessageDBTask.addOnCompleteListener(o -> requestsProgressDialog.dismiss());
 
         holder.requestButton.setOnClickListener(view ->

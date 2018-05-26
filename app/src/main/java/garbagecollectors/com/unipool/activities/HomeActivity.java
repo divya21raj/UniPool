@@ -26,7 +26,7 @@ import garbagecollectors.com.unipool.adapters.HomeActivityTEA;
 
 public class HomeActivity extends BaseActivity
 {
-    RecyclerView recycle;
+    static RecyclerView recycle;
     static HomeActivityTEA recyclerAdapter;
 
     static public RelativeLayout noEntryRelativeLayout;
@@ -185,4 +185,9 @@ public class HomeActivity extends BaseActivity
 
     	recyclerAdapter.notifyDataSetChanged();
     }
+
+	public static RecyclerView getRecycle()
+	{
+		return recycle;
+	}
 }

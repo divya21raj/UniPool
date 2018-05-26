@@ -40,7 +40,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 			resultIntent.putExtra("openingTab", 2);
 		else if(notificationBody.contains("sent"))
 			resultIntent.putExtra("openingTab", 1);
-		else if(notificationBody.contains("message"))
+		else if(notificationBody.contains("messageCard"))
 			resultIntent.putExtra("openingTab", 2);
 
 		//resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

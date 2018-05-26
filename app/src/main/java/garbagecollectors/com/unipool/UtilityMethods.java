@@ -3,6 +3,7 @@ package garbagecollectors.com.unipool;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.View;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
@@ -230,6 +231,13 @@ public class UtilityMethods
         holder.travel_time.setText(tripEntry.getTime());
         holder.source.setText("From " + tripEntry.getSource().getName());
         holder.destination.setText("to " + tripEntry.getDestination().getName());
+
+        if(tripEntry.getMessage() != null)
+        {
+            holder.cardArrow.setVisibility(View.VISIBLE);
+            holder.messageCard.setVisibility(View.VISIBLE);
+            holder.messageText.setText(tripEntry.getMessage());
+        }
     }
 
     public static void fillUserHolder(UserAdapter.MyHolder holder, User user)

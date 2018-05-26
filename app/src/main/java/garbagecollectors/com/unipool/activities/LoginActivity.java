@@ -228,7 +228,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
                     }
                     else
                     {
-                        // If sign in fails, display a message to the user.
+                        // If sign in fails, display a messageCard to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
@@ -297,7 +297,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
         GenLocation dummyGenLocation = new GenLocation("dummy", "dummy", 0d, 0d);
 
         TripEntry dummyTripEntry = new TripEntry("dummy", "dummyId", "DummyUser", "12:00",
-                                                    "1/11/12", dummyGenLocation, dummyGenLocation, dummyLambdaMap);
+                                                    "1/11/12", dummyGenLocation, dummyGenLocation, dummyLambdaMap, "dummyMessage");
 
         HashMap<String, TripEntry> dummyUserEntries = new HashMap<>();
         dummyUserEntries.put("dummy", dummyTripEntry);
