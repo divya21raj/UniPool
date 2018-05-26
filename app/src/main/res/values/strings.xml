@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">UniPool</string>
     <string name="title_home">Home</string>
+
     <string name="WebClientId">560852588496-baos0qb9om1qmvade33hbh1l2ic70l00.apps.googleusercontent.com</string>
     <string name="new_entry">New Entry</string>
     <string name="title_requests">Requests</string>
@@ -12,6 +13,11 @@
     <string name="rohan_datta">Rohan Datta</string>
     <string name="atishay_jain">Atishay Jain</string>
     <string name="saurabh_gangadharan">Saurabh Gangadharan</string>
-    <string name="currentLoc">Getting your current location...</string>
+
+    <string name="currentLoc">Getting your current location…</string>
+
+    <string name="version">v1.09</string>
+    <string name="create_entry_button">CREATE ENTRY</string>
+    <string name="uni_name">Shiv Nadar University, NH91, Tehsil Dadri, Gautam Buddha Nagar, Greater Noida, Uttar Pradesh</string>
 
 </resources>

@@ -3,6 +3,7 @@ package garbagecollectors.com.unipool;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.View;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
@@ -24,6 +25,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import garbagecollectors.com.unipool.Models.Message;
+import garbagecollectors.com.unipool.Models.PairUp;
+import garbagecollectors.com.unipool.Models.TripEntry;
+import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.adapters.TripEntryAdapter;
 import garbagecollectors.com.unipool.adapters.UserAdapter;
@@ -222,10 +227,17 @@ public class UtilityMethods
     public static void fillTripEntryHolder(TripEntryAdapter.MyHolder holder, TripEntry tripEntry)
     {
         holder.date.setText(tripEntry.getDate());
-        holder.name_user.setText(tripEntry.getName());
+        holder.name_user.setText(sanitizeName(tripEntry.getName()));
         holder.travel_time.setText(tripEntry.getTime());
         holder.source.setText("From " + tripEntry.getSource().getName());
         holder.destination.setText("to " + tripEntry.getDestination().getName());
+
+        if(tripEntry.getMessage() != null)
+        {
+            holder.cardArrow.setVisibility(View.VISIBLE);
+            holder.messageCard.setVisibility(View.VISIBLE);
+            holder.messageText.setText(tripEntry.getMessage());
+        }
     }
 
     public static void fillUserHolder(UserAdapter.MyHolder holder, User user)

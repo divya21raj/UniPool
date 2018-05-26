@@ -21,9 +21,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import garbagecollectors.com.unipool.Models.TripEntry;
+import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.TripEntry;
-import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.UtilityMethods;
 
 public class SplashActivity extends AppCompatActivity

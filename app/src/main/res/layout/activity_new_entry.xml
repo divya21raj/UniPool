@@ -10,6 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- Dummy item to prevent EditText from receiving focus -->
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_height="0px"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
         <LinearLayout
             android:id="@+id/findSourceLinearLayout"
             android:layout_width="340dp"
@@ -127,6 +134,7 @@
                         android:layout_marginLeft="60dp"
                         android:textAlignment="center"
                         android:layout_centerHorizontal="true"
+                        android:backgroundTint="@color/colorPrimary"
                         android:clickable="true"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
@@ -184,6 +192,7 @@
                         android:layout_marginLeft="60dp"
                         android:textAlignment="center"
                         android:layout_centerHorizontal="true"
+                        android:backgroundTint="@color/colorPrimary"
                         android:clickable="true"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
@@ -194,16 +203,39 @@
 
         </LinearLayout>
 
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/newEntryMessageCard"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_below="@id/setDateLinearLayout"
+            android:layout_marginTop="20dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/newEntryMessageText"
+                android:paddingRight="5dp"
+                android:textColor="@color/colorPrimary"
+                android:paddingLeft="5dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:hint="Any additional info?"/>
+
+        </android.support.v7.widget.CardView>
+
         <Button
             android:id="@+id/finalSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="finalSave"
-            android:layout_below="@+id/setTimeLinearLayout"
-            android:layout_marginTop="120dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="80dp"
             android:layout_centerHorizontal="true"
             android:backgroundTint="@color/colorPrimary"
-            android:text="CREATE ENTRY"
+            android:text="@string/create_entry_button"
             android:textColor="@color/viewBg"/>
 
         <include

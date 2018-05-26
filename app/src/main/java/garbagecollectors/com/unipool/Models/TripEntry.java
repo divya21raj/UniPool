@@ -1,4 +1,4 @@
-package garbagecollectors.com.unipool;
+package garbagecollectors.com.unipool.Models;
 
 import java.text.ParseException;
 import java.util.HashMap;
@@ -15,7 +15,9 @@ public class TripEntry
 
     private GenLocation source, destination;
 
-    public TripEntry(String name, String entry_id, String user_id, String time, String date, GenLocation source, GenLocation destination, HashMap<String, Float> lambdaMap) throws ParseException
+    private String message;
+
+    public TripEntry(String name, String entry_id, String user_id, String time, String date, GenLocation source, GenLocation destination, HashMap<String, Float> lambdaMap, String message) throws ParseException
     {
         this.entry_id = entry_id;
         this.user_id = user_id;
@@ -24,6 +26,7 @@ public class TripEntry
         this.source = source;
         this.destination = destination;
         this.name = name;
+        this.message = message;
     }
 
     public TripEntry(TripEntry tripEntry)   //copyConstructor
@@ -95,4 +98,13 @@ public class TripEntry
         return destination;
     }
 
+    public String getMessage()
+    {
+        return message;
+    }
+
+    public void setMessage(String message)
+    {
+        this.message = message;
+    }
 }

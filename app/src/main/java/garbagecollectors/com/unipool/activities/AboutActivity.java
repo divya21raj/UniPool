@@ -111,6 +111,7 @@ public class AboutActivity extends AppCompatActivity
 				BaseActivity.mAuth.signOut();
 				finish();
 				startActivity(new Intent(this, LoginActivity.class));
+				break;
 
 			case R.id.nav_home:
 				finish();

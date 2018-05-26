@@ -39,10 +39,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import garbagecollectors.com.unipool.Constants;
 import garbagecollectors.com.unipool.DatePickerFragment;
-import garbagecollectors.com.unipool.GenLocation;
+import garbagecollectors.com.unipool.Models.GenLocation;
+import garbagecollectors.com.unipool.Models.TripEntry;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.TripEntry;
 import garbagecollectors.com.unipool.UtilityMethods;
 
 public class NewEntryActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener,
@@ -51,9 +52,9 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     GenLocation source, destination;
-    String time, sourceSet, destinationSet;
+    String time, sourceSet, destinationSet, message;
 
-    EditText findSource, findDestination, setTime, setDate;
+    EditText findSource, findDestination, setTime, setDate, messageText;
     Button buttonFinalSave;
 
     public static String date;
@@ -95,6 +96,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
 
         source = null;
         destination = null;
+        message = null;
 
         time = "";
 
@@ -102,6 +104,9 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         findDestination = findViewById(R.id.findDestinationEditText);
         setTime = findViewById(R.id.setTimeEditText);
         setDate = findViewById(R.id.setDateEditText);
+        messageText = findViewById(R.id.newEntryMessageText);
+
+        predictSourceAndDestination();
 
         setTime.setOnClickListener(view -> openTimePickerDialog(false));
 
@@ -131,6 +136,26 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+
+    }
+
+    private void predictSourceAndDestination()
+    {
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+
+        if(day == Calendar.SATURDAY || day == Calendar.SUNDAY)
+        {
+        	findDestination.setText(R.string.uni_name);
+        	destination = new GenLocation(Constants.uniInfo.get("name"), Constants.uniInfo.get("address"),
+			     Double.parseDouble(Constants.uniInfo.get("latitude")), Double.parseDouble(Constants.uniInfo.get("longitude")));
+        }
+        else
+        {
+        	findSource.setText(R.string.uni_name);
+	        source = new GenLocation(Constants.uniInfo.get("name"), Constants.uniInfo.get("address"),
+			        Double.parseDouble(Constants.uniInfo.get("latitude")), Double.parseDouble(Constants.uniInfo.get("longitude")));
+        }
 
     }
 
@@ -276,9 +301,13 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 String entryId = entryDatabaseReference.push().getKey();
                 String name = UtilityMethods.sanitizeName(finalCurrentUser.getName());
                 System.currentTimeMillis();
+                message = messageText.getText().toString();
+
+                if(message.isEmpty())
+                    message = null;
 
                 TripEntry tripEntry = new TripEntry(name, entryId, finalCurrentUser.getUserId(),
-                                                        time, date, source, destination, null);
+                                                        time, date, source, destination, null, message);
 
                 finalCurrentUser.getUserTripEntries().put(tripEntry.getEntry_id(), tripEntry);
 
@@ -298,7 +327,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 break;
 
             case 2:
-                Toast.makeText(this, "The developers are still working on time travel...",
+                Toast.makeText(this, "This app's developer is still working on time travel...",
                         Toast.LENGTH_LONG).show();
                 break;
 
@@ -342,7 +371,7 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         else if (date == null)
             flag = 2;
 
-        else if (inputTime.before(currentTime))
+        else if (inputTime.before(currentTime) || setDate.getText().toString().equalsIgnoreCase("Invalid Date"))
             flag = 2;
 
         else if(diffInDays > 21)

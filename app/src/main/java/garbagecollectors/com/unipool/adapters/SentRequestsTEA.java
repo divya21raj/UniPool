@@ -3,20 +3,26 @@
 package garbagecollectors.com.unipool.adapters;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import garbagecollectors.com.unipool.Models.TripEntry;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.TripEntry;
 import garbagecollectors.com.unipool.UtilityMethods;
+import garbagecollectors.com.unipool.activities.HomeActivity;
 
 public class SentRequestsTEA extends TripEntryAdapter
 {
     private List<TripEntry> list;
     private Context context;
+
+    int isExpanded = -1;
 
     public SentRequestsTEA(List<TripEntry> list, Context context)
     {
@@ -40,12 +46,30 @@ public class SentRequestsTEA extends TripEntryAdapter
     }
 
     // Replace the contents of a view (invoked by the layout manager)
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onBindViewHolder(MyHolder holder, int position)
     {
         TripEntry tripEntry = list.get(position);
 
         UtilityMethods.fillTripEntryHolder(holder, tripEntry);
+
+        if(list.get(position).getMessage() != null)
+        {
+            final boolean isExpanded = position== this.isExpanded;
+            holder.messageCard.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+            holder.itemView.setActivated(isExpanded);
+            holder.cardArrow.setOnClickListener(v -> {
+                if (!isExpanded)
+                    holder.cardArrow.setImageResource(R.drawable.ic_arrow_drop_down_circle_24px);
+                else
+                    holder.cardArrow.setImageResource(R.drawable.ic_arrow_left_24px);
+                this.isExpanded = isExpanded ? -1:position;
+                TransitionManager.beginDelayedTransition(HomeActivity.getRecycle());
+                notifyDataSetChanged();
+            });
+        }
+
         holder.requestButton.setVisibility(View.INVISIBLE);
     }
 

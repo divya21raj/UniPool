@@ -16,9 +16,9 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import garbagecollectors.com.unipool.Models.TripEntry;
+import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.TripEntry;
-import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.HomeActivity;
 import garbagecollectors.com.unipool.adapters.ReceivedRequestsTEA;

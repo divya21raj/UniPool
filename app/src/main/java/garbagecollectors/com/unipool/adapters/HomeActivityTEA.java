@@ -4,7 +4,10 @@ package garbagecollectors.com.unipool.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +26,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import garbagecollectors.com.unipool.Models.TripEntry;
+import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.TripEntry;
-import garbagecollectors.com.unipool.User;
 import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.BaseActivity;
+import garbagecollectors.com.unipool.activities.HomeActivity;
 
 import static garbagecollectors.com.unipool.UtilityMethods.accessUserDatabase;
 import static garbagecollectors.com.unipool.UtilityMethods.addRequestInList;
@@ -45,6 +49,8 @@ public class HomeActivityTEA extends TripEntryAdapter
     private AlertDialog.Builder alertDialogBuilder;
 
     private ProgressDialog progressDialog;
+
+    private int isExpanded = -1;
 
     public HomeActivityTEA(List<TripEntry> list, Context context)
     {
@@ -68,10 +74,27 @@ public class HomeActivityTEA extends TripEntryAdapter
     }
 
     // Replace the contents of a view (invoked by the layout manager)
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onBindViewHolder(MyHolder holder, int position)
     {
         UtilityMethods.fillTripEntryHolder(holder, list.get(position));
+
+        if(list.get(position).getMessage() != null)
+        {
+            final boolean isExpanded = position== this.isExpanded;
+            holder.messageCard.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+            holder.itemView.setActivated(isExpanded);
+            holder.cardArrow.setOnClickListener(v -> {
+                if (!isExpanded)
+                    holder.cardArrow.setImageResource(R.drawable.ic_arrow_drop_down_circle_24px);
+                else
+                    holder.cardArrow.setImageResource(R.drawable.ic_arrow_left_24px);
+                this.isExpanded = isExpanded ? -1:position;
+                TransitionManager.beginDelayedTransition(HomeActivity.getRecycle());
+                notifyDataSetChanged();
+            });
+        }
 
         holder.requestButton.setOnClickListener(view ->
                 sendRequest(view, position));

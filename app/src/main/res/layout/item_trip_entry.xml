@@ -16,85 +16,143 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/vname"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="2dp"
-                android:paddingLeft="@dimen/title_padding"
-                android:paddingRight="@dimen/title_padding"
-                android:text="name"
-                android:textColor="@color/colorTextBlack"
-                android:textSize="20sp" />
+                android:id="@+id/cardInfoRel">
 
-            <Button
-                android:id="@+id/requestButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/ic_group_add_black_24px"
-                android:backgroundTint="@color/colorPrimary"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingStart="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="12dp"/>
+                <TextView
+                    android:id="@+id/vname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="@dimen/title_padding"
+                    android:paddingRight="@dimen/title_padding"
+                    android:text="name"
+                    android:textColor="@color/colorTextBlack"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/vdate"
-                android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/requestButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/ic_group_add_black_24px"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="12dp"/>
+
+                <TextView
+                    android:id="@+id/vdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/vname"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="@dimen/title_padding"
+                    android:paddingRight="@dimen/title_padding"
+                    android:text="date"
+                    android:textColor="@color/colorTextBlack"
+                    android:textSize="@dimen/card_text_size" />
+
+                <TextView
+                    android:id="@+id/vtime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/vdate"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="@dimen/title_padding"
+                    android:paddingRight="@dimen/title_padding"
+                    android:textColor="@color/colorTextBlack"
+                    android:text="time"
+                    android:textSize="@dimen/card_text_size" />
+
+                <TextView
+                    android:id="@+id/vsource"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/vtime"
+                    android:paddingLeft="@dimen/title_padding"
+                    android:paddingRight="@dimen/title_padding"
+                    android:text="source"
+                    android:textColor="@color/colorTextBlack"
+                    android:textSize="@dimen/card_text_size" />
+
+                <TextView
+                    android:id="@+id/vdestination"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/vsource"
+                    android:paddingLeft="@dimen/title_padding"
+                    android:paddingRight="@dimen/title_padding"
+                    android:layout_marginBottom="5dp"
+                    android:text="destination"
+                    android:textColor="@color/colorTextBlack"
+                    android:textSize="@dimen/card_text_size" />
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/cardArrow"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_arrow_left_24px"
+                    android:layout_above="@id/dummyLine"
+                    android:layout_marginEnd="5dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:id="@+id/dummyLine"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/vdestination">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/vname"
-                android:paddingBottom="2dp"
-                android:paddingLeft="@dimen/title_padding"
-                android:paddingRight="@dimen/title_padding"
-                android:text="date"
-                android:textColor="@color/colorTextBlack"
-                android:textSize="@dimen/card_text_size" />
+                android:id="@+id/vmessage"
+                android:visibility="gone"
+                android:layout_below="@id/cardInfoRel"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                card_view:cardCornerRadius="5sp">
 
-            <TextView
-                android:id="@+id/vtime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/vdate"
-                android:paddingBottom="2dp"
-                android:paddingLeft="@dimen/title_padding"
-                android:paddingRight="@dimen/title_padding"
-                android:textColor="@color/colorTextBlack"
-                android:text="time"
-                android:textSize="@dimen/card_text_size" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/vsource"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/vtime"
-                android:paddingLeft="@dimen/title_padding"
-                android:paddingRight="@dimen/title_padding"
-                android:text="source"
-                android:textColor="@color/colorTextBlack"
-                android:textSize="@dimen/card_text_size" />
-
-            <TextView
-                android:id="@+id/vdestination"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/vsource"
-                android:paddingLeft="@dimen/title_padding"
-                android:paddingRight="@dimen/title_padding"
-                android:text="destination"
-                android:textColor="@color/colorTextBlack"
-                android:textSize="@dimen/card_text_size" />
-
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/cardMessageText"
+                        android:layout_centerInParent="true"
+                        android:paddingRight="5dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="5dp"
+                        android:text="Message"
+                        android:textSize="@dimen/card_text_size"
+                        android:textColor="@color/colorTextBlack"/>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
 
         </RelativeLayout>
 

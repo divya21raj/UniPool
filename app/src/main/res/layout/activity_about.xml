@@ -128,7 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/version"
-            android:text="v1.06"
+            android:text="@string/version"
             android:layout_above="@id/githubLayout"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"/>
