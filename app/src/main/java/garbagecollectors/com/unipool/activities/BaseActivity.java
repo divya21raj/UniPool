@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import garbagecollectors.com.unipool.Constants;
 import garbagecollectors.com.unipool.Models.Message;
 import garbagecollectors.com.unipool.Models.TripEntry;
 import garbagecollectors.com.unipool.Models.User;
@@ -78,6 +79,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         {
             super.onCreate(savedInstanceState);
             setContentView(getContentViewId());
+
+            Constants.init();
 
             mAuth = FirebaseAuth.getInstance();
             currentUser = mAuth.getCurrentUser();
@@ -177,11 +180,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                     // Failed to read value
                         Log.w("UserDB", "Failed to read userDB value.", error.toException());
                         Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }
 
-                bottomNavigationView = findViewById(R.id.bottom_navigation);
-                bottomNavigationView.setOnNavigationItemSelectedListener(this);
+            });
+
+            bottomNavigationView = findViewById(R.id.bottom_navigation);
+            bottomNavigationView.setOnNavigationItemSelectedListener(this);
         }
 
         catch(NullPointerException nlp)
@@ -311,27 +315,32 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 		{
 			case R.id.nav_about:
 				startActivity(new Intent(this, AboutActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 				break;
 
 			case R.id.nav_logout:
 				mAuth.signOut();
 				finish();
 				startActivity(new Intent(this, LoginActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 				break;
 
             case R.id.nav_home:
                 finish();
                 startActivity(new Intent(this, HomeActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
 
             case R.id.nav_newEntry:
                 finish();
                 startActivity(new Intent(this, NewEntryActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
 
             case R.id.nav_requests:
                 finish();
                 startActivity(new Intent(this, RequestActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
 
             case R.id.nav_chat:
@@ -339,6 +348,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 Intent chatIntent = new Intent(this, RequestActivity.class);
                 chatIntent.putExtra("openingTab", 2);
                 startActivity(chatIntent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
 		}
 	}

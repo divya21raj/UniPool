@@ -43,6 +43,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 		else if(notificationBody.contains("message"))
 			resultIntent.putExtra("openingTab", 2);
 
+		//resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
 		PendingIntent resultPendingIntent =
 				PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 

@@ -39,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import garbagecollectors.com.unipool.Constants;
 import garbagecollectors.com.unipool.DatePickerFragment;
 import garbagecollectors.com.unipool.Models.GenLocation;
 import garbagecollectors.com.unipool.Models.TripEntry;
@@ -103,6 +104,8 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
         setTime = findViewById(R.id.setTimeEditText);
         setDate = findViewById(R.id.setDateEditText);
 
+        predictSourceAndDestination();
+
         setTime.setOnClickListener(view -> openTimePickerDialog(false));
 
         setDate.setOnClickListener(v ->
@@ -131,6 +134,26 @@ public class NewEntryActivity extends BaseActivity implements GoogleApiClient.On
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+
+    }
+
+    private void predictSourceAndDestination()
+    {
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+
+        if(day == Calendar.SATURDAY || day == Calendar.SUNDAY)
+        {
+        	findDestination.setText(R.string.uni_name);
+        	destination = new GenLocation(Constants.uniInfo.get("name"), Constants.uniInfo.get("address"),
+			     Double.parseDouble(Constants.uniInfo.get("latitude")), Double.parseDouble(Constants.uniInfo.get("longitude")));
+        }
+        else
+        {
+        	findSource.setText(R.string.uni_name);
+	        source = new GenLocation(Constants.uniInfo.get("name"), Constants.uniInfo.get("address"),
+			        Double.parseDouble(Constants.uniInfo.get("latitude")), Double.parseDouble(Constants.uniInfo.get("longitude")));
+        }
 
     }
 

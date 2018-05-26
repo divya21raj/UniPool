@@ -63,7 +63,6 @@
             android:label="@string/title_requests">
             <intent-filter>
                 <action android:name="android.intent.action.TARGET_NOTIFICATION" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
