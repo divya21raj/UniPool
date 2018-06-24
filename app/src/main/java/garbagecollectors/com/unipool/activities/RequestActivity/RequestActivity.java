@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -63,13 +62,6 @@ public class RequestActivity extends BaseActivity
 
 			receivedRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference(
 					"users/" + finalCurrentUser.getUserId() + "/requestsReceived");
-
-			final ActionBar actionBar = getSupportActionBar();
-			if(actionBar != null)
-			{
-				actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
-				actionBar.setDisplayHomeAsUpEnabled(true);
-			}
 
 			drawerLayout = findViewById(R.id.requests_layout);
 

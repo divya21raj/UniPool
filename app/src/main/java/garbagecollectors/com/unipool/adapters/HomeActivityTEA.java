@@ -102,16 +102,13 @@ public class HomeActivityTEA extends TripEntryAdapter
         holder.itemView.setOnLongClickListener(v ->
         {
             if(list.get(position).getUser_id().equals(BaseActivity.getFinalCurrentUser().getUserId()))
-            {
                 deleteEntry(v, position);
-            }
 
             else
                 sendRequest(v, position);
 
             return true;
         });
-
 
     }
 

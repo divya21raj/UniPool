@@ -31,7 +31,7 @@ public class SplashActivity extends AppCompatActivity
     private static ArrayList<TripEntry> tripEntryList = new ArrayList<>();
 
     private static DatabaseReference userDatabaseReference;
-    private static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
+    public static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
     private static DatabaseReference messageDatabaseReference;
 
     FirebaseAuth mAuth;

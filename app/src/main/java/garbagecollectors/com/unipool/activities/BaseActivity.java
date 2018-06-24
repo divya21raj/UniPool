@@ -1,12 +1,17 @@
 package garbagecollectors.com.unipool.activities;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +20,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -31,6 +40,7 @@ import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import garbagecollectors.com.unipool.Constants;
+import garbagecollectors.com.unipool.Models.GenLocation;
 import garbagecollectors.com.unipool.Models.Message;
 import garbagecollectors.com.unipool.Models.TripEntry;
 import garbagecollectors.com.unipool.Models.User;
@@ -85,107 +95,21 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             mAuth = FirebaseAuth.getInstance();
             currentUser = mAuth.getCurrentUser();
 
+            final ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null)
+            {
+                actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+
             userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId());
             userMessageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + finalCurrentUser.getUserId());
 
-            MessageDBTask.addOnCompleteListener(task ->
-            {
-                DataSnapshot messageData = (DataSnapshot) MessageDBTask.getResult();
+            startMessageListener();
 
-                for (DataSnapshot dataSnapshot : messageData.getChildren())
-                {
-                    Message message = dataSnapshot.getValue(Message.class);
+            getTripEntries();
 
-                    assert message != null;
-                    if (!(message.getMessageId().equals("def@ult")))
-                        UtilityMethods.putMessageInMap(messages, message);
-                }
-            });
-
-
-            entryDatabaseReference.addChildEventListener(new ChildEventListener()
-            {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s)
-                {
-                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                    UtilityMethods.updateTripList(tripEntryList, tripEntry);
-
-                    HomeActivity.updateRecycleAdapter();
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s)
-                {
-                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                    UtilityMethods.updateTripList(tripEntryList, tripEntry);
-
-                    HomeActivity.updateRecycleAdapter();
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot)
-                {
-                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                    if (tripEntry != null)
-                    {
-                        UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
-                        HomeActivity.updateRecycleAdapter();
-                    }
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s)
-                {
-                    //IDK
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError)
-                {
-                    // Failed to read value
-                    Log.w("Hello", "Failed to read value.", databaseError.toException());
-                    Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            userDatabaseReference.addValueEventListener(new ValueEventListener()
-            {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot)
-                {
-                    // This method is called once with the initial value and again
-                    // whenever data at this location is updated.
-                    try
-                    {
-                        if(dataSnapshot.getValue() != null)
-                        {
-                            finalCurrentUser = dataSnapshot.getValue(User.class);
-                            UtilityMethods.populateChatMap(dataSnapshot);
-                            ReceivedRequestsFragment.refreshRecycler();
-                            SentRequestsFragment.refreshRecycler();
-                            ChatFragment.refreshRecycler();
-                        }
-                    }
-                    catch (DatabaseException dbe)
-                    {
-                        Toast.makeText(getApplicationContext(), "Some problems, mind restarting the app?", Toast.LENGTH_LONG).show();
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError error)
-                {
-                    // Failed to read value
-                        Log.w("UserDB", "Failed to read userDB value.", error.toException());
-                        Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
-                }
-
-            });
-
-            bottomNavigationView = findViewById(R.id.bottom_navigation);
-            bottomNavigationView.setOnNavigationItemSelectedListener(this);
+            getUserDetails();
         }
 
         catch(NullPointerException nlp)
@@ -194,6 +118,113 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         }
 
+    }
+
+    protected void startMessageListener()
+    {
+        MessageDBTask.addOnCompleteListener(task ->
+        {
+            DataSnapshot messageData = (DataSnapshot) MessageDBTask.getResult();
+
+            for (DataSnapshot dataSnapshot : messageData.getChildren())
+            {
+                Message message = dataSnapshot.getValue(Message.class);
+
+                assert message != null;
+                if (!(message.getMessageId().equals("def@ult")))
+                    UtilityMethods.putMessageInMap(messages, message);
+            }
+        });
+    }
+
+    protected void getUserDetails()
+    {
+        userDatabaseReference.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                try
+                {
+                    if(dataSnapshot.getValue() != null)
+                    {
+                        finalCurrentUser = dataSnapshot.getValue(User.class);
+                        UtilityMethods.populateChatMap(dataSnapshot);
+                        ReceivedRequestsFragment.refreshRecycler();
+                        SentRequestsFragment.refreshRecycler();
+                        ChatFragment.refreshRecycler();
+                    }
+                }
+                catch (DatabaseException dbe)
+                {
+                    Toast.makeText(getApplicationContext(), "Some problems, mind restarting the app?", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error)
+            {
+                // Failed to read value
+                Log.w("UserDB", "Failed to read userDB value.", error.toException());
+                Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+    }
+
+    protected void getTripEntries()
+    {
+        entryDatabaseReference.addChildEventListener(new ChildEventListener()
+        {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s)
+            {
+                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                UtilityMethods.updateTripList(tripEntryList, tripEntry);
+
+                HomeActivity.updateRecycleAdapter();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s)
+            {
+                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                UtilityMethods.updateTripList(tripEntryList, tripEntry);
+
+                HomeActivity.updateRecycleAdapter();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot)
+            {
+                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                if (tripEntry != null)
+                {
+                    UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
+                    HomeActivity.updateRecycleAdapter();
+                }
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s)
+            {
+                //IDK
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                // Failed to read value
+                Log.w("Hello", "Failed to read value.", databaseError.toException());
+                Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -206,6 +237,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     }
 
     // Remove inter-activity transition to avoid screen tossing on tapping bottom bottom_nav items
+    @RequiresApi(api = Build.VERSION_CODES.ECLAIR)
     @Override
     public void onPause()
     {
@@ -231,9 +263,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             if (itemId == R.id.navigation_home)
             {
                 startActivity(new Intent(this, HomeActivity.class));
-            } else if (itemId == R.id.navigation_newEntry)
-            {
-                startActivity(new Intent(this, NewEntryActivity.class));
             } else if (itemId == R.id.navigation_requests)
             {
                 startActivity(new Intent(this, RequestActivity.class));
@@ -332,9 +361,16 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 break;
 
             case R.id.nav_newEntry:
-                finish();
-                startActivity(new Intent(this, NewEntryActivity.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                if(Constants.OPEN_ACTIVITY.contains("HOME"))
+                    new NewEntryDialog().show(getFragmentManager(), "NewEntryDialog");
+                else
+                {
+                    Intent intent = new Intent(this, HomeActivity.class);
+                    intent.putExtra("openNewEntryDialog", true);
+                    finish();
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }
                 break;
 
             case R.id.nav_requests:
@@ -352,6 +388,86 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 break;
 		}
 	}
+
+    //+++++
+    //For NewEntryDialog
+    // A place has been received; use requestCode to track the request.
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == Activity.RESULT_OK)
+        {
+            Place place = PlaceAutocomplete.getPlace(this, data);
+            Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber());
+            LatLng latLng;
+            switch (requestCode)
+            {
+                case 1:
+                    latLng = place.getLatLng();
+                    NewEntryDialog.source = new GenLocation(place.getName().toString(), place.getAddress().toString(),
+                            latLng.latitude, latLng.longitude);//check
+
+                    NewEntryDialog.sourceSet = (place.getName() + ",\n" +
+                            place.getAddress() + "\n" + place.getPhoneNumber());//check
+
+                    NewEntryDialog.findSource.setText(NewEntryDialog.sourceSet);
+                    break;
+                case 2:
+                    latLng = place.getLatLng();
+                    NewEntryDialog.destination = new GenLocation(place.getName().toString(), place.getAddress().toString(),
+                            latLng.latitude, latLng.longitude);//check
+
+                    NewEntryDialog.destinationSet = (place.getName() + ",\n" +
+                            place.getAddress() + "\n" + place.getPhoneNumber());//check
+
+                    NewEntryDialog.findDestination.setText(NewEntryDialog.destinationSet);
+                    break;
+            }
+        } else if (resultCode == PlaceAutocomplete.RESULT_ERROR)
+        {
+            Status status = PlaceAutocomplete.getStatus(this, data);
+            // TODO: Handle the error.
+            Log.e("Tag", status.getStatusMessage());
+
+        } else if (resultCode == RESULT_CANCELED)
+        {
+            // The user canceled the operation.
+            //Toast.makeText(getApplicationContext(), "Cancelled...", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults)
+    {
+        switch (requestCode)
+        {
+            case NewEntryDialog.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    NewEntryDialog.getCurrentPlace(this);
+                }
+                else
+                {
+                    Toast.makeText(this, "You have to accept that to get current location",
+                            Toast.LENGTH_SHORT).show();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+
+    //-------
 
 	protected void setNavHeaderStuff()
 	{

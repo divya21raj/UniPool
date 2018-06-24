@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/new_entry_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <!-- Dummy item to prevent EditText from receiving focus -->
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/newEntryDialogHeader"
+        android:elevation="20dp"
+        android:background="@drawable/create_entry_title">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/create_entry_title"
+            tools:targetApi="lollipop" />
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/findSourceLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/newEntryDialogHeader"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/findSourceEditText"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:hint="Source"
+            app:met_floatingLabelText="XXX"
+            android:backgroundTint="@color/colorPrimary"
+            app:met_baseColor="@color/colorAccent"
+            android:inputType="textAutoComplete"
+            android:layout_alignParentLeft="true"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:clickable="true" />
+
+        <Button
+            style="?android:buttonBarButtonStyle"
+            android:id="@+id/get_current_location_button0"
+            android:tag="gct_source"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_weight="0"
+            android:background="@drawable/ic_my_location_black_24px"
+            android:textSize="26sp"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/toTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="to"
+        android:textColor="#aeadad"
+        android:layout_centerHorizontal="true"
+        android:textSize="18sp"
+        android:layout_below="@+id/findSourceLinearLayout"/>
+
+    <LinearLayout
+        android:id="@+id/findDestinationLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toTextView"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_centerHorizontal="true">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:hint="Destination"
+            app:met_baseColor="@color/colorAccent"
+            android:backgroundTint="@color/colorPrimary"
+            android:id="@+id/findDestinationEditText"
+            android:inputType="textAutoComplete"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:clickable="true" />
+        <Button
+            style="?android:buttonBarButtonStyle"
+            android:tag="gct_destination"
+            android:id="@+id/get_current_location_button1"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_weight="0"
+            android:background="@drawable/ic_my_location_black_24px"
+            android:layout_alignParentRight="true"
+            android:textSize="26sp"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/setDateTimeLin"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/findDestinationLinearLayout"
+        android:baselineAligned="false">
+
+
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/atTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="at"
+                android:layout_centerHorizontal="true"
+                android:textColor="#aeadad"
+                android:textSize="18sp"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="83dp"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/setTimeRelativeLayout"
+                android:layout_below="@+id/atTextView">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/setTimeEditText"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="60dp"
+                    android:textAlignment="center"
+                    android:backgroundTint="@color/colorPrimary"
+                    app:met_baseColor="@color/colorAccent"
+                    android:layout_centerHorizontal="true"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:textStyle="bold"
+                    android:hint="Time"
+                    android:layout_marginStart="60dp" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/onTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="on"
+                android:textColor="#aeadad"
+                android:layout_centerHorizontal="true"
+                android:textSize="18sp"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="80dp"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/setDateRelativeLayout"
+                android:layout_below="@+id/onTextView">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/setDateEditText"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="60dp"
+                    android:textAlignment="center"
+                    android:layout_centerHorizontal="true"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textStyle="bold"
+                    app:met_baseColor="@color/colorAccent"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Date"
+                    android:layout_marginStart="60dp" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/newEntryMessageCard"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@id/setDateTimeLin"
+        android:layout_marginTop="20dp">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/newEntryMessageText"
+            android:paddingRight="5dp"
+            android:textColor="@color/colorPrimary"
+            android:paddingLeft="5dp"
+            app:met_maxCharacters="200"
+            app:met_hideUnderline="true"
+            app:met_baseColor="@color/colorAccent"
+            android:hint="Any additional info?"/>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>
+

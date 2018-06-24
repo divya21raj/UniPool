@@ -4,6 +4,9 @@ import java.util.HashMap;
 
 public class Constants
 {
+	public static final String OPEN_ACTIVITY = "";
+	//HOME, REQUESTS
+
 	public static HashMap<String, String> uniInfo;
 
 	public static void init()

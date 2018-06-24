@@ -16,8 +16,9 @@ android {
         applicationId 'garbagecollectors.com.unipool'
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 110
-        versionName "1.10"
+        versionCode 116
+        versionName "1.16"
+        resConfigs "en"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true //important
@@ -68,15 +69,14 @@ dependencies {
     implementation 'com.android.support:preference-v7:27.1.1'
     implementation 'com.android.support:preference-v14:27.1.1'
 
-    implementation 'com.github.QuadFlask:colorpicker:0.0.13'
-
-    implementation 'com.github.apl-devs:appintro:v4.2.3'
-
-    implementation 'de.hdodenhof:circleimageview:2.2.0'
-
-    implementation 'com.squareup.picasso:picasso:2.71828'
-
     testImplementation 'junit:junit:4.12'
+
+    //external libraries
+    implementation 'com.github.QuadFlask:colorpicker:0.0.13'
+    implementation 'com.github.apl-devs:appintro:v4.2.3'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.rengwuxian.materialedittext:library:2.1.4'
 }
 apply plugin: "com.google.gms.google-services"
 

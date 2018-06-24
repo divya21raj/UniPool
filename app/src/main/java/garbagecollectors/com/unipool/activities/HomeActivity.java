@@ -5,8 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,15 +22,19 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 
+import garbagecollectors.com.unipool.FirebaseInteractions;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.adapters.HomeActivityTEA;
 
 public class HomeActivity extends BaseActivity
 {
+	static SwipeRefreshLayout homeTripEntrySwipe;
     static RecyclerView recycle;
     static HomeActivityTEA recyclerAdapter;
 
     static public RelativeLayout noEntryRelativeLayout;
+
+    FloatingActionButton newEntryFab;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState)
@@ -39,14 +44,13 @@ public class HomeActivity extends BaseActivity
 
 	    handleIntent(getIntent());
 
-	    final ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
-        {
-        	actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
-        	actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
 	    drawerLayout = findViewById(R.id.home_layout);
+
+	    homeTripEntrySwipe = findViewById(R.id.homeSwipe);
+	    homeTripEntrySwipe.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+
+	    newEntryFab = findViewById(R.id.newEntryFab);
+	    newEntryFab.setOnClickListener(v -> new NewEntryDialog().show(getFragmentManager(), "NewEntryDialog"));
 
         noEntryRelativeLayout = findViewById(R.id.no_entry_message);
         noEntryRelativeLayout.setOnLongClickListener(v ->
@@ -84,7 +88,37 @@ public class HomeActivity extends BaseActivity
 	    recycle.setItemAnimator( new DefaultItemAnimator());
 	    recycle.setAdapter(recyclerAdapter);
 
+	    recycle.addOnScrollListener(new RecyclerView.OnScrollListener()
+	    {
+		    @Override
+		    public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+		    {
+			    super.onScrolled(recyclerView, dx, dy);
+			    if (dy < 0 && !newEntryFab.isShown())
+				    newEntryFab.show();
+			    else if (dy > 0 && newEntryFab.isShown())
+				    newEntryFab.hide();
+		    }
+	    });
+
+	    //came from about activity
+	    if(getIntent().getBooleanExtra("openNewEntryDialog", false))
+	    	new NewEntryDialog().show(getFragmentManager(), "NewEntryDialog");
+
+	    homeTripEntrySwipe.setOnRefreshListener(() -> {
+	    	newEntryFab.show();
+		    FirebaseInteractions.getTripEntries(getApplicationContext());
+	    });
+
+	    stopRefresherAfterSomeTime();
     }
+
+	private void stopRefresherAfterSomeTime()
+	{
+		//stops refreshing after 5 seconds
+		final Handler handler = new Handler();
+		handler.postDelayed(() -> homeTripEntrySwipe.setRefreshing(false), 5000);
+	}
 
 	private void changeToSOLogo()
 	{
@@ -164,6 +198,18 @@ public class HomeActivity extends BaseActivity
 		}
 	}
 
+	public static void updateRecycleAdapter()
+	{
+		if(tripEntryList.isEmpty())
+			noEntryRelativeLayout.setVisibility(View.VISIBLE);
+
+		else
+			noEntryRelativeLayout.setVisibility(View.INVISIBLE);
+
+		recyclerAdapter.notifyDataSetChanged();
+		homeTripEntrySwipe.setRefreshing(false);
+	}
+
 	@Override
     protected int getNavigationMenuItemId()
     {
@@ -173,17 +219,6 @@ public class HomeActivity extends BaseActivity
     protected int getContentViewId()
     {
         return R.layout.activity_home;
-    }
-
-    public static void updateRecycleAdapter()
-    {
-	    if(tripEntryList.isEmpty())
-		    noEntryRelativeLayout.setVisibility(View.VISIBLE);
-
-	    else
-	    	noEntryRelativeLayout.setVisibility(View.INVISIBLE);
-
-    	recyclerAdapter.notifyDataSetChanged();
     }
 
 	public static RecyclerView getRecycle()

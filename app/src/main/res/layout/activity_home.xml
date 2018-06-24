@@ -11,15 +11,23 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
+        android:layout_marginTop="10dp">
 
-        <android.support.v7.widget.RecyclerView
+
+        <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/recycle"
+            android:id="@+id/homeSwipe"
             android:layout_above="@+id/bottom_navigation">
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycle">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -59,6 +67,16 @@
                 android:text="Maybe you can create a new entry?"/>
 
         </RelativeLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:id="@+id/newEntryFab"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@id/bottom_navigation"
+            android:layout_margin="20dp"
+            android:src="@drawable/ic_directions_car_24px"
+            android:layout_alignParentRight="true" />
 
         <include
             android:id="@+id/bottom_navigation"

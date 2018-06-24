@@ -23,7 +23,7 @@
 
         <item
             android:id="@+id/nav_newEntry"
-            android:icon="@drawable/ic_directions_car_black_24px"
+            android:icon="@drawable/ic_directions_car_24px"
             android:title="New Entry" />
 
         <item

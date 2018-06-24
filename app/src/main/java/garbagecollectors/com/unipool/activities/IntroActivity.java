@@ -33,8 +33,8 @@ public class IntroActivity extends AppIntro
 
 		String descriptionWelcome = "Thanks for downloading! Let's see how stuff works here...";
 		String descriptionHome = "This is where you search for your desired entry and send a request to join them";
-		String descriptionNewEntry = "If you don't find a desired entry on the home screen, you can create your own here, " +
-										"and wait for someone to join you";
+		String descriptionNewEntry = "If you don't find a desired entry, you can create your own by pressing " +
+										"the cab button and wait for someone to join you...";
 		String descriptionRequests = "Here you'll see the requests you've sent and received";
 		String descriptionChat = "When you accept someone's request, or someone else does yours, they will show up here";
 		String descriptionDone = "You're all set!";

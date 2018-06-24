@@ -111,21 +111,27 @@ public class AboutActivity extends AppCompatActivity
 				BaseActivity.mAuth.signOut();
 				finish();
 				startActivity(new Intent(this, LoginActivity.class));
+				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 				break;
 
 			case R.id.nav_home:
 				finish();
 				startActivity(new Intent(this, HomeActivity.class));
+				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 				break;
 
 			case R.id.nav_newEntry:
+				Intent intent = new Intent(this, HomeActivity.class);
+				intent.putExtra("openNewEntryDialog", true);
 				finish();
-				startActivity(new Intent(this, NewEntryActivity.class));
+				startActivity(intent);
+				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 				break;
 
 			case R.id.nav_requests:
 				finish();
 				startActivity(new Intent(this, RequestActivity.class));
+				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 				break;
 
 			case R.id.nav_chat:
@@ -133,6 +139,7 @@ public class AboutActivity extends AppCompatActivity
 				Intent chatIntent = new Intent(this, RequestActivity.class);
 				chatIntent.putExtra("openingTab", 2);
 				startActivity(chatIntent);
+				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 				break;
 		}
 	}

@@ -52,13 +52,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.NewEntryActivity"
-            android:label="Create a New Entry">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".activities.RequestActivity.RequestActivity"
             android:label="@string/title_requests">
             <intent-filter>
