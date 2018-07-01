@@ -3,7 +3,7 @@
 [![Play Store Badge](https://developer.android.com/images/brand/en_app_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=garbagecollectors.com.unipool&hl=en)
 
 ## Introduction
-A cab-pooling solution for univesities.
+A cab-pooling solution for universities.
 
 ## About the Project
 Cab-pooling is a huge concern in an isolated, residential university like Shiv Nadar University. It has become a part of the process while planning to go anywhere. Although Gmail is an easy platform for cab-pool requests, it is not convenient at all because of the following reasons,
@@ -21,7 +21,7 @@ In such a scenario, there is a need for such an app which will be secure, and ea
 
 ## Contributors 
  
-* **Abhishek Srivastava** - [abhesrivastava](https://github.com/abhesrivastava)
+* **Abhishek Srivastava** - [srivastavabhi](https://github.com/srivastavabhi)
  
 * **Divya Raj**           - [divya21raj](https://github.com/divya21raj)
  
@@ -38,4 +38,4 @@ To contribute, follow these guidelines,
 3. Make pull request.
 
 ## Acknowledgments 
-* Anuradha Ravi - Assistant Professor
+* [Anuradha Ravi](https://github.com/ans24us1) - Assistant Professor

@@ -1,4 +1,4 @@
-package garbagecollectors.com.unipool;
+package garbagecollectors.com.unipool.dialog;
 
 /**
  * Created by SIMRAN on 22-11-2017.
@@ -12,8 +12,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import java.util.Calendar;
-
-import garbagecollectors.com.unipool.activities.NewEntryDialog;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener
 {

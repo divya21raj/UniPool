@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".application.UniPool"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,9 +14,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB8Ik3P9bFz_prcjauv0oGMM_4gQmK2U_I" />
+
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/logo_trans" />
 
         <activity
             android:name=".activities.IntroActivity"
@@ -61,7 +66,7 @@
         </activity>
         <activity android:name=".activities.MessageListActivity" />
 
-        <service android:name=".FirebaseMessagingService">
+        <service android:name=".firebase.FirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

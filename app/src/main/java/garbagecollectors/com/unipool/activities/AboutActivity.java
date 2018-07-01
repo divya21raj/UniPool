@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
+import garbagecollectors.com.unipool.application.UtilityMethods;
 
 import static garbagecollectors.com.unipool.activities.BaseActivity.currentUser;
 import static garbagecollectors.com.unipool.activities.BaseActivity.finalCurrentUser;

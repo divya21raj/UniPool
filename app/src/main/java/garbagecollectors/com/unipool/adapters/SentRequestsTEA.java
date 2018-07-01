@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import garbagecollectors.com.unipool.Models.TripEntry;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.HomeActivity;
+import garbagecollectors.com.unipool.application.UtilityMethods;
+import garbagecollectors.com.unipool.models.TripEntry;
 
 public class SentRequestsTEA extends TripEntryAdapter
 {

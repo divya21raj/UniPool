@@ -1,4 +1,4 @@
-package garbagecollectors.com.unipool.Models;
+package garbagecollectors.com.unipool.models;
 
 import java.util.ArrayList;
 

@@ -1,14 +1,17 @@
-package garbagecollectors.com.unipool;
+package garbagecollectors.com.unipool.firebase;
 
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
 
+import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.activities.MessageListActivity;
+import garbagecollectors.com.unipool.application.Constants;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService
 {
@@ -24,13 +27,20 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 		Uri sound = Uri.parse(remoteMessage.getNotification().getSound());
 
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
 				.setSmallIcon(R.mipmap.ic_launcher)
 				.setContentTitle(notificationTitle)
 				.setContentText(notificationBody)
 				.setAutoCancel(true)
 				.setPriority(NotificationCompat.PRIORITY_DEFAULT)
 				.setSound(sound);
+
+		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			mBuilder.setSmallIcon(R.drawable.logo_trans);
+			mBuilder.setColor(getResources().getColor(R.color.colorTextBlack));
+		} else {
+			mBuilder.setSmallIcon(R.mipmap.ic_launcher);
+		}
 
 		//clicking on the notification
 		Intent resultIntent = new Intent(clickAction);
@@ -40,7 +50,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 			resultIntent.putExtra("openingTab", 2);
 		else if(notificationBody.contains("sent"))
 			resultIntent.putExtra("openingTab", 1);
-		else if(notificationBody.contains("messageCard"))
+		else if(notificationBody.contains("message"))
 			resultIntent.putExtra("openingTab", 2);
 
 		//resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

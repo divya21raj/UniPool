@@ -26,16 +26,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import garbagecollectors.com.unipool.Models.TripEntry;
-import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.activities.HomeActivity;
+import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.UtilityMethods;
+import garbagecollectors.com.unipool.models.TripEntry;
+import garbagecollectors.com.unipool.models.User;
 
-import static garbagecollectors.com.unipool.UtilityMethods.accessUserDatabase;
-import static garbagecollectors.com.unipool.UtilityMethods.addRequestInList;
-import static garbagecollectors.com.unipool.UtilityMethods.putInMap;
+import static garbagecollectors.com.unipool.application.UtilityMethods.accessUserDatabase;
+import static garbagecollectors.com.unipool.application.UtilityMethods.addRequestInList;
+import static garbagecollectors.com.unipool.application.UtilityMethods.putInMap;
 
 public class HomeActivityTEA extends TripEntryAdapter
 {
@@ -129,12 +130,9 @@ public class HomeActivityTEA extends TripEntryAdapter
 
             TripEntry tripEntry = list.get(position);
 
-            DatabaseReference entryDatabaseReference = BaseActivity.getEntryDatabaseReference();
-            DatabaseReference userDatabaseReference = BaseActivity.getUserDatabaseReference();
+            Task<Void> task1 = Constants.entryDatabaseReference.child(tripEntry.getEntry_id()).removeValue();
 
-            Task<Void> task1 = entryDatabaseReference.child(tripEntry.getEntry_id()).removeValue();
-
-            userDatabaseReference.child("userTripEntries").addListenerForSingleValueEvent(new ValueEventListener()
+            Constants.userDatabaseReference.child("userTripEntries").addListenerForSingleValueEvent(new ValueEventListener()
             {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot)
@@ -164,7 +162,7 @@ public class HomeActivityTEA extends TripEntryAdapter
                     i[0]++;
                 }
 
-                Task<Void> task3 = userDatabaseReference.child("userTripEntries").child(tripEntry.getEntry_id()).removeValue();
+                Task<Void> task3 = Constants.userDatabaseReference.child("userTripEntries").child(tripEntry.getEntry_id()).removeValue();
 
                 task3.addOnSuccessListener(aVoid1 ->
                 {
@@ -223,8 +221,7 @@ public class HomeActivityTEA extends TripEntryAdapter
 
                 tripEntryUser[0] = snapshot.getValue(User.class);
 
-                DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
-                DatabaseReference notificationDatabaseReference = BaseActivity.getNotificationDatabaseReference();
+                DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "users");
 
                 HashMap<String, TripEntry> requestSent = user.getRequestSent();
                 HashMap<String, ArrayList<String>> requestsReceived = tripEntryUser[0].getRequestsReceived();
@@ -249,7 +246,7 @@ public class HomeActivityTEA extends TripEntryAdapter
                     notificationObject.put("from", user.getUserId());
                     notificationObject.put("type", "requestCreated");
 
-                    Task<Void> task3 = notificationDatabaseReference.child(tripEntryUser[0].getUserId()).push().setValue(notificationObject);
+                    Task<Void> task3 = Constants.notificationDatabaseReference.child(tripEntryUser[0].getUserId()).push().setValue(notificationObject);
 
                     Task<Void> allTask = Tasks.whenAll(task1, task2, task3);
                     allTask.addOnSuccessListener(bVoid ->

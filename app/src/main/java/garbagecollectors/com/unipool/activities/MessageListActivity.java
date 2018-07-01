@@ -24,13 +24,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import garbagecollectors.com.unipool.Models.Message;
-import garbagecollectors.com.unipool.Models.PairUp;
-import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.UtilityMethods;
-
-import static garbagecollectors.com.unipool.activities.BaseActivity.notificationDatabaseReference;
+import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.UtilityMethods;
+import garbagecollectors.com.unipool.models.Message;
+import garbagecollectors.com.unipool.models.PairUp;
+import garbagecollectors.com.unipool.models.User;
 
 
 public class MessageListActivity extends AppCompatActivity
@@ -142,7 +141,7 @@ public class MessageListActivity extends AppCompatActivity
 				notificationObject.put("from", BaseActivity.getFinalCurrentUser().getUserId());
 				notificationObject.put("type", "chat");
 
-				notificationDatabaseReference.child(chatUser.getUserId()).push().setValue(notificationObject);
+				Constants.notificationDatabaseReference.child(chatUser.getUserId()).push().setValue(notificationObject);
 
 				messageArea.setText("");
 				personalMessageMap.put(message.getCreatedAtTime(), message);

@@ -1,4 +1,4 @@
-package garbagecollectors.com.unipool;
+package garbagecollectors.com.unipool.firebase;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -7,17 +7,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import garbagecollectors.com.unipool.Models.TripEntry;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.activities.HomeActivity;
-
-import static garbagecollectors.com.unipool.activities.SplashActivity.entryDatabaseReference;
+import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.UtilityMethods;
+import garbagecollectors.com.unipool.models.TripEntry;
 
 public class FirebaseInteractions
 {
 	public static void getTripEntries(Context context)
 	{
-		entryDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+		Constants.entryDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
 		{
 			@Override
 			public void onDataChange(DataSnapshot entryData)

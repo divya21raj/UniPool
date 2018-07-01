@@ -1,4 +1,4 @@
-package garbagecollectors.com.unipool;
+package garbagecollectors.com.unipool.application;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -25,13 +25,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import garbagecollectors.com.unipool.Models.Message;
-import garbagecollectors.com.unipool.Models.PairUp;
-import garbagecollectors.com.unipool.Models.TripEntry;
-import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.adapters.TripEntryAdapter;
 import garbagecollectors.com.unipool.adapters.UserAdapter;
+import garbagecollectors.com.unipool.models.Message;
+import garbagecollectors.com.unipool.models.PairUp;
+import garbagecollectors.com.unipool.models.TripEntry;
+import garbagecollectors.com.unipool.models.User;
 
 public class UtilityMethods
 {
@@ -40,7 +40,7 @@ public class UtilityMethods
         TaskCompletionSource<DataSnapshot> userSource = new TaskCompletionSource<>();
         Task userTask = userSource.getTask();
 
-        DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference(userReference);
+        DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + userReference);
 
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
@@ -422,8 +422,8 @@ public class UtilityMethods
 
     public static void putMessageOnDB(Message message, User chatUser, User user)
     {
-        DatabaseReference chatUserMessageReference = FirebaseDatabase.getInstance().getReference("messages/" + chatUser.getUserId());
-        DatabaseReference userMessageReference = FirebaseDatabase.getInstance().getReference("messages/" + user.getUserId());
+        DatabaseReference chatUserMessageReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "messages/" + chatUser.getUserId());
+        DatabaseReference userMessageReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "messages/" + user.getUserId());
 
         String messageId = userMessageReference.push().getKey();
         message.setMessageId(messageId);

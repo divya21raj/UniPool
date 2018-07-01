@@ -23,17 +23,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import garbagecollectors.com.unipool.Models.PairUp;
-import garbagecollectors.com.unipool.Models.TripEntry;
-import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.activities.RequestActivity.ReceivedRequestsFragment;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
+import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.UtilityMethods;
+import garbagecollectors.com.unipool.models.PairUp;
+import garbagecollectors.com.unipool.models.TripEntry;
+import garbagecollectors.com.unipool.models.User;
 
-import static garbagecollectors.com.unipool.UtilityMethods.accessUserDatabase;
 import static garbagecollectors.com.unipool.activities.SplashActivity.MessageDBTask;
+import static garbagecollectors.com.unipool.application.UtilityMethods.accessUserDatabase;
 
 public class ReceivedRequestsTEA extends TripEntryAdapter
 {
@@ -74,9 +75,9 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
 
         holder.requestButton.setOnClickListener(view ->
         {
-            DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
-            DatabaseReference pairUpDatabaseReference = BaseActivity.getPairUpDatabaseReference();
-            DatabaseReference notificationDatabaseReference = BaseActivity.getNotificationDatabaseReference();
+            DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "users");
+            DatabaseReference pairUpDatabaseReference = Constants.pairUpDatabaseReference;
+            DatabaseReference notificationDatabaseReference = Constants.notificationDatabaseReference;
 
             TripEntry tripEntry = list.get(position);
 

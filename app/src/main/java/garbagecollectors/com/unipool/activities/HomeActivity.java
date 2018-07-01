@@ -22,9 +22,10 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 
-import garbagecollectors.com.unipool.FirebaseInteractions;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.adapters.HomeActivityTEA;
+import garbagecollectors.com.unipool.dialog.NewEntryDialog;
+import garbagecollectors.com.unipool.firebase.FirebaseInteractions;
 
 public class HomeActivity extends BaseActivity
 {

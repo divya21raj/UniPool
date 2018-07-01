@@ -12,11 +12,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.activities.MessageListActivity;
+import garbagecollectors.com.unipool.application.UtilityMethods;
+import garbagecollectors.com.unipool.models.User;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder>
 {

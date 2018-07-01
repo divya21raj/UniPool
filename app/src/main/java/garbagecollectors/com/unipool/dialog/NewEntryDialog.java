@@ -1,4 +1,4 @@
-package garbagecollectors.com.unipool.activities;
+package garbagecollectors.com.unipool.dialog;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -40,16 +40,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import garbagecollectors.com.unipool.Constants;
-import garbagecollectors.com.unipool.DatePickerFragment;
-import garbagecollectors.com.unipool.Models.GenLocation;
-import garbagecollectors.com.unipool.Models.TripEntry;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.UtilityMethods;
+import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.UtilityMethods;
+import garbagecollectors.com.unipool.models.GenLocation;
+import garbagecollectors.com.unipool.models.TripEntry;
 
-import static garbagecollectors.com.unipool.activities.BaseActivity.entryDatabaseReference;
 import static garbagecollectors.com.unipool.activities.BaseActivity.finalCurrentUser;
-import static garbagecollectors.com.unipool.activities.BaseActivity.userDatabaseReference;
 
 public class NewEntryDialog extends DialogFragment implements GoogleApiClient.OnConnectionFailedListener,
                                                               GoogleApiClient.ConnectionCallbacks
@@ -357,7 +354,7 @@ public class NewEntryDialog extends DialogFragment implements GoogleApiClient.On
 
     public void finalSave() throws ParseException
     {
-        String entryId = entryDatabaseReference.push().getKey();
+        String entryId = Constants.entryDatabaseReference.push().getKey();
         String name = UtilityMethods.sanitizeName(finalCurrentUser.getName());
         System.currentTimeMillis();
         message = messageText.getText().toString();
@@ -370,9 +367,9 @@ public class NewEntryDialog extends DialogFragment implements GoogleApiClient.On
 
         finalCurrentUser.getUserTripEntries().put(tripEntry.getEntry_id(), tripEntry);
 
-        entryDatabaseReference.child(entryId).setValue(tripEntry);
+        Constants.entryDatabaseReference.child(entryId).setValue(tripEntry);
 
-        userDatabaseReference.child("userTripEntries").setValue(finalCurrentUser.getUserTripEntries());
+        Constants.userDatabaseReference.child("userTripEntries").setValue(finalCurrentUser.getUserTripEntries());
 
         Toast.makeText(getActivity(), "Trip entry created!", Toast.LENGTH_SHORT).show();
 

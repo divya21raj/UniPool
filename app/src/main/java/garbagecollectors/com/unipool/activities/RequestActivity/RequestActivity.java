@@ -19,18 +19,18 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import garbagecollectors.com.unipool.Models.TripEntry;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.activities.LoginActivity;
+import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.UtilityMethods;
+import garbagecollectors.com.unipool.models.TripEntry;
 
 public class RequestActivity extends BaseActivity
 {
@@ -38,9 +38,6 @@ public class RequestActivity extends BaseActivity
 	private ViewPager viewPager;
 
 	public static ProgressBar requestsProgressBar;
-
-	static DatabaseReference sentRequestsDatabaseReference;
-	static DatabaseReference receivedRequestsDatabaseReference;
 
 	static TaskCompletionSource<DataSnapshot> sentRequestsSource;
 	static TaskCompletionSource<DataSnapshot> receivedRequestsSource;
@@ -57,11 +54,11 @@ public class RequestActivity extends BaseActivity
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.activity_request);
 
-			sentRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference(
-					"users/" + finalCurrentUser.getUserId() + "/requestSent");
+			Constants.sentRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference(
+					Constants.UNI + "users/" + finalCurrentUser.getUserId() + "/requestSent");
 
-			receivedRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference(
-					"users/" + finalCurrentUser.getUserId() + "/requestsReceived");
+			Constants.receivedRequestsDatabaseReference = FirebaseDatabase.getInstance().getReference(
+					Constants.UNI + "users/" + finalCurrentUser.getUserId() + "/requestsReceived");
 
 			drawerLayout = findViewById(R.id.requests_layout);
 
@@ -116,7 +113,7 @@ public class RequestActivity extends BaseActivity
 		sentRequestsDBTask = sentRequestsSource.getTask();
 		receivedRequestsDBTask = receivedRequestsSource.getTask();
 
-		sentRequestsDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+		Constants.sentRequestsDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
 		{
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot)
@@ -131,7 +128,7 @@ public class RequestActivity extends BaseActivity
 			}
 		});
 
-		receivedRequestsDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+		Constants.receivedRequestsDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
 		{
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot)

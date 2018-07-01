@@ -25,7 +25,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -34,13 +33,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import garbagecollectors.com.unipool.AppStatus;
-import garbagecollectors.com.unipool.Models.GenLocation;
-import garbagecollectors.com.unipool.Models.Message;
-import garbagecollectors.com.unipool.Models.PairUp;
-import garbagecollectors.com.unipool.Models.TripEntry;
-import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.R;
+import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.models.GenLocation;
+import garbagecollectors.com.unipool.models.Message;
+import garbagecollectors.com.unipool.models.PairUp;
+import garbagecollectors.com.unipool.models.TripEntry;
+import garbagecollectors.com.unipool.models.User;
 
 import static garbagecollectors.com.unipool.activities.BaseActivity.finalCurrentUser;
 
@@ -55,12 +54,6 @@ public class LoginActivity extends Activity implements View.OnClickListener
     private FirebaseAuth mAuth;
     private static FirebaseUser currentUser;
 
-    protected static DatabaseReference userDatabaseReference;
-    protected static DatabaseReference messageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages");
-
-    private static DatabaseReference expiryDatabaseReference = FirebaseDatabase.getInstance().getReference("deleteExpired");
-
-
     Message defaultMessage = BaseActivity.getDefaultMessage();
 
     private ProgressDialog progressDialog;
@@ -71,8 +64,6 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     TaskCompletionSource<DataSnapshot> userDBSource = new TaskCompletionSource();
     Task userDBTask = userDBSource.getTask();
-
-    AppStatus appStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -99,7 +90,6 @@ public class LoginActivity extends Activity implements View.OnClickListener
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
 
-        appStatus = new AppStatus(this);
     }
 
     private void startIntro()
@@ -243,9 +233,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
     {
         dummyInitFinalCurrentUser(user);
 
-        userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + user.getUid());
+        Constants.userDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "users/" + user.getUid());
 
-        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+        Constants.userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot snapshot)
@@ -269,9 +259,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
             {
                 userNewOnDatabase = true;
 
-                userDatabaseReference.setValue(finalCurrentUser);
+                Constants.userDatabaseReference.setValue(finalCurrentUser);
 
-                messageDatabaseReference.child(finalCurrentUser.getUserId()).child(defaultMessage.getMessageId()).
+                Constants.messageDatabaseReference.child(finalCurrentUser.getUserId()).child(defaultMessage.getMessageId()).
                                                                             setValue(defaultMessage);
 
                 //Toast.makeText(getApplicationContext(), "User added to database!", Toast.LENGTH_SHORT).show();
@@ -340,11 +330,11 @@ public class LoginActivity extends Activity implements View.OnClickListener
         {
             String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
-            userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
+            Constants.userDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "users/" + currentUser.getUid());
 
-            userDatabaseReference.child("deviceToken").setValue(deviceToken);
+            Constants.userDatabaseReference.child("deviceToken").setValue(deviceToken);
 
-            expiryDatabaseReference.child(currentUser.getUid()).setValue(true);
+            Constants.expiryDatabaseReference.child(currentUser.getUid()).setValue(true);
 
             finish();
             startActivity(new Intent(getApplicationContext(), SplashActivity.class));

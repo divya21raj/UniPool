@@ -30,7 +30,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
@@ -39,17 +38,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import garbagecollectors.com.unipool.Constants;
-import garbagecollectors.com.unipool.Models.GenLocation;
-import garbagecollectors.com.unipool.Models.Message;
-import garbagecollectors.com.unipool.Models.TripEntry;
-import garbagecollectors.com.unipool.Models.User;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.UtilityMethods;
 import garbagecollectors.com.unipool.activities.RequestActivity.ChatFragment;
 import garbagecollectors.com.unipool.activities.RequestActivity.ReceivedRequestsFragment;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
 import garbagecollectors.com.unipool.activities.RequestActivity.SentRequestsFragment;
+import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.UtilityMethods;
+import garbagecollectors.com.unipool.dialog.NewEntryDialog;
+import garbagecollectors.com.unipool.models.GenLocation;
+import garbagecollectors.com.unipool.models.Message;
+import garbagecollectors.com.unipool.models.TripEntry;
+import garbagecollectors.com.unipool.models.User;
 
 import static garbagecollectors.com.unipool.activities.SplashActivity.MessageDBTask;
 
@@ -62,14 +62,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     public static FirebaseAuth mAuth;
     public static FirebaseUser currentUser;
-
-    protected static DatabaseReference userDatabaseReference;
-    protected static DatabaseReference userMessageDatabaseReference;
-    protected static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference("entries");
-    protected static DatabaseReference pairUpDatabaseReference = FirebaseDatabase.getInstance().getReference("pairUps");
-    protected static DatabaseReference notificationDatabaseReference = FirebaseDatabase.getInstance().getReference("notifications");
-
-    private static DatabaseReference expiryDatabaseReference = FirebaseDatabase.getInstance().getReference("deleteExpired");
 
     public static User finalCurrentUser;
 
@@ -102,8 +94,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 actionBar.setDisplayHomeAsUpEnabled(true);
             }
 
-            userDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + finalCurrentUser.getUserId());
-            userMessageDatabaseReference = FirebaseDatabase.getInstance().getReference("messages/" + finalCurrentUser.getUserId());
+            Constants.userDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "users/" + finalCurrentUser.getUserId());
+            Constants.userMessageDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "messages/" + finalCurrentUser.getUserId());
 
             startMessageListener();
 
@@ -139,7 +131,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     protected void getUserDetails()
     {
-        userDatabaseReference.addValueEventListener(new ValueEventListener()
+        Constants.userDatabaseReference.addValueEventListener(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -179,7 +171,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     protected void getTripEntries()
     {
-        entryDatabaseReference.addChildEventListener(new ChildEventListener()
+        Constants.entryDatabaseReference.addChildEventListener(new ChildEventListener()
         {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s)
@@ -233,7 +225,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         super.onStart();
         updateNavigationBarState();
         finalCurrentUser.setOnline(true);
-        userDatabaseReference.child("isOnline").setValue("true");
+        Constants.userDatabaseReference.child("isOnline").setValue("true");
     }
 
     // Remove inter-activity transition to avoid screen tossing on tapping bottom bottom_nav items
@@ -250,8 +242,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     {
         super.onBackPressed();
         finalCurrentUser.setOnline(false);
-        userDatabaseReference.child("isOnline").setValue("false");
-        expiryDatabaseReference.child(finalCurrentUser.getUserId()).removeValue();
+        Constants.userDatabaseReference.child("isOnline").setValue("false");
+        Constants.expiryDatabaseReference.child(finalCurrentUser.getUserId()).removeValue();
     }
 
     @Override
@@ -498,11 +490,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         BaseActivity.currentUser = currentUser;
     }
 
-    public static DatabaseReference getNotificationDatabaseReference()
-    {
-        return notificationDatabaseReference;
-    }
-
     public static User getFinalCurrentUser()
     {
         return finalCurrentUser;
@@ -516,26 +503,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public static ArrayList<TripEntry> getTripEntryList()
     {
         return tripEntryList;
-    }
-
-    public static DatabaseReference getPairUpDatabaseReference()
-    {
-        return pairUpDatabaseReference;
-    }
-
-    public static DatabaseReference getUserMessageDatabaseReference()
-    {
-        return userMessageDatabaseReference;
-    }
-
-    public static DatabaseReference getUserDatabaseReference()
-    {
-        return userDatabaseReference;
-    }
-
-    public static DatabaseReference getEntryDatabaseReference()
-    {
-        return entryDatabaseReference;
     }
 
     public static HashMap<String, User> getChatMap()
