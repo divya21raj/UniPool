@@ -13,6 +13,7 @@ public class Constants
 	public static DatabaseReference userDatabaseReference;
 	public static DatabaseReference userMessageDatabaseReference;
 	public static DatabaseReference entryDatabaseReference = FirebaseDatabase.getInstance().getReference(UNI + "entries");
+	public static DatabaseReference megaEntryDatabaseReference = FirebaseDatabase.getInstance().getReference(UNI + "mega_entries");
 	public static DatabaseReference pairUpDatabaseReference = FirebaseDatabase.getInstance().getReference(UNI + "pairUps");
 	public static DatabaseReference notificationDatabaseReference = FirebaseDatabase.getInstance().getReference(UNI + "notifications");
 	public static DatabaseReference messageDatabaseReference = FirebaseDatabase.getInstance().getReference(UNI + "messages");
@@ -21,8 +22,8 @@ public class Constants
 	public static DatabaseReference sentRequestsDatabaseReference;
 	public static DatabaseReference receivedRequestsDatabaseReference;
 
-	public static final String OPEN_ACTIVITY = "";
-	//HOME, REQUESTS
+	public static String OPEN_ACTIVITY = "";
+	//HOME, REQUESTS, CHAT, ABOUT
 
 	public static HashMap<String, String> uniInfo;
 

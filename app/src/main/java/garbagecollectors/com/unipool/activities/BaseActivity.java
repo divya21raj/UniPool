@@ -3,10 +3,8 @@ package garbagecollectors.com.unipool.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -100,6 +98,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             startMessageListener();
 
             getTripEntries();
+
+            getMegaEntries();
 
             getUserDetails();
         }
@@ -219,6 +219,56 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         });
     }
 
+    protected void getMegaEntries()
+    {
+        Constants.megaEntryDatabaseReference.addChildEventListener(new ChildEventListener()
+        {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s)
+            {
+                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                UtilityMethods.updateTripList(tripEntryList, tripEntry);
+
+                HomeActivity.updateRecycleAdapter();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s)
+            {
+                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                UtilityMethods.updateTripList(tripEntryList, tripEntry);
+
+                HomeActivity.updateRecycleAdapter();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot)
+            {
+                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                if (tripEntry != null)
+                {
+                    UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
+                    HomeActivity.updateRecycleAdapter();
+                }
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s)
+            {
+                //IDK
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                // Failed to read value
+                Log.w("Hello", "Failed to read value.", databaseError.toException());
+                Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     @Override
     protected void onStart()
     {
@@ -226,15 +276,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         updateNavigationBarState();
         finalCurrentUser.setOnline(true);
         Constants.userDatabaseReference.child("isOnline").setValue("true");
-    }
-
-    // Remove inter-activity transition to avoid screen tossing on tapping bottom bottom_nav items
-    @RequiresApi(api = Build.VERSION_CODES.ECLAIR)
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        overridePendingTransition(0, 0);
     }
 
     @Override
@@ -255,9 +296,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             if (itemId == R.id.navigation_home)
             {
                 startActivity(new Intent(this, HomeActivity.class));
+                overridePendingTransition(0, 0);
             } else if (itemId == R.id.navigation_requests)
             {
                 startActivity(new Intent(this, RequestActivity.class));
+                overridePendingTransition(0, 0);
             }
             finish();
         }, 300);
@@ -332,53 +375,68 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
 	protected void dealWithSelectedMenuItem(MenuItem menuItem)
 	{
-		switch (menuItem.getItemId())
-		{
-			case R.id.nav_about:
-				startActivity(new Intent(this, AboutActivity.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-				break;
+		// Handle navigation view item clicks here.
 
-			case R.id.nav_logout:
-				mAuth.signOut();
-				finish();
-				startActivity(new Intent(this, LoginActivity.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-				break;
+		//close drawer and open selection after some delay
 
-            case R.id.nav_home:
-                finish();
-                startActivity(new Intent(this, HomeActivity.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                break;
-
-            case R.id.nav_newEntry:
-                if(Constants.OPEN_ACTIVITY.contains("HOME"))
-                    new NewEntryDialog().show(getFragmentManager(), "NewEntryDialog");
-                else
-                {
-                    Intent intent = new Intent(this, HomeActivity.class);
-                    intent.putExtra("openNewEntryDialog", true);
+		drawerLayout.postDelayed(() -> {
+			switch (menuItem.getItemId())
+			{
+				case R.id.nav_about:
+					startActivity(new Intent(getApplicationContext(), AboutActivity.class));
+                    overridePendingTransition(0, 0);
                     finish();
-                    startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                }
-                break;
+                    break;
 
-            case R.id.nav_requests:
-                finish();
-                startActivity(new Intent(this, RequestActivity.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                break;
+				case R.id.nav_logout:
+					mAuth.signOut();
+					startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    finish();
+                    break;
 
-            case R.id.nav_chat:
-                finish();
-                Intent chatIntent = new Intent(this, RequestActivity.class);
-                chatIntent.putExtra("openingTab", 2);
-                startActivity(chatIntent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                break;
-		}
+				case R.id.nav_home:
+					if(!Constants.OPEN_ACTIVITY.contains("HOME"))
+					{
+						startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        overridePendingTransition(0, 0);
+                        finish();
+                    }
+					break;
+
+				case R.id.nav_newEntry:
+					if(Constants.OPEN_ACTIVITY.contains("HOME"))
+						new NewEntryDialog().show(getFragmentManager(), "NewEntryDialog");
+					else
+					{
+						Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+						intent.putExtra("openNewEntryDialog", true);
+						startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        finish();
+                    }
+					break;
+
+				case R.id.nav_requests:
+					if(!Constants.OPEN_ACTIVITY.contains("REQ"))
+					{
+						startActivity(new Intent(getApplicationContext(), RequestActivity.class));
+                        overridePendingTransition(0, 0);
+                        finish();
+                    }
+					break;
+
+				case R.id.nav_chat:
+					if(!Constants.OPEN_ACTIVITY.contains("CHAT"))
+					{
+						Intent chatIntent = new Intent(getApplicationContext(), RequestActivity.class);
+                        chatIntent.putExtra("openingTab", 2);
+                        startActivity(chatIntent);
+                        overridePendingTransition(0, 0);
+                        finish();
+                    }
+					break;
+			}
+		}, 280);
 	}
 
     //+++++

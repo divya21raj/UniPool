@@ -363,7 +363,7 @@ public class NewEntryDialog extends DialogFragment implements GoogleApiClient.On
             message = null;
 
         TripEntry tripEntry = new TripEntry(name, entryId, finalCurrentUser.getUserId(),
-                time, date, source, destination, null, message);
+                time, date, source, destination, message, "", true);
 
         finalCurrentUser.getUserTripEntries().put(tripEntry.getEntry_id(), tripEntry);
 

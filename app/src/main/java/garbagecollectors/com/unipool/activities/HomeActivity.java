@@ -12,6 +12,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.adapters.HomeActivityTEA;
+import garbagecollectors.com.unipool.application.Constants;
 import garbagecollectors.com.unipool.dialog.NewEntryDialog;
 import garbagecollectors.com.unipool.firebase.FirebaseInteractions;
 
@@ -180,6 +182,14 @@ public class HomeActivity extends BaseActivity
 		}
 
 		return true;
+	}
+
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		Constants.OPEN_ACTIVITY = "HOME";
+		Log.d("Open", Constants.OPEN_ACTIVITY);
 	}
 
 	@Override

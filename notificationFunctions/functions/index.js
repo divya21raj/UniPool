@@ -110,7 +110,7 @@ exports.deleteExpired  = functions.database.ref('/deleteExpired/{user_id}')
 				var ISTTime = new Date(currentDate.getTime() + (ISTOffset + currentOffset)*60000);
 
 				console.log(`${ISTTime}`);
-        console.log(`${puDateObj}`);
+				console.log(`${puDateObj}`);
 
 				var currentDate = new Date();
 				var currentOffset = currentDate.getTimezoneOffset();
@@ -267,7 +267,7 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
 						console.log('This was the notifications feature!');
 
 						const error = response.error;
-      			if (error)
+      					if (error)
 						{
 							console.error('Failure sending notification to', token_id, error);
 						}

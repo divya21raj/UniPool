@@ -282,13 +282,10 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     private void dummyInitFinalCurrentUser(FirebaseUser user) throws ParseException
     {
-        HashMap<String, Float> dummyLambdaMap = new HashMap<>();
-        dummyLambdaMap.put("123", 0f);
-
         GenLocation dummyGenLocation = new GenLocation("dummy", "dummy", 0d, 0d);
 
         TripEntry dummyTripEntry = new TripEntry("dummy", "dummyId", "DummyUser", "12:00",
-                                                    "1/11/12", dummyGenLocation, dummyGenLocation, dummyLambdaMap, "dummyMessage");
+                                                    "1/11/12", dummyGenLocation, dummyGenLocation, "dummyMessage", "", false);
 
         HashMap<String, TripEntry> dummyUserEntries = new HashMap<>();
         dummyUserEntries.put("dummy", dummyTripEntry);
@@ -301,11 +298,6 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
         HashMap<String, ArrayList<String>> dummyRequestReceived = new HashMap<>();
         dummyRequestReceived.put("dummy", dummyUserIdList);
-
-        Message dummyMessage = new Message("dummy", "", "", "dummy",
-                                                    "dummy", 1L);
-        ArrayList<Message> dummyMessages = new ArrayList<>();
-        dummyMessages.add(dummyMessage);
 
         PairUp dummyPairUp = new PairUp("dummydummy", "dummy", "dummy", "dummy", dummyUserIdList);
         HashMap<String, PairUp> dummyPairUps = new HashMap<>();

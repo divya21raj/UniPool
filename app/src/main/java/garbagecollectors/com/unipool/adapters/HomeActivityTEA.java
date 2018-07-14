@@ -4,7 +4,9 @@ package garbagecollectors.com.unipool.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.transition.TransitionManager;
@@ -97,20 +99,48 @@ public class HomeActivityTEA extends TripEntryAdapter
             });
         }
 
-        holder.requestButton.setOnClickListener(view ->
-                sendRequest(view, position));
+        holder.requestButton.setOnClickListener(view -> onRequestClick(view, position));
 
         holder.itemView.setOnLongClickListener(v ->
         {
-            if(list.get(position).getUser_id().equals(BaseActivity.getFinalCurrentUser().getUserId()))
-                deleteEntry(v, position);
-
-            else
-                sendRequest(v, position);
-
+            onRequestClick(v, position);
             return true;
         });
 
+    }
+
+    private void onRequestClick(View view, int position)
+    {
+        if (list.get(position).isFromApp())
+        {
+            if(list.get(position).getUser_id().equals(BaseActivity.getFinalCurrentUser().getUserId()))
+                deleteEntry(view, position);
+            else sendRequest(view, position);
+        }
+        else addToContacts(list.get(position));
+    }
+
+    private void addToContacts(TripEntry tripEntry)
+    {
+        alertDialogBuilder.setMessage("This person isn't on the app :(\nDo you want to add them to your contacts?");
+
+        alertDialogBuilder.setPositiveButton("YES", (dialog, which) ->
+        {
+            //open contacts intent with pre-filled stuff
+
+            Intent intent = new Intent(Intent.ACTION_INSERT);
+            intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+
+            intent.putExtra(ContactsContract.Intents.Insert.NAME, tripEntry.getName());
+            intent.putExtra(ContactsContract.Intents.Insert.PHONE, tripEntry.getPhone());
+
+            context.startActivity(intent);
+        });
+
+        alertDialogBuilder.setNegativeButton("NO", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 
     private void deleteEntry(View view, int position)

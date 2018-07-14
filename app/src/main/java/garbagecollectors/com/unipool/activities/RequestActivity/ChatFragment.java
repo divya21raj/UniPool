@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import java.util.Map;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.adapters.UserAdapter;
+import garbagecollectors.com.unipool.application.Constants;
 import garbagecollectors.com.unipool.models.User;
 
 public class ChatFragment extends Fragment
@@ -34,6 +36,16 @@ public class ChatFragment extends Fragment
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+
+		if (isVisibleToUser) {
+			Constants.OPEN_ACTIVITY = "CHATS";
+			Log.d("Open", Constants.OPEN_ACTIVITY);
+		}
+	}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

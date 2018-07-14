@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.adapters.SentRequestsTEA;
+import garbagecollectors.com.unipool.application.Constants;
 import garbagecollectors.com.unipool.models.TripEntry;
 import garbagecollectors.com.unipool.models.User;
 
@@ -29,6 +31,16 @@ public class SentRequestsFragment extends Fragment
     public SentRequestsFragment()
     {  }
 
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+
+		if (isVisibleToUser) {
+			Constants.OPEN_ACTIVITY = "REQUESTS";
+            Log.d("Open", Constants.OPEN_ACTIVITY);
+		}
+	}
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -36,7 +48,8 @@ public class SentRequestsFragment extends Fragment
         setHasOptionsMenu(true);
     }
 
-    @Override
+
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {

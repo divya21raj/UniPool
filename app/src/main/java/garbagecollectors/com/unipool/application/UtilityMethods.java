@@ -89,14 +89,14 @@ public class UtilityMethods
         return flag;
     }
 
-    public static boolean putInMap(HashMap<String, ArrayList<String>> map, String keyId, String valueId)
+    public static boolean putInMap(HashMap<String, ArrayList<String>> requestsReceived, String keyId, String valueId)
     {
         boolean flag = false, flag2 = false;
 
-        if(map == null)
-            map = new HashMap<>();
+        if(requestsReceived == null)
+            requestsReceived = new HashMap<>();
 
-        for (Map.Entry<String, ArrayList<String>> entry : map.entrySet())
+        for (Map.Entry<String, ArrayList<String>> entry : requestsReceived.entrySet())
         {
             if (entry.getKey().equals(keyId))
             {
@@ -123,7 +123,7 @@ public class UtilityMethods
             ArrayList<String> IdList = new ArrayList<>();
             IdList.add(valueId);
 
-            map.put(keyId, IdList);
+            requestsReceived.put(keyId, IdList);
         }
 
         return flag;

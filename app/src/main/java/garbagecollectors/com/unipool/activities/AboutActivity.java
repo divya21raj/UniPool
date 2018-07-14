@@ -3,11 +3,13 @@ package garbagecollectors.com.unipool.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,6 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
+import garbagecollectors.com.unipool.application.Constants;
 import garbagecollectors.com.unipool.application.UtilityMethods;
 
 import static garbagecollectors.com.unipool.activities.BaseActivity.currentUser;
@@ -102,46 +105,53 @@ public class AboutActivity extends AppCompatActivity
 
 	private void dealWithSelectedMenuItem(MenuItem menuItem)
 	{
-		switch (menuItem.getItemId())
-		{
-			case R.id.nav_about:
-				break;
+		// Handle navigation view item clicks here.
 
-			case R.id.nav_logout:
-				BaseActivity.mAuth.signOut();
-				finish();
-				startActivity(new Intent(this, LoginActivity.class));
-				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-				break;
+		//close drawer and open selection after some delay
+		drawerLayout.closeDrawer(Gravity.START);
 
-			case R.id.nav_home:
-				finish();
-				startActivity(new Intent(this, HomeActivity.class));
-				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-				break;
+		final Handler handler = new Handler();
+		handler.postDelayed(() -> {
+			switch (menuItem.getItemId())
+			{
+				case R.id.nav_about:
+					break;
 
-			case R.id.nav_newEntry:
-				Intent intent = new Intent(this, HomeActivity.class);
-				intent.putExtra("openNewEntryDialog", true);
-				finish();
-				startActivity(intent);
-				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-				break;
+				case R.id.nav_logout:
+					BaseActivity.mAuth.signOut();
+					startActivity(new Intent(this, LoginActivity.class));
+					finish();
+					break;
 
-			case R.id.nav_requests:
-				finish();
-				startActivity(new Intent(this, RequestActivity.class));
-				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-				break;
+				case R.id.nav_home:
+					startActivity(new Intent(this, HomeActivity.class));
+					overridePendingTransition(0, 0);
+					finish();
+					break;
 
-			case R.id.nav_chat:
-				finish();
-				Intent chatIntent = new Intent(this, RequestActivity.class);
-				chatIntent.putExtra("openingTab", 2);
-				startActivity(chatIntent);
-				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-				break;
-		}
+				case R.id.nav_newEntry:
+					Intent intent = new Intent(this, HomeActivity.class);
+					intent.putExtra("openNewEntryDialog", true);
+					startActivity(intent);
+					overridePendingTransition(0, 0);
+					finish();
+					break;
+
+				case R.id.nav_requests:
+					startActivity(new Intent(this, RequestActivity.class));
+					overridePendingTransition(0, 0);
+					finish();
+					break;
+
+				case R.id.nav_chat:
+					Intent chatIntent = new Intent(this, RequestActivity.class);
+					chatIntent.putExtra("openingTab", 2);
+					startActivity(chatIntent);
+					overridePendingTransition(0, 0);
+					finish();
+					break;
+			}
+		}, 280);
 	}
 
 	public void onClickAbout(View view)
@@ -189,5 +199,21 @@ public class AboutActivity extends AppCompatActivity
 
 		Intent intent = new Intent(Intent.ACTION_VIEW, url);
 		startActivity(intent);
+	}
+
+	@Override
+	public void onBackPressed()
+	{
+		super.onBackPressed();
+		finish();
+		startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+		overridePendingTransition(0, 0);
+	}
+
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		Constants.OPEN_ACTIVITY = "ABOUT";
 	}
 }

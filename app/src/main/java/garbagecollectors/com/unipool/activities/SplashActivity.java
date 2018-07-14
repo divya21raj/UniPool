@@ -39,6 +39,8 @@ public class SplashActivity extends AppCompatActivity implements ForceUpdateChec
     FirebaseAuth mAuth;
     static FirebaseUser currentUser;
 
+    private boolean canProceed = true;
+
     private TaskCompletionSource<Void> timerSource = new TaskCompletionSource<>();
     private Task<Void> timerTask = timerSource.getTask();
 
@@ -156,8 +158,11 @@ public class SplashActivity extends AppCompatActivity implements ForceUpdateChec
 
             chatListTask.addOnCompleteListener(task1 ->
             {
-                finish();
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                if(canProceed)
+                {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                }
             });
         });
 
@@ -182,6 +187,7 @@ public class SplashActivity extends AppCompatActivity implements ForceUpdateChec
     @Override
     public void onUpdateNeeded(String updateUrl)
     {
+        canProceed = false;  //don't go beyond splash
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("New version available")
                 .setMessage("The latest version fixes the problem of phones catching fire randomly, please update")
