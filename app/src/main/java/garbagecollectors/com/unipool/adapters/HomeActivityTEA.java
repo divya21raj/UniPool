@@ -5,11 +5,11 @@ package garbagecollectors.com.unipool.adapters;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
-import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +30,6 @@ import java.util.List;
 
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.activities.BaseActivity;
-import garbagecollectors.com.unipool.activities.HomeActivity;
 import garbagecollectors.com.unipool.application.Constants;
 import garbagecollectors.com.unipool.application.UtilityMethods;
 import garbagecollectors.com.unipool.models.TripEntry;
@@ -52,8 +51,6 @@ public class HomeActivityTEA extends TripEntryAdapter
     private AlertDialog.Builder alertDialogBuilder;
 
     private ProgressDialog progressDialog;
-
-    private int isExpanded = -1;
 
     public HomeActivityTEA(List<TripEntry> list, Context context)
     {
@@ -81,43 +78,71 @@ public class HomeActivityTEA extends TripEntryAdapter
     @Override
     public void onBindViewHolder(MyHolder holder, int position)
     {
-        UtilityMethods.fillTripEntryHolder(holder, list.get(position));
-
-        if(list.get(position).getMessage() != null)
+        try
         {
-            final boolean isExpanded = position== this.isExpanded;
-            holder.messageCard.setVisibility(isExpanded?View.VISIBLE:View.GONE);
-            holder.itemView.setActivated(isExpanded);
+            UtilityMethods.fillTripEntryHolder(holder, list.get(position));
+
             holder.cardArrow.setOnClickListener(v -> {
-                if (!isExpanded)
-                    holder.cardArrow.setImageResource(R.drawable.ic_arrow_drop_down_circle_24px);
-                else
+                if (holder.tripEntryExpand.isExpanded())
+                {
+                    holder.tripEntryExpand.collapse();
                     holder.cardArrow.setImageResource(R.drawable.ic_arrow_left_24px);
-                this.isExpanded = isExpanded ? -1:position;
-                TransitionManager.beginDelayedTransition(HomeActivity.getRecycle());
-                notifyDataSetChanged();
+                }
+                else
+                {
+                    holder.tripEntryExpand.expand();
+                    holder.cardArrow.setImageResource(R.drawable.ic_arrow_drop_down_circle_24px);
+                }
             });
-        }
 
-        holder.requestButton.setOnClickListener(view -> onRequestClick(view, position));
+            holder.requestButton.setOnClickListener(view -> onRequestClick(view, position));
 
-        holder.itemView.setOnLongClickListener(v ->
+            holder.itemView.setOnLongClickListener(v ->
+            {
+                onRequestClick(v, position);
+                return true;
+            });
+        } catch (Exception e)
         {
-            onRequestClick(v, position);
-            return true;
-        });
+            //Maybe cause of missing info
+            e.printStackTrace();
+        }
 
     }
 
     private void onRequestClick(View view, int position)
     {
-        if (list.get(position).isFromApp())
+        TripEntry tripEntry = list.get(position);
+
+        if (tripEntry.isNotFromApp())
+            if(tripEntry.getPhone() != null && !tripEntry.getPhone().isEmpty())
+                addToContacts(tripEntry);
+            else
+                writeMail(tripEntry);
+        else
         {
-            if(list.get(position).getUser_id().equals(BaseActivity.getFinalCurrentUser().getUserId()))
+            if(tripEntry.getUser_id().equals(BaseActivity.getFinalCurrentUser().getUserId()))
                 deleteEntry(view, position);
             else sendRequest(view, position);
         }
-        else addToContacts(list.get(position));
+    }
+
+    private void writeMail(TripEntry tripEntry)
+    {
+        alertDialogBuilder.setMessage("This person isn't on the app :(  \nDo you want to mail them instead?");
+
+        alertDialogBuilder.setPositiveButton("YES", (dialog, which) ->
+        {
+            // Open email intent
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                    "mailto",tripEntry.getEmail(), null));
+            context.startActivity(Intent.createChooser(emailIntent, "Send email..."));
+        });
+
+        alertDialogBuilder.setNegativeButton("NO", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 
     private void addToContacts(TripEntry tripEntry)

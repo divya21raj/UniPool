@@ -51,7 +51,6 @@
             android:inputType="textAutoComplete"
             android:layout_alignParentLeft="true"
             android:textColor="@color/colorPrimaryDark"
-            android:textStyle="bold"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:clickable="true" />
@@ -96,7 +95,6 @@
             android:backgroundTint="@color/colorPrimary"
             android:id="@+id/findDestinationEditText"
             android:inputType="textAutoComplete"
-            android:textStyle="bold"
             android:textColor="@color/colorPrimaryDark"
             android:focusable="false"
             android:focusableInTouchMode="false"
@@ -157,7 +155,6 @@
                     android:clickable="true"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:textStyle="bold"
                     android:hint="Time"
                     android:layout_marginStart="60dp" />
             </RelativeLayout>
@@ -194,7 +191,6 @@
                     android:textAlignment="center"
                     android:layout_centerHorizontal="true"
                     android:backgroundTint="@color/colorPrimary"
-                    android:textStyle="bold"
                     app:met_baseColor="@color/colorAccent"
                     android:clickable="true"
                     android:focusable="false"

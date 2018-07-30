@@ -16,10 +16,12 @@ public class TripEntry
 
     private String phone;
 
-    private boolean fromApp;
+    private String email;
+
+    private boolean notFromApp;
 
     public TripEntry(String name, String entry_id, String user_id, String time, String date,
-                     GenLocation source, GenLocation destination, String message, String phone, boolean fromApp)
+                     GenLocation source, GenLocation destination, String message, String phone, String email, boolean notFromApp)
     {
         this.entry_id = entry_id;
         this.user_id = user_id;
@@ -30,7 +32,8 @@ public class TripEntry
         this.name = name;
         this.message = message;
         this.phone = phone;
-        this.fromApp = fromApp;
+        this.email = email;
+        this.notFromApp = notFromApp;
     }
 
     public TripEntry(TripEntry tripEntry)   //copyConstructor
@@ -43,7 +46,7 @@ public class TripEntry
         this.destination = tripEntry.getDestination();
         this.name = tripEntry.getName();
         this.phone = tripEntry.getPhone();
-        this.fromApp = tripEntry.isFromApp();
+        this.notFromApp = tripEntry.isNotFromApp();
     }
 
     public TripEntry()
@@ -124,13 +127,23 @@ public class TripEntry
         this.phone = phone;
     }
 
-    public boolean isFromApp()
+    public boolean isNotFromApp()
     {
-        return fromApp;
+        return notFromApp;
     }
 
-    public void setFromApp(boolean fromApp)
+    public void setNotFromApp(boolean notFromApp)
     {
-        this.fromApp = fromApp;
+        this.notFromApp = notFromApp;
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
     }
 }

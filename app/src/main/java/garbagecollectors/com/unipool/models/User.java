@@ -8,6 +8,7 @@ public class User
     private String userId;
     private String name;
     private String photoUrl;
+    private String email;
 
     private HashMap<String, TripEntry> userTripEntries =new HashMap<>();
 
@@ -22,11 +23,12 @@ public class User
 
     private HashMap<String, PairUp> pairUps;
 
-    public User(String userId, String name, String photoUrl, HashMap<String, TripEntry> userTripEntries, HashMap<String, TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, boolean isOnline, HashMap<String, PairUp> pairUps)
+    public User(String userId, String name, String photoUrl, String email, HashMap<String, TripEntry> userTripEntries, HashMap<String, TripEntry> requestSent, HashMap<String, ArrayList<String>> requestsReceived, String deviceToken, boolean isOnline, HashMap<String, PairUp> pairUps)
     {
         this.userId = userId;
         this.name = name;
         this.photoUrl = photoUrl;
+        this.email = email;
         this.userTripEntries = userTripEntries;
         this.requestSent = requestSent;
         this.requestsReceived = requestsReceived;
@@ -116,5 +118,15 @@ public class User
     public void setOnline(boolean online)
     {
         isOnline = online;
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
     }
 }

@@ -226,10 +226,16 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s)
             {
-                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                UtilityMethods.updateTripList(tripEntryList, tripEntry);
+                try
+                {
+                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                    UtilityMethods.updateTripList(tripEntryList, tripEntry);
 
-                HomeActivity.updateRecycleAdapter();
+                    HomeActivity.updateRecycleAdapter();
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -244,11 +250,17 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot)
             {
-                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                if (tripEntry != null)
+                try
                 {
-                    UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
-                    HomeActivity.updateRecycleAdapter();
+                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+                    if (tripEntry != null)
+                    {
+                        UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
+                        HomeActivity.updateRecycleAdapter();
+                    }
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
                 }
 
             }

@@ -16,8 +16,8 @@ android {
         applicationId 'garbagecollectors.com.unipool'
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 117
-        versionName "1.17"
+        versionCode 120
+        versionName "1.20"
         resConfigs "en"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -79,6 +79,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+    implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
 
 }
 apply plugin: "com.google.gms.google-services"

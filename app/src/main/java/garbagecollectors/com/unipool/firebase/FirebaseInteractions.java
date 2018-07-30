@@ -39,4 +39,38 @@ public class FirebaseInteractions
 			}
 		});
 	}
+
+	public static void getMegaTripEntries(Context context)
+	{
+		Constants.megaEntryDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+		{
+			@Override
+			public void onDataChange(DataSnapshot entryData)
+			{
+				for (DataSnapshot dataSnapshot : entryData.getChildren())
+				{
+					try
+					{
+						TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
+						if (!tripEntry.getEntry_id().equals("dummy"))
+						{
+							UtilityMethods.updateTripList(BaseActivity.getTripEntryList(), tripEntry);
+
+							HomeActivity.updateRecycleAdapter();
+						}
+					} catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+
+			@Override
+			public void onCancelled(DatabaseError databaseError)
+			{
+				Toast.makeText(context, "Network Issues!", Toast.LENGTH_SHORT).show();
+				HomeActivity.updateRecycleAdapter();
+			}
+		});
+	}
 }

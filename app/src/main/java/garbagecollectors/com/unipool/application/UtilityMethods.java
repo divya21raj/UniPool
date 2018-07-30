@@ -137,10 +137,16 @@ public class UtilityMethods
         {
             TripEntry tripEntryFromList = iterator.next();
 
-            if(tripEntryFromList.getEntry_id().equals(tripEntry.getEntry_id()))
+            try
             {
-                iterator.remove();
-                break;
+                if(tripEntryFromList.getEntry_id().equals(tripEntry.getEntry_id()))
+                {
+                    iterator.remove();
+                    break;
+                }
+            } catch (NullPointerException npe)
+            {
+                npe.printStackTrace();
             }
         }
 
@@ -226,6 +232,9 @@ public class UtilityMethods
 
     public static void fillTripEntryHolder(TripEntryAdapter.MyHolder holder, TripEntry tripEntry)
     {
+    	holder.cardArrow.setVisibility(View.GONE);
+	    holder.messageCard.setVisibility(View.GONE);
+
         holder.date.setText(tripEntry.getDate());
         holder.name_user.setText(sanitizeName(tripEntry.getName()));
         holder.travel_time.setText(tripEntry.getTime());

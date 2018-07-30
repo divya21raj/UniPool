@@ -285,7 +285,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
         GenLocation dummyGenLocation = new GenLocation("dummy", "dummy", 0d, 0d);
 
         TripEntry dummyTripEntry = new TripEntry("dummy", "dummyId", "DummyUser", "12:00",
-                                                    "1/11/12", dummyGenLocation, dummyGenLocation, "dummyMessage", "", false);
+                                                    "1/11/12", dummyGenLocation, dummyGenLocation, "dummyMessage", "", "", true);
 
         HashMap<String, TripEntry> dummyUserEntries = new HashMap<>();
         dummyUserEntries.put("dummy", dummyTripEntry);
@@ -303,15 +303,19 @@ public class LoginActivity extends Activity implements View.OnClickListener
         HashMap<String, PairUp> dummyPairUps = new HashMap<>();
         dummyPairUps.put("dummy", dummyPairUp);
 
-        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
+            String deviceToken = instanceIdResult.getToken();
 
-        String url = "";
-        Uri photoUrl = user.getPhotoUrl();
-        if(photoUrl != null)
-            url = photoUrl.toString();
+            String url = "";
 
-        finalCurrentUser = new User(user.getUid(), user.getDisplayName(), url,
-                                    dummyUserEntries, dummyRequestSent, dummyRequestReceived, deviceToken, true, dummyPairUps);
+            Uri photoUrl = user.getPhotoUrl();
+            if(photoUrl != null)
+                url = photoUrl.toString();
+
+            finalCurrentUser = new User(user.getUid(), user.getDisplayName(), url,
+                    user.getEmail(), dummyUserEntries, dummyRequestSent, dummyRequestReceived, deviceToken, true, dummyPairUps);
+        });
+
     }
 
     private void updateUI(FirebaseUser currentUser)

@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.cachapa.expandablelayout.ExpandableLayout;
+
 import garbagecollectors.com.unipool.R;
 
 public abstract class TripEntryAdapter extends RecyclerView.Adapter<TripEntryAdapter.MyHolder>
@@ -28,6 +30,7 @@ public abstract class TripEntryAdapter extends RecyclerView.Adapter<TripEntryAda
         public TextView messageText;
         public Button requestButton;
         public ImageView cardArrow;
+        public ExpandableLayout tripEntryExpand;
 
         MyHolder(View v)
         {
@@ -41,6 +44,7 @@ public abstract class TripEntryAdapter extends RecyclerView.Adapter<TripEntryAda
             messageText = v.findViewById(R.id.cardMessageText);
             requestButton = v.findViewById(R.id.requestButton);
             cardArrow = v.findViewById(R.id.cardArrow);
+            tripEntryExpand = v.findViewById(R.id.tripEntryExpand);
         }
     }
 }

@@ -110,6 +110,7 @@ public class HomeActivity extends BaseActivity
 
 	    homeTripEntrySwipe.setOnRefreshListener(() -> {
 	    	newEntryFab.show();
+		    FirebaseInteractions.getMegaTripEntries(getApplicationContext());
 		    FirebaseInteractions.getTripEntries(getApplicationContext());
 	    });
 

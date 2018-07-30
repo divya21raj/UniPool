@@ -352,7 +352,7 @@ public class NewEntryDialog extends DialogFragment implements GoogleApiClient.On
 
     }
 
-    public void finalSave() throws ParseException
+    public void finalSave()
     {
         String entryId = Constants.entryDatabaseReference.push().getKey();
         String name = UtilityMethods.sanitizeName(finalCurrentUser.getName());
@@ -363,7 +363,7 @@ public class NewEntryDialog extends DialogFragment implements GoogleApiClient.On
             message = null;
 
         TripEntry tripEntry = new TripEntry(name, entryId, finalCurrentUser.getUserId(),
-                time, date, source, destination, message, "", true);
+                time, date, source, destination, message, "", finalCurrentUser.getEmail(), false);
 
         finalCurrentUser.getUserTripEntries().put(tripEntry.getEntry_id(), tripEntry);
 

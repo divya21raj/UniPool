@@ -20,14 +20,15 @@ exports.deleteExpired  = functions.database.ref('/deleteExpired/{user_id}')
 		}
 
 		var tripEntryRef = db.ref("entries");
+		var megaTripEntryRef = db.ref("mega_entries");
 		var pairUpRef = db.ref("pairUps");
 		var userRef = db.ref("users");
 
 		tripEntryRef.once('value', function(entrySnapshot)
 		{
-  		entrySnapshot.forEach(function(entryChildSnapshot)
+  			entrySnapshot.forEach(function(entryChildSnapshot)
 			{
-    		var childKey = entryChildSnapshot.key;
+    			var childKey = entryChildSnapshot.key;
 				console.log(`key = ${childKey}`);
 
 				var childData = entryChildSnapshot.val();
