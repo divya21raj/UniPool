@@ -24,6 +24,11 @@ exports.deleteExpired  = functions.database.ref('/deleteExpired/{user_id}')
 		var pairUpRef = db.ref("pairUps");
 		var userRef = db.ref("users");
 
+		var currentDate = new Date();
+		var currentOffset = currentDate.getTimezoneOffset();
+		var ISTOffset = 330;   // IST offset UTC +5:30
+		var ISTTime = new Date(currentDate.getTime() + (ISTOffset + currentOffset)*60000);
+
 		tripEntryRef.once('value', function(entrySnapshot)
 		{
   			entrySnapshot.forEach(function(entryChildSnapshot)
@@ -39,10 +44,10 @@ exports.deleteExpired  = functions.database.ref('/deleteExpired/{user_id}')
 				var timeParts = time.split(":");
 				var dateObject = new Date(dateParts[2], dateParts[1] - 1, dateParts[0], timeParts[0], timeParts[1], 0); // month is 0-based
 
-				var currentDate = new Date();
-				var currentOffset = currentDate.getTimezoneOffset();
-				var ISTOffset = 330;   // IST offset UTC +5:30
-				var ISTTime = new Date(currentDate.getTime() + (ISTOffset + currentOffset)*60000);
+				currentDate = new Date();
+				currentOffset = currentDate.getTimezoneOffset();
+				ISTOffset = 330;   // IST offset UTC +5:30
+				ISTTime = new Date(currentDate.getTime() + (ISTOffset + currentOffset)*60000);
 
 				console.log(`${ISTTime}`);
 				console.log(`${dateObject}`);
@@ -105,10 +110,10 @@ exports.deleteExpired  = functions.database.ref('/deleteExpired/{user_id}')
 				var puDateObj = new Date(puDateParts[2], puDateParts[1] - 1,
 																	puDateParts[0], puDateParts[3], puDateParts[4], 0); //give them 4 hrs
 
-				var currentDate = new Date();
-				var currentOffset = currentDate.getTimezoneOffset();
-				var ISTOffset = 330;   // IST offset UTC +5:30
-				var ISTTime = new Date(currentDate.getTime() + (ISTOffset + currentOffset)*60000);
+				currentDate = new Date();
+				currentOffset = currentDate.getTimezoneOffset();
+				ISTOffset = 330;   // IST offset UTC +5:30
+				ISTTime = new Date(currentDate.getTime() + (ISTOffset + currentOffset)*60000);
 
 				console.log(`${ISTTime}`);
 				console.log(`${puDateObj}`);
