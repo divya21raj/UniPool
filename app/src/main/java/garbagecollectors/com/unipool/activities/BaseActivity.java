@@ -3,6 +3,7 @@ package garbagecollectors.com.unipool.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -24,7 +25,6 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
@@ -41,9 +41,10 @@ import garbagecollectors.com.unipool.activities.RequestActivity.ChatFragment;
 import garbagecollectors.com.unipool.activities.RequestActivity.ReceivedRequestsFragment;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
 import garbagecollectors.com.unipool.activities.RequestActivity.SentRequestsFragment;
-import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.Globals;
 import garbagecollectors.com.unipool.application.UtilityMethods;
 import garbagecollectors.com.unipool.dialog.NewEntryDialog;
+import garbagecollectors.com.unipool.firebase.FirebaseInteractions;
 import garbagecollectors.com.unipool.models.GenLocation;
 import garbagecollectors.com.unipool.models.Message;
 import garbagecollectors.com.unipool.models.TripEntry;
@@ -63,7 +64,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     public static User finalCurrentUser;
 
-    protected static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
+    public static ArrayList<TripEntry> tripEntryList = SplashActivity.getTripEntryList();
     protected static HashMap<String, User> chatMap; //key = UserId
 
     protected static HashMap<String, HashMap<String, Message>> messages = new HashMap<>();   //Key - PairUpID, Value- List of messages in that pairUp
@@ -80,7 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             super.onCreate(savedInstanceState);
             setContentView(getContentViewId());
 
-            Constants.init();
+            Globals.init();
 
             mAuth = FirebaseAuth.getInstance();
             currentUser = mAuth.getCurrentUser();
@@ -92,14 +93,14 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 actionBar.setDisplayHomeAsUpEnabled(true);
             }
 
-            Constants.userDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "users/" + finalCurrentUser.getUserId());
-            Constants.userMessageDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "messages/" + finalCurrentUser.getUserId());
+            Globals.userDatabaseReference = FirebaseDatabase.getInstance().getReference(Globals.UNI + "users/" + finalCurrentUser.getUserId());
+            Globals.userMessageDatabaseReference = FirebaseDatabase.getInstance().getReference(Globals.UNI + "messages/" + finalCurrentUser.getUserId());
 
             startMessageListener();
 
-            getTripEntries();
+            FirebaseInteractions.addTripEntryChildListener(this);
 
-            getMegaEntries();
+            FirebaseInteractions.addMegaEntryChildListener(this);
 
             getUserDetails();
         }
@@ -131,7 +132,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
     protected void getUserDetails()
     {
-        Constants.userDatabaseReference.addValueEventListener(new ValueEventListener()
+        Globals.userDatabaseReference.addValueEventListener(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -143,7 +144,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                     if(dataSnapshot.getValue() != null)
                     {
                         finalCurrentUser = dataSnapshot.getValue(User.class);
-                        UtilityMethods.populateChatMap(dataSnapshot);
+                        UtilityMethods.populateChatMap(dataSnapshot.child("pairUps"));
                         ReceivedRequestsFragment.refreshRecycler();
                         SentRequestsFragment.refreshRecycler();
                         ChatFragment.refreshRecycler();
@@ -169,117 +170,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
     }
 
-    protected void getTripEntries()
-    {
-        Constants.entryDatabaseReference.addChildEventListener(new ChildEventListener()
-        {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s)
-            {
-                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                UtilityMethods.updateTripList(tripEntryList, tripEntry);
 
-                HomeActivity.updateRecycleAdapter();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s)
-            {
-                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                UtilityMethods.updateTripList(tripEntryList, tripEntry);
-
-                HomeActivity.updateRecycleAdapter();
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot)
-            {
-                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                if (tripEntry != null)
-                {
-                    UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
-                    HomeActivity.updateRecycleAdapter();
-                }
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s)
-            {
-                //IDK
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-                // Failed to read value
-                Log.w("Hello", "Failed to read value.", databaseError.toException());
-                Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    protected void getMegaEntries()
-    {
-        Constants.megaEntryDatabaseReference.addChildEventListener(new ChildEventListener()
-        {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s)
-            {
-                try
-                {
-                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                    UtilityMethods.updateTripList(tripEntryList, tripEntry);
-
-                    HomeActivity.updateRecycleAdapter();
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s)
-            {
-                TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                UtilityMethods.updateTripList(tripEntryList, tripEntry);
-
-                HomeActivity.updateRecycleAdapter();
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot)
-            {
-                try
-                {
-                    TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                    if (tripEntry != null)
-                    {
-                        UtilityMethods.removeFromList(tripEntryList, tripEntry.getEntry_id());
-                        HomeActivity.updateRecycleAdapter();
-                    }
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s)
-            {
-                //IDK
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-                // Failed to read value
-                Log.w("Hello", "Failed to read value.", databaseError.toException());
-                Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     @Override
     protected void onStart()
@@ -287,7 +178,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         super.onStart();
         updateNavigationBarState();
         finalCurrentUser.setOnline(true);
-        Constants.userDatabaseReference.child("isOnline").setValue("true");
+        Globals.userDatabaseReference.child("isOnline").setValue("true");
     }
 
     @Override
@@ -295,8 +186,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     {
         super.onBackPressed();
         finalCurrentUser.setOnline(false);
-        Constants.userDatabaseReference.child("isOnline").setValue("false");
-        Constants.expiryDatabaseReference.child(finalCurrentUser.getUserId()).removeValue();
+        Globals.userDatabaseReference.child("isOnline").setValue("false");
+        Globals.expiryDatabaseReference.child(finalCurrentUser.getUserId()).removeValue();
     }
 
     @Override
@@ -400,6 +291,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                     finish();
                     break;
 
+                case R.id.nav_privacy:
+                    // The code for opening a URL in a Browser in Android:
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.PrivacyPolicyUrl)));
+                    startActivity(browserIntent);
+                    break;
+
 				case R.id.nav_logout:
 					mAuth.signOut();
 					startActivity(new Intent(getApplicationContext(), LoginActivity.class));
@@ -407,7 +304,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                     break;
 
 				case R.id.nav_home:
-					if(!Constants.OPEN_ACTIVITY.contains("HOME"))
+					if(!Globals.OPEN_ACTIVITY.contains("HOME"))
 					{
 						startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         overridePendingTransition(0, 0);
@@ -416,7 +313,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 					break;
 
 				case R.id.nav_newEntry:
-					if(Constants.OPEN_ACTIVITY.contains("HOME"))
+					if(Globals.OPEN_ACTIVITY.contains("HOME"))
 						new NewEntryDialog().show(getFragmentManager(), "NewEntryDialog");
 					else
 					{
@@ -429,7 +326,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 					break;
 
 				case R.id.nav_requests:
-					if(!Constants.OPEN_ACTIVITY.contains("REQ"))
+					if(!Globals.OPEN_ACTIVITY.contains("REQ"))
 					{
 						startActivity(new Intent(getApplicationContext(), RequestActivity.class));
                         overridePendingTransition(0, 0);
@@ -438,7 +335,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 					break;
 
 				case R.id.nav_chat:
-					if(!Constants.OPEN_ACTIVITY.contains("CHAT"))
+					if(!Globals.OPEN_ACTIVITY.contains("CHAT"))
 					{
 						Intent chatIntent = new Intent(getApplicationContext(), RequestActivity.class);
                         chatIntent.putExtra("openingTab", 2);

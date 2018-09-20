@@ -26,8 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.application.Constants;
 import garbagecollectors.com.unipool.application.ForceUpdateChecker;
+import garbagecollectors.com.unipool.application.Globals;
 import garbagecollectors.com.unipool.application.UtilityMethods;
 import garbagecollectors.com.unipool.models.TripEntry;
 import garbagecollectors.com.unipool.models.User;
@@ -76,16 +76,18 @@ public class SplashActivity extends AppCompatActivity implements ForceUpdateChec
         //For Oreo and above
         createNotificationChannel();
 
+        UtilityMethods.fillGlobalVariables(getApplicationContext());
+
         BaseActivity.setCurrentUser(currentUser);
 
-        Constants.userDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "users/" + currentUser.getUid());
+        Globals.userDatabaseReference = FirebaseDatabase.getInstance().getReference(Globals.UNI + "users/" + currentUser.getUid());
 
-        Constants.messageDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "messages/" + currentUser.getUid());
+        Globals.messageDatabaseReference = FirebaseDatabase.getInstance().getReference(Globals.UNI + "messages/" + currentUser.getUid());
 
         Handler handler = new Handler();
-        handler.postDelayed(() -> timerSource.setResult(null), 12350);
+        handler.postDelayed(() -> timerSource.setResult(null), 12345);
 
-        Constants.userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+        Globals.userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -101,7 +103,7 @@ public class SplashActivity extends AppCompatActivity implements ForceUpdateChec
             }
         });
 
-        Constants.entryDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+        Globals.entryDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -128,15 +130,15 @@ public class SplashActivity extends AppCompatActivity implements ForceUpdateChec
             for (DataSnapshot dataSnapshot : entryData.getChildren())
             {
                 TripEntry tripEntry = dataSnapshot.getValue(TripEntry.class);
-                UtilityMethods.updateTripList(tripEntryList, tripEntry);
+                UtilityMethods.updateTripList(tripEntryList, tripEntry, true);
             }
 
             if (!(LoginActivity.userNewOnDatabase))
                 BaseActivity.setFinalCurrentUser(userData.getValue(User.class));
 
-            Task chatListTask = UtilityMethods.populateChatMap(userData);
+            Task chatListTask = UtilityMethods.populateChatMap(userData.child("pairUps"));
 
-            Constants.messageDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+            Globals.messageDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
             {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot)
@@ -207,7 +209,7 @@ public class SplashActivity extends AppCompatActivity implements ForceUpdateChec
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(Constants.CHANNEL_ID, "UniPool Channel", importance);
+            NotificationChannel channel = new NotificationChannel(Globals.CHANNEL_ID, "UniPool Channel", importance);
             channel.setDescription("The default notification channel for UniPool");
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this

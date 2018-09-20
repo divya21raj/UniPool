@@ -48,4 +48,13 @@
 
     </group>
 
+    <group android:checkableBehavior="single"
+        android:id="@+id/legal_group_drawer">
+
+        <item
+            android:id="@+id/nav_privacy"
+            android:title="Privacy Policy" />
+
+    </group>
+
 </menu>

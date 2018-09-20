@@ -25,9 +25,8 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.adapters.HomeActivityTEA;
-import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.Globals;
 import garbagecollectors.com.unipool.dialog.NewEntryDialog;
-import garbagecollectors.com.unipool.firebase.FirebaseInteractions;
 
 public class HomeActivity extends BaseActivity
 {
@@ -110,18 +109,18 @@ public class HomeActivity extends BaseActivity
 
 	    homeTripEntrySwipe.setOnRefreshListener(() -> {
 	    	newEntryFab.show();
-		    FirebaseInteractions.getMegaTripEntries(getApplicationContext());
-		    FirebaseInteractions.getTripEntries(getApplicationContext());
-	    });
+		    /*FirebaseInteractions.getMegaTripEntries(getApplicationContext());
+		    FirebaseInteractions.getTripEntries(getApplicationContext());*/
 
-	    stopRefresherAfterSomeTime();
+		    stopRefresherAfterSomeTime();
+	    });
     }
 
 	private void stopRefresherAfterSomeTime()
 	{
-		//stops refreshing after 5 seconds
+		//stops refreshing after 3 seconds
 		final Handler handler = new Handler();
-		handler.postDelayed(() -> homeTripEntrySwipe.setRefreshing(false), 5000);
+		handler.postDelayed(() -> homeTripEntrySwipe.setRefreshing(false), 3000);
 	}
 
 	private void changeToSOLogo()
@@ -189,8 +188,8 @@ public class HomeActivity extends BaseActivity
 	protected void onResume()
 	{
 		super.onResume();
-		Constants.OPEN_ACTIVITY = "HOME";
-		Log.d("Open", Constants.OPEN_ACTIVITY);
+		Globals.OPEN_ACTIVITY = "HOME";
+		Log.d("Open", Globals.OPEN_ACTIVITY);
 	}
 
 	@Override

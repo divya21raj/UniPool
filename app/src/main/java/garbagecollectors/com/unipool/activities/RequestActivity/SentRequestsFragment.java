@@ -16,7 +16,7 @@ import java.util.Map;
 
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.adapters.SentRequestsTEA;
-import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.Globals;
 import garbagecollectors.com.unipool.models.TripEntry;
 import garbagecollectors.com.unipool.models.User;
 
@@ -36,8 +36,8 @@ public class SentRequestsFragment extends Fragment
 		super.setUserVisibleHint(isVisibleToUser);
 
 		if (isVisibleToUser) {
-			Constants.OPEN_ACTIVITY = "REQUESTS";
-            Log.d("Open", Constants.OPEN_ACTIVITY);
+			Globals.OPEN_ACTIVITY = "REQUESTS";
+            Log.d("Open", Globals.OPEN_ACTIVITY);
 		}
 	}
 

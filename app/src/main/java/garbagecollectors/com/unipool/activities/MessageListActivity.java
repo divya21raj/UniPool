@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.TreeMap;
 
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.Globals;
 import garbagecollectors.com.unipool.application.UtilityMethods;
 import garbagecollectors.com.unipool.models.Message;
 import garbagecollectors.com.unipool.models.PairUp;
@@ -65,15 +65,25 @@ public class MessageListActivity extends AppCompatActivity
 		messagesOnScreen = new ArrayList<>();
 
 		messageProgressDialog = new ProgressDialog(this);
+		messageProgressDialog.setCanceledOnTouchOutside(false);
 		messageProgressDialog.setMessage("Fetching your messages...");
 		messageProgressDialog.show();
 
 		setScrollViewToBottom();
 
-		DatabaseReference userMessageDatabaseReference = FirebaseDatabase.getInstance().
-				getReference("messages/" + BaseActivity.getFinalCurrentUser().getUserId());
+		DatabaseReference userMessageDatabaseReference = null;
+		try
+		{
+			userMessageDatabaseReference = FirebaseDatabase.getInstance().
+					getReference("messages/" + BaseActivity.getFinalCurrentUser().getUserId());
+		} catch (Exception e)
+		{
+			//Could be NPE, fall back to locally stored USER_ID
+			userMessageDatabaseReference = FirebaseDatabase.getInstance().
+					getReference("messages/" + Globals.USER_ID);
+		}
 
-		//load from local
+		/*load from local*/
 
 		userMessageDatabaseReference.addChildEventListener(new ChildEventListener()
 		{
@@ -141,7 +151,7 @@ public class MessageListActivity extends AppCompatActivity
 				notificationObject.put("from", BaseActivity.getFinalCurrentUser().getUserId());
 				notificationObject.put("type", "chat");
 
-				Constants.notificationDatabaseReference.child(chatUser.getUserId()).push().setValue(notificationObject);
+				Globals.notificationDatabaseReference.child(chatUser.getUserId()).push().setValue(notificationObject);
 
 				messageArea.setText("");
 				personalMessageMap.put(message.getCreatedAtTime(), message);

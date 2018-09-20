@@ -16,7 +16,7 @@ import java.util.Map;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.adapters.UserAdapter;
-import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.Globals;
 import garbagecollectors.com.unipool.models.User;
 
 public class ChatFragment extends Fragment
@@ -42,8 +42,8 @@ public class ChatFragment extends Fragment
 		super.setUserVisibleHint(isVisibleToUser);
 
 		if (isVisibleToUser) {
-			Constants.OPEN_ACTIVITY = "CHATS";
-			Log.d("Open", Constants.OPEN_ACTIVITY);
+			Globals.OPEN_ACTIVITY = "CHATS";
+			Log.d("Open", Globals.OPEN_ACTIVITY);
 		}
 	}
 

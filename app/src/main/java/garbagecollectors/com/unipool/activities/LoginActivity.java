@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -29,17 +31,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import garbagecollectors.com.unipool.BuildConfig;
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.Globals;
+import garbagecollectors.com.unipool.application.LocalStorageHelper;
+import garbagecollectors.com.unipool.application.UtilityMethods;
 import garbagecollectors.com.unipool.models.GenLocation;
 import garbagecollectors.com.unipool.models.Message;
 import garbagecollectors.com.unipool.models.PairUp;
 import garbagecollectors.com.unipool.models.TripEntry;
 import garbagecollectors.com.unipool.models.User;
+import io.fabric.sdk.android.Fabric;
 
 import static garbagecollectors.com.unipool.activities.BaseActivity.finalCurrentUser;
 
@@ -68,6 +73,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        //disableCrashlyticsForDebug();
+
         startIntro();
 
         super.onCreate(savedInstanceState);
@@ -90,6 +97,17 @@ public class LoginActivity extends Activity implements View.OnClickListener
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
 
+    }
+
+    private void disableCrashlyticsForDebug()
+    {
+        // Set up Crashlytics, disabled for debug builds
+        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+                .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                .build();
+
+        // Initialize Fabric with the debug-disabled crashlytics.
+        Fabric.with(this, crashlyticsKit, new Crashlytics());
     }
 
     private void startIntro()
@@ -208,14 +226,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
                         FirebaseUser user = mAuth.getCurrentUser();
 
-                        try
-                        {
-                            createUserOnDatabase(user);
-                        } catch (ParseException e)
-                        {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Network Issues!", Toast.LENGTH_SHORT).show();
-                        }
+                        createUserOnDatabase(user);
                     }
                     else
                     {
@@ -229,13 +240,14 @@ public class LoginActivity extends Activity implements View.OnClickListener
                 });
     }
 
-    private void createUserOnDatabase(FirebaseUser user) throws ParseException
+
+    private void createUserOnDatabase(FirebaseUser user)
     {
         dummyInitFinalCurrentUser(user);
 
-        Constants.userDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "users/" + user.getUid());
+        Globals.userDatabaseReference = FirebaseDatabase.getInstance().getReference(Globals.UNI + "users/" + user.getUid());
 
-        Constants.userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+        Globals.userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot snapshot)
@@ -259,9 +271,9 @@ public class LoginActivity extends Activity implements View.OnClickListener
             {
                 userNewOnDatabase = true;
 
-                Constants.userDatabaseReference.setValue(finalCurrentUser);
+                Globals.userDatabaseReference.setValue(finalCurrentUser);
 
-                Constants.messageDatabaseReference.child(finalCurrentUser.getUserId()).child(defaultMessage.getMessageId()).
+                Globals.messageDatabaseReference.child(finalCurrentUser.getUserId()).child(defaultMessage.getMessageId()).
                                                                             setValue(defaultMessage);
 
                 //Toast.makeText(getApplicationContext(), "User added to database!", Toast.LENGTH_SHORT).show();
@@ -280,7 +292,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
         });
     }
 
-    private void dummyInitFinalCurrentUser(FirebaseUser user) throws ParseException
+    private void dummyInitFinalCurrentUser(FirebaseUser user)
     {
         GenLocation dummyGenLocation = new GenLocation("dummy", "dummy", 0d, 0d);
 
@@ -318,23 +330,31 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
     }
 
-    private void updateUI(FirebaseUser currentUser)
+    private void updateUI(FirebaseUser user)
     {
         progressDialog.dismiss();
 
-        if(currentUser != null)
+        if(user != null)
         {
-            String deviceToken = FirebaseInstanceId.getInstance().getToken();
+            UtilityMethods.storeUserLocally(user, getApplicationContext());
 
-            Constants.userDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "users/" + currentUser.getUid());
+            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
+                String deviceToken = instanceIdResult.getToken();
 
-            Constants.userDatabaseReference.child("deviceToken").setValue(deviceToken);
+                LocalStorageHelper.storeLocally(Globals.USER_SP_FILE, Globals.USER_TOKEN_KEY, deviceToken, getApplicationContext());
 
-            Constants.expiryDatabaseReference.child(currentUser.getUid()).setValue(true);
+                UtilityMethods.fillGlobalVariables(getApplicationContext());
 
-            finish();
-            startActivity(new Intent(getApplicationContext(), SplashActivity.class));
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                Globals.userDatabaseReference = FirebaseDatabase.getInstance().getReference(Globals.UNI + "users/" + user.getUid());
+
+                Globals.userDatabaseReference.child("deviceToken").setValue(deviceToken);
+
+                Globals.expiryDatabaseReference.child(user.getUid()).setValue(true);
+
+                finish();
+                startActivity(new Intent(getApplicationContext(), SplashActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            });
         }
     }
 }

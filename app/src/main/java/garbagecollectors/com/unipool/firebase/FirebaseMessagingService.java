@@ -6,12 +6,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
 
 import com.google.firebase.messaging.RemoteMessage;
 
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.activities.MessageListActivity;
-import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.Globals;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService
 {
@@ -20,6 +21,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 	{
 		super.onMessageReceived(remoteMessage);
 
+		Log.d("D2R", remoteMessage.getNotification().getBody());
+
 		String notificationTitle = remoteMessage.getNotification().getTitle();
 		String notificationBody = remoteMessage.getNotification().getBody();
 
@@ -27,7 +30,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 		Uri sound = Uri.parse(remoteMessage.getNotification().getSound());
 
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, Globals.CHANNEL_ID)
 				.setSmallIcon(R.mipmap.ic_launcher)
 				.setContentTitle(notificationTitle)
 				.setContentText(notificationBody)
@@ -51,7 +54,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 		else if(notificationBody.contains("sent"))
 			resultIntent.putExtra("openingTab", 1);
 		else if(notificationBody.contains("message"))
+		{
+			Log.d("D2R", "Yay");
 			resultIntent.putExtra("openingTab", 2);
+		}
 
 		//resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -62,6 +68,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 		//issuing
 		int notificationId = (int) System.currentTimeMillis();
+
+		if(notificationBody.contains("message"))
+			notificationId = 0;  // Id stays same for all chat notifs, so that new replaces old
+
 		NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
 		String name = "sdcsdfiwfef9";

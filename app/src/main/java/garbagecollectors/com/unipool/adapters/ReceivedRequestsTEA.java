@@ -27,7 +27,7 @@ import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.activities.BaseActivity;
 import garbagecollectors.com.unipool.activities.RequestActivity.ReceivedRequestsFragment;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
-import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.Globals;
 import garbagecollectors.com.unipool.application.UtilityMethods;
 import garbagecollectors.com.unipool.models.PairUp;
 import garbagecollectors.com.unipool.models.TripEntry;
@@ -72,12 +72,13 @@ public class ReceivedRequestsTEA extends TripEntryAdapter
         holder.messageCard.setVisibility(View.GONE);
 
         MessageDBTask.addOnCompleteListener(o -> requestsProgressDialog.dismiss());
+        MessageDBTask.addOnFailureListener(o -> requestsProgressDialog.dismiss());
 
         holder.requestButton.setOnClickListener(view ->
         {
-            DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "users");
-            DatabaseReference pairUpDatabaseReference = Constants.pairUpDatabaseReference;
-            DatabaseReference notificationDatabaseReference = Constants.notificationDatabaseReference;
+            DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference(Globals.UNI + "users");
+            DatabaseReference pairUpDatabaseReference = Globals.pairUpDatabaseReference;
+            DatabaseReference notificationDatabaseReference = Globals.notificationDatabaseReference;
 
             TripEntry tripEntry = list.get(position);
 

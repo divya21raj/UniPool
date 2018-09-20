@@ -19,7 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.activities.RequestActivity.RequestActivity;
-import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.Globals;
 import garbagecollectors.com.unipool.application.UtilityMethods;
 
 import static garbagecollectors.com.unipool.activities.BaseActivity.currentUser;
@@ -115,6 +115,12 @@ public class AboutActivity extends AppCompatActivity
 			switch (menuItem.getItemId())
 			{
 				case R.id.nav_about:
+					break;
+
+				case R.id.nav_privacy:
+					// The code for opening a URL in a Browser in Android:
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.PrivacyPolicyUrl)));
+					startActivity(browserIntent);
 					break;
 
 				case R.id.nav_logout:
@@ -214,6 +220,6 @@ public class AboutActivity extends AppCompatActivity
 	protected void onResume()
 	{
 		super.onResume();
-		Constants.OPEN_ACTIVITY = "ABOUT";
+		Globals.OPEN_ACTIVITY = "ABOUT";
 	}
 }

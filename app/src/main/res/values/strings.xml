@@ -3,9 +3,13 @@
     <string name="title_home">Home</string>
 
     <string name="WebClientId">560852588496-baos0qb9om1qmvade33hbh1l2ic70l00.apps.googleusercontent.com</string>
+    <string name="PrivacyPolicyUrl">https://cdn.rawgit.com/divya21raj/06cb6b6dbe68b6eeecb9e2fa4da1337a/raw/3ff0f30047e536454c472ed6b673ce19bcf9c8e6/unipoolPp.html</string>
+
     <string name="new_entry">New Entry</string>
     <string name="title_requests">Requests</string>
     <string name="placeholder">placeholder</string>
+
+    <string name="dev_mail">divya21raj</string>
 
     <string name="divya_raj">Divya Raj</string>
     <string name="abhishek_srivastava">Abhishek Srivastava</string>
@@ -16,8 +20,9 @@
 
     <string name="currentLoc">Getting your current location…</string>
 
-    <string name="version">v1.19</string>
+    <string name="version">v1.23</string>
     <string name="create_entry_button">CREATE ENTRY</string>
     <string name="uni_name">Shiv Nadar University, NH91, Tehsil Dadri, Gautam Buddha Nagar, Greater Noida, Uttar Pradesh</string>
+
 
 </resources>

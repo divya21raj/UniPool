@@ -30,7 +30,7 @@ import java.util.List;
 
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.activities.BaseActivity;
-import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.Globals;
 import garbagecollectors.com.unipool.application.UtilityMethods;
 import garbagecollectors.com.unipool.models.TripEntry;
 import garbagecollectors.com.unipool.models.User;
@@ -99,7 +99,9 @@ public class HomeActivityTEA extends TripEntryAdapter
 
             holder.itemView.setOnLongClickListener(v ->
             {
-                onRequestClick(v, position);
+                if(Globals.USER_EMAIL.contains(context.getString(R.string.dev_mail)))  //God mode
+                    deleteEntry(v, position);
+                else onRequestClick(v, position);
                 return true;
             });
         } catch (Exception e)
@@ -185,9 +187,9 @@ public class HomeActivityTEA extends TripEntryAdapter
 
             TripEntry tripEntry = list.get(position);
 
-            Task<Void> task1 = Constants.entryDatabaseReference.child(tripEntry.getEntry_id()).removeValue();
+            Task<Void> task1 = Globals.entryDatabaseReference.child(tripEntry.getEntry_id()).removeValue();
 
-            Constants.userDatabaseReference.child("userTripEntries").addListenerForSingleValueEvent(new ValueEventListener()
+            Globals.userDatabaseReference.child("userTripEntries").addListenerForSingleValueEvent(new ValueEventListener()
             {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot)
@@ -217,7 +219,7 @@ public class HomeActivityTEA extends TripEntryAdapter
                     i[0]++;
                 }
 
-                Task<Void> task3 = Constants.userDatabaseReference.child("userTripEntries").child(tripEntry.getEntry_id()).removeValue();
+                Task<Void> task3 = Globals.userDatabaseReference.child("userTripEntries").child(tripEntry.getEntry_id()).removeValue();
 
                 task3.addOnSuccessListener(aVoid1 ->
                 {
@@ -276,7 +278,7 @@ public class HomeActivityTEA extends TripEntryAdapter
 
                 tripEntryUser[0] = snapshot.getValue(User.class);
 
-                DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.UNI + "users");
+                DatabaseReference userDatabaseReference = FirebaseDatabase.getInstance().getReference(Globals.UNI + "users");
 
                 HashMap<String, TripEntry> requestSent = user.getRequestSent();
                 HashMap<String, ArrayList<String>> requestsReceived = tripEntryUser[0].getRequestsReceived();
@@ -301,7 +303,7 @@ public class HomeActivityTEA extends TripEntryAdapter
                     notificationObject.put("from", user.getUserId());
                     notificationObject.put("type", "requestCreated");
 
-                    Task<Void> task3 = Constants.notificationDatabaseReference.child(tripEntryUser[0].getUserId()).push().setValue(notificationObject);
+                    Task<Void> task3 = Globals.notificationDatabaseReference.child(tripEntryUser[0].getUserId()).push().setValue(notificationObject);
 
                     Task<Void> allTask = Tasks.whenAll(task1, task2, task3);
                     allTask.addOnSuccessListener(bVoid ->

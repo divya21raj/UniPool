@@ -41,7 +41,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import garbagecollectors.com.unipool.R;
-import garbagecollectors.com.unipool.application.Constants;
+import garbagecollectors.com.unipool.application.Globals;
 import garbagecollectors.com.unipool.application.UtilityMethods;
 import garbagecollectors.com.unipool.models.GenLocation;
 import garbagecollectors.com.unipool.models.TripEntry;
@@ -165,14 +165,14 @@ public class NewEntryDialog extends DialogFragment implements GoogleApiClient.On
         if(day == Calendar.SATURDAY || day == Calendar.SUNDAY)
         {
         	findDestination.setText(R.string.uni_name);
-        	destination = new GenLocation(Constants.uniInfo.get("name"), Constants.uniInfo.get("address"),
-			     Double.parseDouble(Constants.uniInfo.get("latitude")), Double.parseDouble(Constants.uniInfo.get("longitude")));
+        	destination = new GenLocation(Globals.uniInfo.get("name"), Globals.uniInfo.get("address"),
+			     Double.parseDouble(Globals.uniInfo.get("latitude")), Double.parseDouble(Globals.uniInfo.get("longitude")));
         }
         else
         {
         	findSource.setText(R.string.uni_name);
-	        source = new GenLocation(Constants.uniInfo.get("name"), Constants.uniInfo.get("address"),
-			        Double.parseDouble(Constants.uniInfo.get("latitude")), Double.parseDouble(Constants.uniInfo.get("longitude")));
+	        source = new GenLocation(Globals.uniInfo.get("name"), Globals.uniInfo.get("address"),
+			        Double.parseDouble(Globals.uniInfo.get("latitude")), Double.parseDouble(Globals.uniInfo.get("longitude")));
         }
 
     }
@@ -354,7 +354,7 @@ public class NewEntryDialog extends DialogFragment implements GoogleApiClient.On
 
     public void finalSave()
     {
-        String entryId = Constants.entryDatabaseReference.push().getKey();
+        String entryId = Globals.entryDatabaseReference.push().getKey();
         String name = UtilityMethods.sanitizeName(finalCurrentUser.getName());
         System.currentTimeMillis();
         message = messageText.getText().toString();
@@ -367,9 +367,9 @@ public class NewEntryDialog extends DialogFragment implements GoogleApiClient.On
 
         finalCurrentUser.getUserTripEntries().put(tripEntry.getEntry_id(), tripEntry);
 
-        Constants.entryDatabaseReference.child(entryId).setValue(tripEntry);
+        Globals.entryDatabaseReference.child(entryId).setValue(tripEntry);
 
-        Constants.userDatabaseReference.child("userTripEntries").setValue(finalCurrentUser.getUserTripEntries());
+        Globals.userDatabaseReference.child("userTripEntries").setValue(finalCurrentUser.getUserTripEntries());
 
         Toast.makeText(getActivity(), "Trip entry created!", Toast.LENGTH_SHORT).show();
 

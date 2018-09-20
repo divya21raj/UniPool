@@ -5,10 +5,28 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
-public class Constants
+public class Globals
 {
 	public static final String UNI = "";
 	public static final String CHANNEL_ID = "unipool";
+
+	// SharedPreference Keys
+	public static final String USER_SP_FILE = "USER_SP_FILE";
+	public static final String USER_ID_KEY = "USER_ID";
+	public static final String USER_NAME_KEY = "USER_NAME";
+	public static final String USER_EMAIL_KEY = "USER_EMAIL";
+	public static final String USER_PHONE_KEY = "USER_PHONE";
+	public static final String USER_PHOTO_URL_KEY = "USER_PHOTO_URL";
+	public static final String USER_TOKEN_KEY = "USER_TOKEN";
+
+	// User Stuff
+	public static String USER_ID = "";
+	public static String USER_NAME = "";
+	public static String USER_EMAIL = "";
+	public static String USER_PHONE = "";
+	public static String USER_PHOTO_URL = "";
+	public static String USER_TOKEN = "";
+
 
 	public static DatabaseReference userDatabaseReference;
 	public static DatabaseReference userMessageDatabaseReference;
@@ -21,6 +39,7 @@ public class Constants
 
 	public static DatabaseReference sentRequestsDatabaseReference;
 	public static DatabaseReference receivedRequestsDatabaseReference;
+	public static DatabaseReference userPairUpDatabaseReference;
 
 	public static String OPEN_ACTIVITY = "";
 	//HOME, REQUESTS, CHAT, ABOUT
