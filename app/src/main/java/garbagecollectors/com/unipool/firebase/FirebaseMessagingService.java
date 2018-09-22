@@ -13,6 +13,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import garbagecollectors.com.unipool.R;
 import garbagecollectors.com.unipool.activities.MessageListActivity;
 import garbagecollectors.com.unipool.application.Globals;
+import garbagecollectors.com.unipool.application.UtilityMethods;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService
 {
@@ -23,8 +24,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 		Log.d("D2R", remoteMessage.getNotification().getBody());
 
-		String notificationTitle = remoteMessage.getNotification().getTitle();
-		String notificationBody = remoteMessage.getNotification().getBody();
+		String notificationTitle = UtilityMethods.sanitizeName(remoteMessage.getNotification().getTitle());
+		String notificationBody = UtilityMethods.sanitizeName(remoteMessage.getNotification().getBody());
 
 		String clickAction = remoteMessage.getNotification().getClickAction();
 
